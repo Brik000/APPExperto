@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">AppExperto2020</string>
+    <string name="app_name">EXPERT</string>
+    <string name="slogan">Tu experto de confianza al instante</string>
+    <string name="login_expert">Ingresar como experto</string>
+    <string name="login_user">Ingresar como cliente</string>
+    <string name="register">Registrarme</string>
+    <string name="username">Usuario</string>
+    <string name="password">Contraseña</string>
+    <string name="login">Iniciar sesión</string>
 </resources>
