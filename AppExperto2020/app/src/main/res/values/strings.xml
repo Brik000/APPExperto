@@ -7,4 +7,20 @@
     <string name="username">Usuario</string>
     <string name="password">Contraseña</string>
     <string name="login">Iniciar sesión</string>
+    <string name="userSingInSection">Busco expertos</string>
+    <string name="singInUser">Registrar nuevo usuario</string>
+    <string name="newUserName">Nombre del ususario</string>
+    <string name="repeatNewPassword">Repita la contraseña</string>
+    <string name="email">Email de registro</string>
+    <string name="emailCheck">Repita el email</string>
+    <string name="birthDate">Fecha de nacimiento</string>
+    <string name="userDescription">Mi descripcion</string>
+
+
+
+
+
+
+
+
 </resources>
