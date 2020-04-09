@@ -15,12 +15,8 @@
     <string name="emailCheck">Repita el email</string>
     <string name="birthDate">Fecha de nacimiento</string>
     <string name="userDescription">Mi descripcion</string>
-
-
-
-
-
-
-
+    <string name="LookingFor">¿Qué buscas?</string>
+    <string name="OfferServices">Quiero ofrecer mis servicios</string>
+    <string name="SearchingServices">Quiero buscar a un experto</string>
 
 </resources>
