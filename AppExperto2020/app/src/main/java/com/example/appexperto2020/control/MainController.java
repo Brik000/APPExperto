@@ -6,6 +6,7 @@ import android.view.View;
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.appexperto2020.R;
 import com.example.appexperto2020.util.Constants;
+import com.example.appexperto2020.view.ChooseTypeOfRegister;
 import com.example.appexperto2020.view.LoginActivity;
 import com.example.appexperto2020.view.MainActivity;
 
@@ -36,7 +37,9 @@ public class MainController implements View.OnClickListener{
                 Animatoo.animateFade(view);
                 break;
             case R.id.butRegisterMain:
-
+                Intent i2 = new Intent(view, ChooseTypeOfRegister.class);
+                view.startActivity(i2);
+                Animatoo.animateFade(view);
                 break;
         }
     }

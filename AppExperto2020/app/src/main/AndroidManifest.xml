@@ -10,7 +10,8 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ChooseTypeOfRegister"></activity>
+        <activity android:name=".view.ChooseTypeOfRegister"></activity>
+        <activity android:name=".view.CreateUserActivity"></activity>
         <activity android:name=".view.LoginActivity" />
         <activity android:name=".view.SplashScreen">
             <intent-filter>

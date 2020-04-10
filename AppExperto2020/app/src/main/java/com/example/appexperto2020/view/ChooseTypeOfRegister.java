@@ -1,12 +1,17 @@
-package com.example.appexperto2020;
+package com.example.appexperto2020.view;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Switch;
+
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
+import com.example.appexperto2020.R;
+import com.example.appexperto2020.util.Constants;
 
 public class ChooseTypeOfRegister extends AppCompatActivity {
 
@@ -39,11 +44,18 @@ public class ChooseTypeOfRegister extends AppCompatActivity {
                     }else{
                         if(offerServiceSwitch.isChecked()){
 
-                        }else if(offerServiceSwitch.isChecked()){
-
+                        }else if(searchServiceSwitch.isChecked()){
+                            Intent in = new Intent(this, CreateUserActivity.class);
+                            startActivity(in);
+                            Animatoo.animateFade(this);
                         }
                     }
                 }
         );
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Animatoo.animateFade(this);
     }
 }

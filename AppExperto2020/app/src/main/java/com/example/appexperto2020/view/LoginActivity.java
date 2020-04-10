@@ -26,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
         txtLogining = findViewById(R.id.txtLogining);
         editUserLog = findViewById(R.id.editTextUserSingIn);
         editPasswordLog = findViewById(R.id.editPasswordLog);
-        butLogin = findViewById(R.id.butNewUser);
+        butLogin = findViewById(R.id.butLogin);
         txtLogining.setText(llegada);
     }
 
