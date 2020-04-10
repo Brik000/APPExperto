@@ -24,9 +24,9 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         String llegada = getIntent().getExtras().getString(Constants.LOG_IN_TYPE);
         txtLogining = findViewById(R.id.txtLogining);
-        editUserLog = findViewById(R.id.editUserLog);
+        editUserLog = findViewById(R.id.editTextUserSingIn);
         editPasswordLog = findViewById(R.id.editPasswordLog);
-        butLogin = findViewById(R.id.butRegistro);
+        butLogin = findViewById(R.id.butNewUser);
         txtLogining.setText(llegada);
     }
 

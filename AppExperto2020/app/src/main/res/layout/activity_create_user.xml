@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.LoginActivity">
+    tools:context=".view.CreateUserActivity">
 
     <TextView
         android:id="@+id/textView"
@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editUserLog"
+        android:id="@+id/editTextUserSingIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -40,10 +40,10 @@
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText2" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextMail" />
 
     <Button
-        android:id="@+id/butRegistro"
+        android:id="@+id/butNewUser"
         style="@style/ExpertWhiteType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -53,11 +53,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText"
+        app:layout_constraintTop_toBottomOf="@+id/editTextRepeatPassword"
         app:layout_constraintVertical_bias="0.757" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/editTextRepeatPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -69,7 +69,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editPasswordLog" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/editTextMail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -78,7 +78,7 @@
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editUserLog" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextUserSingIn" />
 
     <ImageView
         android:id="@+id/imageView3"
@@ -92,7 +92,7 @@
         app:srcCompat="@drawable/expert" />
 
     <EditText
-        android:id="@+id/editText4"
+        android:id="@+id/editTextDescriptionNewUser"
         android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -102,18 +102,18 @@
         android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextRepeatPassword" />
 
-    <com.example.appexperto2020.extra.MultiSelectionSpinner
-        android:id="@+id/input1"
+    <com.example.appexperto2020.util.MultiSelectionSpinner
+        android:id="@+id/inputIterests"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
-        app:layout_constraintBottom_toTopOf="@+id/butRegistro"
+        app:layout_constraintBottom_toTopOf="@+id/butNewUser"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText4"
+        app:layout_constraintTop_toBottomOf="@+id/editTextDescriptionNewUser"
         app:layout_constraintVertical_bias="0.353"
         tools:ignore="MissingConstraints" />
 
