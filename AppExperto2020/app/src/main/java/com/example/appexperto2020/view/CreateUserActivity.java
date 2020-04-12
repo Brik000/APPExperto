@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.appexperto2020.R;
-import com.example.appexperto2020.util.MultiSelectionSpinner;
 
 import java.util.ArrayList;
 import java.util.List;

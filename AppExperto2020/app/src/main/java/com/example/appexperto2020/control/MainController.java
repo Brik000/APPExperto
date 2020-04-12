@@ -1,11 +1,15 @@
 package com.example.appexperto2020.control;
 
+import android.Manifest;
 import android.content.Intent;
 import android.view.View;
+
+import androidx.core.app.ActivityCompat;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.appexperto2020.R;
 import com.example.appexperto2020.util.Constants;
+import com.example.appexperto2020.view.ChooseTypeOfRegisterActivity;
 import com.example.appexperto2020.view.LoginActivity;
 import com.example.appexperto2020.view.MainActivity;
 
@@ -13,8 +17,16 @@ public class MainController implements View.OnClickListener{
 
     private MainActivity view;
 
-    public MainController(MainActivity main) {
-        view = main;
+    public MainController(MainActivity view) {
+
+
+        this.view = view;
+
+        ActivityCompat.requestPermissions(view, new String[]{
+                Manifest.permission.CAMERA,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+        },0);
         view.getButRegisterMain().setOnClickListener(this);
         view.getButLoginClient().setOnClickListener(this);
         view.getButLoginWorker().setOnClickListener(this);
@@ -36,6 +48,10 @@ public class MainController implements View.OnClickListener{
                 Animatoo.animateFade(view);
                 break;
             case R.id.butRegisterMain:
+                Intent reg = new Intent(view, ChooseTypeOfRegisterActivity.class);
+                view.startActivity(reg);
+                Animatoo.animateFade(view);
+
 
                 break;
         }

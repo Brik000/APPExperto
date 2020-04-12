@@ -18,5 +18,16 @@
     <string name="LookingFor">¿Qué buscas?</string>
     <string name="OfferServices">Quiero ofrecer mis servicios</string>
     <string name="SearchingServices">Quiero buscar a un experto</string>
+    <string name="title_activity_job_line">JobLine</string>
+    <string name="name">Nombre</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name ="iAmExpert">Soy un experto</string>
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="addFiles">Adjunte aquí foto de documentos, certificados, o fotos de trabajo que validen su experiencia. (OPCIONAL)</string>
 
 </resources>

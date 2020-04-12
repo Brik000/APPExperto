@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ChooseTypeOfRegister">
+    tools:context=".view.ChooseTypeOfRegisterActivity">
 
     <ImageView
         android:id="@+id/imageView4"
@@ -47,7 +47,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:text="TextView"
+        android:text="Qué buscas?"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,6 +60,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="32dp"
         android:autoText="false"
+        android:hint="Quiero ofrecer mis servicios"
         android:text="@string/OfferServices"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -70,7 +71,8 @@
         android:layout_width="264dp"
         android:layout_height="46dp"
         android:layout_marginTop="32dp"
-        android:text="Switch"
+        android:hint="Quiero buscar a un experto"
+        android:text="Quiero buscar a un experto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
@@ -82,11 +84,13 @@
         style="@style/ExpertOrangeType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:alpha="1"
         android:background="@android:color/transparent"
         android:lineSpacingExtra="8sp"
         android:text="@string/register"
-        tools:layout_editor_absoluteX="156dp"
-        tools:layout_editor_absoluteY="628dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchServiceSwitch" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

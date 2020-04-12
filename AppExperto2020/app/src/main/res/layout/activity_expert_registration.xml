@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animationCache="true"
+    android:background="@color/backgroundExpert"
+    tools:context=".view.ExpertRegistrationActivity">
+
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="116dp"
+        android:layout_height="100dp"
+        android:src="@drawable/worker"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView6"
+        style="@style/ExpertLogoType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="SOY UN EXPERTO"
+        android:textSize="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+
+    <EditText
+        android:id="@+id/nameText"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="Nombre"
+        android:textColorHint="@color/colorPrimaryDark"
+        android:inputType="textPersonName"
+        android:textSize="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+    <EditText
+        android:id="@+id/cedulaText"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textColorHint="@color/colorPrimaryDark"
+        android:ems="10"
+        android:hint="Cedula"
+        android:inputType="textPersonName"
+        android:textColor="@color/gray"
+        android:textSize="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toBottomOf="@+id/nameText" />
+
+    <EditText
+        android:id="@+id/celularText"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:ems="10"
+        android:textColorHint="@color/colorPrimaryDark"
+        android:hint="Número de celular"
+        android:inputType="textPersonName"
+        android:textColor="@color/gray"
+        android:textSize="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cedulaText" />
+
+    <EditText
+        android:id="@+id/emailText"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:ems="10"
+        android:textColorHint="@color/colorPrimaryDark"
+        android:hint="Correo Electrónico"
+        android:inputType="textPersonName"
+        android:textColor="@color/gray"
+        android:textSize="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/celularText" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:text="Tienes más de un oficio?"
+        app:layout_constraintEnd_toStartOf="@+id/addJobText"
+        app:layout_constraintTop_toBottomOf="@+id/jobList" />
+
+    <TextView
+        android:id="@+id/addJobText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginRight="60dp"
+        android:text="Añadir Otro Oficio"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/jobList" />
+
+    <ListView
+        android:id="@+id/jobList"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:foregroundGravity="center|fill_vertical|center_horizontal"
+        android:maxWidth="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emailText" />
+
+    <ImageView
+        android:id="@+id/addPhotoBut"
+        android:layout_width="40dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/jobList"
+        app:srcCompat="@drawable/file" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/addFiles"
+        android:textSize="12dp"
+        app:layout_constraintStart_toEndOf="@+id/addPhotoBut"
+        app:layout_constraintTop_toBottomOf="@+id/jobList" />
+
+    <GridView
+        android:id="@+id/photoList"
+        android:layout_width="0dp"
+        android:layout_height="130dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginRight="1dp"
+        android:columnWidth="100dp"
+        android:gravity="fill_horizontal|fill_vertical"
+        android:numColumns="auto_fit"
+        android:orientation="horizontal"
+        android:theme="@style/AppTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+    <Button
+        android:id="@+id/registerBut"
+        style="@style/ExpertLogoType"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
+        android:background="@drawable/filled_button_gray"
+        android:text="Registrarme"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/photoList" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
