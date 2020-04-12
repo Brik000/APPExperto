@@ -10,11 +10,7 @@
         android:id="@+id/imageView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
+        android:layout_marginTop="64dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -34,25 +30,12 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/slogan"
+        android:layout_marginTop="8dp"
+        android:text="@string/LookingFor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-    <TextView
-        android:id="@+id/textView5"
-        style="@style/ExpertOrangeType"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:text="Qué buscas?"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
-        tools:text="@string/LookingFor" />
 
     <Switch
         android:id="@+id/offerServiceSwitch"
@@ -60,35 +43,32 @@
         android:layout_height="50dp"
         android:layout_marginTop="32dp"
         android:autoText="false"
-        android:hint="Quiero ofrecer mis servicios"
         android:text="@string/OfferServices"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <Switch
         android:id="@+id/searchServiceSwitch"
         android:layout_width="264dp"
         android:layout_height="46dp"
-        android:layout_marginTop="32dp"
-        android:hint="Quiero buscar a un experto"
-        android:text="Quiero buscar a un experto"
+        android:layout_marginTop="16dp"
+        android:text="@string/SearchingServices"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/offerServiceSwitch"
-        tools:text="@string/SearchingServices" />
+        app:layout_constraintTop_toBottomOf="@+id/offerServiceSwitch" />
 
     <Button
         android:id="@+id/registerBtn"
         style="@style/ExpertOrangeType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
         android:alpha="1"
         android:background="@android:color/transparent"
         android:lineSpacingExtra="8sp"
         android:text="@string/register"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchServiceSwitch" />
