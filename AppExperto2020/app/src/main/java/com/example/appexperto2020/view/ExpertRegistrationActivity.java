@@ -29,6 +29,7 @@ public class ExpertRegistrationActivity extends AppCompatActivity {
     private TextView addJobTxt;
     private ImageView addPhotoBut;
     private GridView photoList;
+    private Button registerBut;
 
     public ImageView getAddPhotoBut() {
         return addPhotoBut;
@@ -50,6 +51,7 @@ public class ExpertRegistrationActivity extends AppCompatActivity {
         addJobTxt = findViewById(R.id.addJobText);
         addPhotoBut = findViewById(R.id.addPhotoBut);
         photoList = findViewById(R.id.photoList);
+        registerBut = findViewById(R.id.registerBut);
         controller = new ExpertRegistrationController(this);
 
 
@@ -60,6 +62,8 @@ public class ExpertRegistrationActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         controller.onActivityResult(requestCode,resultCode,data);
     }
+
+    public Button getRegisterBut() { return registerBut; }
 
     public EditText getNameText() {
         return nameText;

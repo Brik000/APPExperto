@@ -1,5 +1,7 @@
 package com.example.appexperto2020.control;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,14 +15,18 @@ import android.widget.Toast;
 import androidx.core.content.FileProvider;
 
 import com.example.appexperto2020.R;
+import com.example.appexperto2020.model.Expert;
+import com.example.appexperto2020.util.Constants;
+import com.example.appexperto2020.util.HTTPSWebUtilDomi;
 import com.example.appexperto2020.view.ExpertRegistrationActivity;
+import com.google.gson.Gson;
 
 import java.io.File;
 import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_OK;
 
-public class ExpertRegistrationController implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class ExpertRegistrationController implements View.OnClickListener, AdapterView.OnItemSelectedListener, HTTPSWebUtilDomi.OnResponseListener {
 
     public static final int CAMERA_CALLBACK = 1;
     private ExpertRegistrationActivity view;
@@ -29,13 +35,16 @@ public class ExpertRegistrationController implements View.OnClickListener, Adapt
     private ArrayList<File> photos;
     private PhotoCustomAdapter photoAdapter;
     private File file;
+    private HTTPSWebUtilDomi httpsUtil;
 
 
     public ExpertRegistrationController(ExpertRegistrationActivity view){
         this.view = view;
-
+        this.httpsUtil = new HTTPSWebUtilDomi();
+        httpsUtil.setListener(this);
         this.view.getAddJobTxt().setOnClickListener(this);
         this.view.getAddPhotoBut().setOnClickListener(this);
+        this.view.getRegisterBut().setOnClickListener(this);
         jobAdapter = new JobsCustomAdapter(this);
         this.view.getJobList().setAdapter(jobAdapter);
         JobAdapter job = new JobAdapter("hola");
@@ -66,7 +75,24 @@ public class ExpertRegistrationController implements View.OnClickListener, Adapt
                 Uri photoUri = FileProvider.getUriForFile(this.view, this.view.getPackageName(), file);
                 i.putExtra(MediaStore.EXTRA_OUTPUT,photoUri);
                 this.view.startActivityForResult(i, CAMERA_CALLBACK);
+                break;
 
+            case R.id.registerBut:
+
+
+                new Thread(
+                        ()->{
+                            ArrayList<String> j = new ArrayList<>();
+                            j.add("bandalo");
+                            Expert expert = new Expert(view.getNameText().getText().toString(),view.getCedulaText().getText().toString(),view.getCelularText().getText().toString(), view.getEmailText().getText().toString(),j);
+                            Gson gson = new Gson();
+                            String json = gson.toJson(expert);
+                            httpsUtil.POSTrequest(Constants.REGISTER_EXPERT_CALLBACK,Constants.BD_URL+Constants.EXPERTS_GROUP, json);
+                            Log.e("jj","juju");
+                        }
+                ).start();
+
+                break;
         }
         }
 
@@ -92,5 +118,23 @@ public class ExpertRegistrationController implements View.OnClickListener, Adapt
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    @Override
+    public void onResponse(int callbackID, String response) {
+        switch (callbackID){
+            case Constants.REGISTER_EXPERT_CALLBACK:
+                AlertDialog alertDialog = new AlertDialog.Builder(this.view).create();
+                alertDialog.setTitle("Alert");
+                alertDialog.setMessage("Registro Exitoso");
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
+                break;
+        }
     }
 }

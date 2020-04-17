@@ -23,15 +23,15 @@ public class ChooseTypeRegistrationController implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
-            AlertDialog alertDialog = new AlertDialog.Builder(this.view).create();
-            alertDialog.setTitle("Alert");
-            alertDialog.setMessage("Escoge solo una opción");
-            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
+        AlertDialog alertDialog = new AlertDialog.Builder(this.view).create();
+        alertDialog.setTitle("Alert");
+        alertDialog.setMessage("Escoge solo una opción");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
 
             if (this.view.getOfferServiceSwitch().isChecked() && this.view.getSearchServiceSwitch().isChecked()) {
                 alertDialog.show();
