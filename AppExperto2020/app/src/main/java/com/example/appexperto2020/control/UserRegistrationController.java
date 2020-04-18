@@ -1,16 +1,20 @@
 package com.example.appexperto2020.control;
 
+import android.content.Intent;
 import android.os.Build;
 import android.view.View;
 
 import androidx.annotation.RequiresApi;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.appexperto2020.R;
 import com.example.appexperto2020.model.User;
 import com.example.appexperto2020.util.Constants;
 import com.example.appexperto2020.util.HTTPSWebUtilDomi;
 import com.example.appexperto2020.util.MultiSelectionSpinner;
 import com.example.appexperto2020.view.CreateUserActivity;
+import com.example.appexperto2020.view.LoginActivity;
+import com.example.appexperto2020.view.MainActivity;
 import com.google.gson.Gson;
 
 public class UserRegistrationController implements View.OnClickListener{
@@ -44,6 +48,9 @@ public class UserRegistrationController implements View.OnClickListener{
                             utilDomi.POSTrequest(Constants.REGISTER_USER_CALLBACK,Constants.BD_URL+Constants.USERS_GROUP,json);
                         }
                 ).start();
+                Intent reg = new Intent(view, MainActivity.class);
+                view.startActivity(reg);
+                Animatoo.animateFade(view);
         break;
 
         }
