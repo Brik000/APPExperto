@@ -3,50 +3,75 @@ package com.example.appexperto2020.model;
 import java.util.ArrayList;
 
 public class Expert {
-    private String name,identificationCard, phone, email;
-    private ArrayList<String> jobs;
 
-    public Expert(String name, String identificationCard, String phone, String email, ArrayList<String> jobs) {
-        this.name = name;
-        this.identificationCard = identificationCard;
-        this.phone = phone;
-        this.email = email;
-        this.jobs = jobs;
-    }
+    private String id;
+    private String username;
+    private String contraseña;
+    private String cedula;
+
+    private String celular;
+    private String email;
+    private String jobs;
+    private String descripcion;
+
+
+    //TODAVIA NP
+    private String fotoPerfil;
+    private String fotos;
+
+
 
     public Expert() {
     }
 
-    public ArrayList<String> getJobs() {
-        return jobs;
-    }
-
-    public void setJobs(ArrayList<String> jobs) {
+    public Expert(String id, String username, String contraseña, String cedula, String celular, String email, String jobs, String descripcion) {
+        this.id = id;
+        this.username = username;
+        this.contraseña = contraseña;
+        this.cedula = cedula;
+        this.celular = celular;
+        this.email = email;
         this.jobs = jobs;
+        this.descripcion = descripcion;
+    }
+    public String getId() {
+        return id;
     }
 
-    public String getName() {
-        return name;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getUsername() {
+        return username;
     }
 
-    public String getIdentificationCard() {
-        return identificationCard;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public void setIdentificationCard(String identificationCard) {
-        this.identificationCard = identificationCard;
+    public String getContraseña() {
+        return contraseña;
     }
 
-    public String getPhone() {
-        return phone;
+    public void setContraseña(String contraseña) {
+        this.contraseña = contraseña;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public String getCedula() {
+        return cedula;
+    }
+
+    public void setCedula(String cedula) {
+        this.cedula = cedula;
+    }
+
+    public String getCelular() {
+        return celular;
+    }
+
+    public void setCelular(String celular) {
+        this.celular = celular;
     }
 
     public String getEmail() {
@@ -56,4 +81,37 @@ public class Expert {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public String getJobs() {
+        return jobs;
+    }
+
+    public void setJobs(String jobs) {
+        this.jobs = jobs;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public String getFotoPerfil() {
+        return fotoPerfil;
+    }
+
+    public void setFotoPerfil(String fotoPerfil) {
+        this.fotoPerfil = fotoPerfil;
+    }
+
+    public String getFotos() {
+        return fotos;
+    }
+
+    public void setFotos(String fotos) {
+        this.fotos = fotos;
+    }
+
 }

@@ -2,6 +2,7 @@ package com.example.appexperto2020.control;
 
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.RequiresApi;
@@ -15,9 +16,10 @@ import com.example.appexperto2020.util.MultiSelectionSpinner;
 import com.example.appexperto2020.view.CreateUserActivity;
 import com.example.appexperto2020.view.LoginActivity;
 import com.example.appexperto2020.view.MainActivity;
+import com.example.appexperto2020.view.UsersMainActivity;
 import com.google.gson.Gson;
 
-public class UserRegistrationController implements View.OnClickListener{
+public class UserRegistrationController implements View.OnClickListener, HTTPSWebUtilDomi.OnResponseListener{
 
     private User usuario;
 
@@ -45,7 +47,7 @@ public class UserRegistrationController implements View.OnClickListener{
                             Gson gson=new Gson();
                             GenerateUser();
                             String json=gson.toJson(usuario);
-                            utilDomi.POSTrequest(Constants.REGISTER_USER_CALLBACK,Constants.BD_URL+Constants.USERS_GROUP,json);
+                            utilDomi.POSTrequest(Constants.REGISTER_USER_CALLBACK,Constants.BD_URL_LOCAL_LH+Constants.USERS_GROUP,json);
                         }
                 ).start();
                 Intent reg = new Intent(view, MainActivity.class);
@@ -72,5 +74,18 @@ public class UserRegistrationController implements View.OnClickListener{
 
 
 
+    }
+
+    @Override
+    public void onResponse(int callbackID, String response) {
+        switch(callbackID){
+            case Constants.REGISTER_USER_CALLBACK:
+                Log.d("ZZZZZZZZZZZZZZZZZZZZ", "ENTROOOOOOOOO");
+
+                Intent i = new Intent(view, UsersMainActivity.class);
+                i.putExtra("userName", view.getTxtNombreApellido().getText().toString());
+                view.startActivity(i);
+                break;
+        }
     }
 }

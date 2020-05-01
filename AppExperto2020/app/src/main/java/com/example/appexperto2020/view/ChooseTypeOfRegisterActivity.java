@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Switch;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.appexperto2020.R;
 import com.example.appexperto2020.control.ChooseTypeRegistrationController;
 
@@ -40,5 +41,10 @@ public class ChooseTypeOfRegisterActivity extends AppCompatActivity {
 
         controller = new ChooseTypeRegistrationController(this);
 
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Animatoo.animateFade(this);
     }
 }

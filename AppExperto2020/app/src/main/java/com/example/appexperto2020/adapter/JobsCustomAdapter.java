@@ -1,4 +1,4 @@
-package com.example.appexperto2020.control;
+package com.example.appexperto2020.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.Spinner;
 
 import com.example.appexperto2020.R;
+import com.example.appexperto2020.control.ExpertRegistrationController;
+import com.example.appexperto2020.control.JobAdapter;
 
 import java.util.ArrayList;
 
