@@ -18,7 +18,6 @@ import com.example.appexperto2020.util.MultiSelectionSpinner;
 
 public class ExpertRegistrationActivity extends AppCompatActivity {
 
-
     private ExpertRegistrationController controller;
     private EditText nameExpertET;
     private EditText idET;
@@ -54,8 +53,6 @@ public class ExpertRegistrationActivity extends AppCompatActivity {
         descriptionET = findViewById(R.id.descriptionET);
         jobSpinner = findViewById(R.id.jobSpinner);
         controller = new ExpertRegistrationController(this);
-
-
     }
 
     public EditText getPasswordET() {

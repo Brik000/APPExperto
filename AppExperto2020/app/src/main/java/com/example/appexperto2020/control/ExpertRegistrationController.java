@@ -1,25 +1,22 @@
 package com.example.appexperto2020.control;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
 
 import com.example.appexperto2020.R;
 import com.example.appexperto2020.adapter.JobsCustomAdapter;
+import com.example.appexperto2020.adapter.PhotoCustomAdapter;
 import com.example.appexperto2020.model.Expert;
+import com.example.appexperto2020.model.Job;
 import com.example.appexperto2020.util.Constants;
 import com.example.appexperto2020.util.HTTPSWebUtilDomi;
 import com.example.appexperto2020.view.ExpertRegistrationActivity;
-import com.example.appexperto2020.view.UsersMainActivity;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -33,7 +30,6 @@ public class ExpertRegistrationController implements View.OnClickListener, Adapt
     private ExpertRegistrationActivity activity;
     private JobsCustomAdapter jobAdapter;
     private ArrayList<String> jobs;
-    private ArrayList<File> photos;
     private PhotoCustomAdapter photoAdapter;
     private File file;
     private HTTPSWebUtilDomi httpsUtil;
@@ -47,10 +43,10 @@ public class ExpertRegistrationController implements View.OnClickListener, Adapt
         this.activity.getRegisterBut().setOnClickListener(this);
         jobAdapter = new JobsCustomAdapter(this);
      //   this.activity.getJobList().setAdapter(jobAdapter);
-        JobAdapter job = new JobAdapter("hola");
+        Job job = new Job();
+        job.setName("");
         jobAdapter.addJob(job);
         jobs = new ArrayList<>();
-        photos = new ArrayList<>();
         photoAdapter = new PhotoCustomAdapter();
         this.activity.getPhotoList().setAdapter(photoAdapter);
         File root = new File(view.getExternalFilesDir(null)+"");
@@ -80,7 +76,7 @@ public class ExpertRegistrationController implements View.OnClickListener, Adapt
 
             case R.id.addPhotoBut:
                 Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                file = new File(this.activity.getExternalFilesDir(null)+"/photo"+photos.size()+".png");
+                file = new File(this.activity.getExternalFilesDir(null)+"/photo"+photoAdapter.getCount()+".png");
                 Uri photoUri = FileProvider.getUriForFile(this.activity, this.activity.getPackageName(), file);
                 i.putExtra(MediaStore.EXTRA_OUTPUT,photoUri);
                 this.activity.startActivityForResult(i, CAMERA_CALLBACK);
@@ -122,11 +118,7 @@ public class ExpertRegistrationController implements View.OnClickListener, Adapt
 
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
             if (requestCode == CAMERA_CALLBACK && resultCode == RESULT_OK) {
-
-                PhotoAdapter photo = new PhotoAdapter(file);
-                photos.add(file);
-
-                photoAdapter.addPhoto(photo);
+                photoAdapter.addPhoto(file);
 
             }
         }

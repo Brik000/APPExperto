@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "69515944625",
+    "firebase_url": "https://appexperto-788ca.firebaseio.com",
+    "project_id": "appexperto-788ca",
+    "storage_bucket": "appexperto-788ca.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:69515944625:android:74b4a4326c0ffc72a77890",
+        "android_client_info": {
+          "package_name": "com.example.appexperto2020"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "69515944625-d12pbac297jlggm72ah0cf0pq5kgl6ds.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.appexperto2020",
+            "certificate_hash": "119c4b8ae9f3326cb060522be079498da88d7b0c"
+          }
+        },
+        {
+          "client_id": "69515944625-rld1tgm9v9p6qk3amdncre25j9q22mub.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8U0xSEKMpiz960HQWHBRx-qq8FcLBy5E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "69515944625-rld1tgm9v9p6qk3amdncre25j9q22mub.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
