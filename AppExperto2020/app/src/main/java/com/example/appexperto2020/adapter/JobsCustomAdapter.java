@@ -9,13 +9,13 @@ import android.widget.Spinner;
 
 import com.example.appexperto2020.R;
 import com.example.appexperto2020.control.ExpertRegistrationController;
-import com.example.appexperto2020.model.Job;
+import com.example.appexperto2020.control.JobAdapter;
 
 import java.util.ArrayList;
 
 public class JobsCustomAdapter extends BaseAdapter {
 
-    private ArrayList<Job> jobs;
+    private ArrayList<JobAdapter> jobs;
     private ExpertRegistrationController controller;
 
     public JobsCustomAdapter(ExpertRegistrationController controller){
@@ -66,7 +66,7 @@ public class JobsCustomAdapter extends BaseAdapter {
         return row;
     }
 
-    public void addJob(Job job)
+    public void addJob(JobAdapter job)
     {
         jobs.add(job);
         this.notifyDataSetChanged();

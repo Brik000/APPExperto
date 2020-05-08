@@ -1,4 +1,4 @@
-package com.example.appexperto2020.adapter;
+package com.example.appexperto2020.control;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,12 +10,11 @@ import android.widget.ImageView;
 
 import com.example.appexperto2020.R;
 
-import java.io.File;
 import java.util.ArrayList;
 
 public class PhotoCustomAdapter extends BaseAdapter {
 
-    private ArrayList<File> photos;
+    private ArrayList<PhotoAdapter> photos;
 
     public PhotoCustomAdapter()
     {
@@ -42,7 +41,7 @@ public class PhotoCustomAdapter extends BaseAdapter {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View row = inflater.inflate(R.layout.image_line, null);
         ImageView image = row.findViewById(R.id.image);
-        Bitmap i = BitmapFactory.decodeFile(photos.get(position).getPath());
+        Bitmap i = BitmapFactory.decodeFile(photos.get(position).getFile().getPath());
         Bitmap bitmap = Bitmap.createScaledBitmap(i,
                 i.getWidth()/4,
                 i.getHeight()/4,
@@ -53,7 +52,7 @@ public class PhotoCustomAdapter extends BaseAdapter {
         return row;
     }
 
-    public void addPhoto(File photo)
+    public void addPhoto(PhotoAdapter photo)
     {
         photos.add(photo);
         this.notifyDataSetChanged();
