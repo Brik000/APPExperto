@@ -1,67 +1,16 @@
 package com.example.appexperto2020.model;
 
-public class User {
-    private String nombreApellido, usuario,eMail,contrasena, descripcion;
-    private String intereses;
+import java.util.HashMap;
 
-    public User(String nombreApellido, String usuario, String eMail, String contrasena, String descripcion, String intereses) {
-        this.nombreApellido = nombreApellido;
-        this.usuario = usuario;
-        this.eMail = eMail;
-        this.contrasena = contrasena;
-        this.descripcion = descripcion;
-        this.intereses = intereses;
-    }
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-    public User() {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public abstract class User {
+    private String id, firstName, lastName, email, password, description, idDocument, profilePicture;
 
-    }
-
-    public String getNombreApellido() {
-        return nombreApellido;
-    }
-
-    public void setNombreApellido(String nombreApellido) {
-        this.nombreApellido = nombreApellido;
-    }
-
-    public String getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
-    }
-
-    public String geteMail() {
-        return eMail;
-    }
-
-    public void seteMail(String eMail) {
-        this.eMail = eMail;
-    }
-
-    public String getContrasena() {
-        return contrasena;
-    }
-
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public String getIntereses() {
-        return intereses;
-    }
-
-    public void setIntereses(String intereses) {
-        this.intereses = intereses;
-    }
 }

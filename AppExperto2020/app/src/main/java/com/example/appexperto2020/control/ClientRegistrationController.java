@@ -1,36 +1,35 @@
 package com.example.appexperto2020.control;
 
 import android.content.Intent;
-import android.os.Build;
 import android.util.Log;
 import android.view.View;
 
-import androidx.annotation.RequiresApi;
-
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.appexperto2020.R;
-import com.example.appexperto2020.model.User;
+import com.example.appexperto2020.model.Client;
 import com.example.appexperto2020.util.Constants;
 import com.example.appexperto2020.util.HTTPSWebUtilDomi;
 import com.example.appexperto2020.util.MultiSelectionSpinner;
-import com.example.appexperto2020.view.CreateUserActivity;
-import com.example.appexperto2020.view.LoginActivity;
+import com.example.appexperto2020.view.ClientRegistrationActivity;
 import com.example.appexperto2020.view.MainActivity;
 import com.example.appexperto2020.view.UsersMainActivity;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 
-public class UserRegistrationController implements View.OnClickListener, HTTPSWebUtilDomi.OnResponseListener{
+import java.util.HashMap;
 
-    private User usuario;
+public class ClientRegistrationController implements View.OnClickListener, HTTPSWebUtilDomi.OnResponseListener{
 
-    private CreateUserActivity view;
+    private Client usuario;
+
+    private ClientRegistrationActivity view;
 
     private HTTPSWebUtilDomi utilDomi;
 
 
 
 
-    public UserRegistrationController(CreateUserActivity view) {
+    public ClientRegistrationController(ClientRegistrationActivity view) {
         this.view = view;
         utilDomi=new HTTPSWebUtilDomi();
         this.view.getBtnNewUser().setOnClickListener(this);
@@ -60,19 +59,18 @@ public class UserRegistrationController implements View.OnClickListener, HTTPSWe
     }
 
 
-    public void GenerateUser(){
+    public void GenerateUser() {
 
-        String Nombre=view.getTxtNombreApellido().getText().toString();
-        String Usuario=view.getTxtUserName().getText().toString();
-        String Mail=view.getTxtEmailUser().getText().toString();
-        String Contrasena=view.getTxtPassword().getText().toString();
-        String Descripcion=view.getTxtDescription().getText().toString();
-        String intereses=((MultiSelectionSpinner)view.getSpinnerIntereses()).getSelectedItemsAsString();
-
-         usuario=new User(Nombre,Usuario,Mail,Contrasena,Descripcion,intereses);
-
-
-
+        String pushId = FirebaseDatabase.getInstance().getReference().child("user").push().getKey();
+        String Nombre = view.getTxtNombreApellido().getText().toString();
+        String Usuario = view.getTxtUserName().getText().toString();
+        String Mail = view.getTxtEmailUser().getText().toString();
+        String Contrasena = view.getTxtPassword().getText().toString();
+        String Descripcion = view.getTxtDescription().getText().toString();
+        String intereses = ((MultiSelectionSpinner) view.getSpinnerIntereses()).getSelectedItemsAsString();
+        HashMap hashMap = new HashMap();
+        hashMap.put(intereses, intereses);
+        usuario = new Client(pushId, Nombre, Usuario, Mail, Contrasena, Descripcion, intereses, "ruta foto", hashMap);
 
     }
 

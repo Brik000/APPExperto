@@ -1,45 +1,39 @@
 package com.example.appexperto2020.control;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.core.content.FileProvider;
 
 import com.example.appexperto2020.R;
-import com.example.appexperto2020.adapter.JobsCustomAdapter;
 import com.example.appexperto2020.model.Expert;
+import com.example.appexperto2020.model.Job;
 import com.example.appexperto2020.util.Constants;
 import com.example.appexperto2020.util.HTTPSWebUtilDomi;
 import com.example.appexperto2020.util.UtilDomi;
 import com.example.appexperto2020.view.ExpertRegistrationActivity;
-import com.example.appexperto2020.view.UsersMainActivity;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.gson.Gson;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static android.app.Activity.RESULT_OK;
 import static com.example.appexperto2020.util.Constants.GALLERY_CALLBACK;
 
-public class ExpertRegistrationController implements View.OnClickListener, AdapterView.OnItemSelectedListener, HTTPSWebUtilDomi.OnResponseListener {
+public class ExpertRegistrationController implements View.OnClickListener, HTTPSWebUtilDomi.OnResponseListener {
 
     public static final int CAMERA_CALLBACK = 1;
     private ExpertRegistrationActivity activity;
-    private JobsCustomAdapter jobAdapter;
-    private ArrayList<String> jobs;
     private ArrayList<File> photos;
     private PhotoCustomAdapter photoAdapter;
     private File file;
@@ -48,37 +42,49 @@ public class ExpertRegistrationController implements View.OnClickListener, Adapt
 
 
     public ExpertRegistrationController(ExpertRegistrationActivity view){
-        this.activity = view;
-        this.httpsUtil = new HTTPSWebUtilDomi();
+        activity = view;
+        httpsUtil = new HTTPSWebUtilDomi();
         httpsUtil.setListener(this);
-        this.activity.getAddPhotoBut().setOnClickListener(this);
-        this.activity.getRegisterBut().setOnClickListener(this);
-        jobAdapter = new JobsCustomAdapter(this);
-     //   this.activity.getJobList().setAdapter(jobAdapter);
-        JobAdapter job = new JobAdapter("hola");
-        jobAdapter.addJob(job);
-        jobs = new ArrayList<>();
+        activity.getAddPhotoBut().setOnClickListener(this);
+        activity.getRegisterBut().setOnClickListener(this);
+     // this.activity.getJobList().setAdapter(jobAdapter);
         photos = new ArrayList<>();
         photoAdapter = new PhotoCustomAdapter();
         this.activity.getPhotoList().setAdapter(photoAdapter);
         File root = new File(view.getExternalFilesDir(null)+"");
         uris = new ArrayList<>();
-        ArrayList<String> jobs = new ArrayList<>();
-        //Alimentar desde base de datos
-        jobs.add("Agente de bolsa");
-        jobs.add("Arquitect");
-        jobs.add("Bailarin");
-        jobs.add("Bartender");
-        jobs.add("Carpintero");
-        jobs.add("Cantante");
-        jobs.add("Carpintero");
-        jobs.add("Cocinero");
-        jobs.add("Conductor");
-        jobs.add("Contador");
-        jobs.add("Planeador de eventos");
+        bringJobsFromServer();
+//        Agregar Job
+//        ArrayList<String> jobs = new ArrayList<>();
+//        jobs.add("nuevoJob");
+//        for (int i = 0; i<jobs.size();i++)
+//        {
+//            String pushId = FirebaseDatabase.getInstance().getReference().child("jobs").push().getKey();
+//            Job job = new Job(pushId, jobs.get(i), null, null);
+//            FirebaseDatabase.getInstance().getReference().child("jobs").child(pushId).setValue(job);
+//        }
 
-        activity.getJobSpinner().setItems(jobs);
-        activity.getJobSpinner().setOnItemSelectedListener(this);
+    }
+
+    private void bringJobsFromServer() {
+        //Alimentar desde base de datos
+        Query q = FirebaseDatabase.getInstance().getReference().child("jobs");
+        q.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<String> jobs = new ArrayList<>();
+                for (DataSnapshot d : dataSnapshot.getChildren()){
+                    Job j = d.getValue(Job.class);
+                    jobs.add(j.getName());
+                }
+                activity.getJobSpinner().setItems(jobs);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 
@@ -92,14 +98,17 @@ public class ExpertRegistrationController implements View.OnClickListener, Adapt
                 activity.startActivityForResult(gal, GALLERY_CALLBACK);
                 break;
             case R.id.registerBut:
-                String j = activity.getJobSpinner().getSelectedItemsAsString();
                 String pushId =   FirebaseDatabase.getInstance().getReference().child("user").push().getKey();
-                Expert expert = new Expert(pushId, activity.getNameExpertET().getText().toString(),
-                        activity.getPasswordET().getText().toString(), activity.getIdET().getText().toString(),
-                        activity.getCelularET().getText().toString(), activity.getEmailET().getText().toString(),
-                        j, activity.getDescriptionET().getText().toString());
-                Log.e(">>>>>>>>>>>> USER", expert.toString());
+                Expert expert = buildExpert(pushId);
                 FirebaseDatabase.getInstance().getReference().child("experts").child(pushId).setValue(expert);
+                for (int i = 0; i < uris.size(); i++) {
+                    FirebaseStorage storage = FirebaseStorage.getInstance();
+                    storage.getReference().child("experts").child(expert.getId()).child("Doc"+i).putFile(uris.get(i)).addOnCompleteListener(
+                            task -> {
+                                Log.e(">>>>>>>", "photos were successfully uploaded");
+                            }
+                    );
+                }
               //AQUI AGREGRARIAMOS A UNA RAMA DE JOB UN NUEVO EXPERTO (CON SU ID Y EL NOMBRE, O ALGO ASI)
                 /**new Thread(
                         ()-> {
@@ -120,7 +129,21 @@ public class ExpertRegistrationController implements View.OnClickListener, Adapt
         }
         }
 
-        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private Expert buildExpert(String pushId) {
+        String j = activity.getJobSpinner().getSelectedItemsAsString();
+        String name = activity.getNameExpertET().getText().toString();
+        String email = activity.getEmailET().getText().toString();
+        String password = activity.getPasswordET().getText().toString();
+        String description = activity.getDescriptionET().getText().toString();
+        String idDocument = activity.getIdET().getText().toString();
+        long cellphone = Long.parseLong(activity.getCelularET().getText().toString());
+        String profilePicture = "ruta de acceso a la foto en fireBaseStorage";
+        HashMap jobs = new HashMap();
+        jobs.put(j,j);
+        return new Expert(pushId, name, name, email, password, description, idDocument, profilePicture, cellphone, jobs);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
             if (requestCode == CAMERA_CALLBACK && resultCode == RESULT_OK) {
 
@@ -141,19 +164,6 @@ public class ExpertRegistrationController implements View.OnClickListener, Adapt
                 photoAdapter.addPhoto(photo);
             }
         }
-
-
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String j = parent.getItemAtPosition(position).toString();
-        jobs.add(j);
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
 
     @Override
     public void onResponse(int callbackID, String response) {

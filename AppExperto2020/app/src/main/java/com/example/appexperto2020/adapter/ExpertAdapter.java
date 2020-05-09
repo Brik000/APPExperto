@@ -90,7 +90,7 @@ public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder
         public void custom( Expert expert, UserMainController controller)
         {
             //expertIV.
-            expertNameTV.setText(expert.getUsername());
+            expertNameTV.setText(expert.getFirstName()+" "+expert.getLastName());
             expertJobTV.setText(expert.getJobs().toString());
             goToBtn.setContentDescription(expert.getId());
             //IMPLEMENTAR EL DETALLE DEL EXPERTO

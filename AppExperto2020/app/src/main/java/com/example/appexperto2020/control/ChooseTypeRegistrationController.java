@@ -8,7 +8,7 @@ import android.view.View;
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.appexperto2020.view.ChooseTypeOfRegisterActivity;
 import com.example.appexperto2020.view.ExpertRegistrationActivity;
-import com.example.appexperto2020.view.CreateUserActivity;
+import com.example.appexperto2020.view.ClientRegistrationActivity;
 
 public class ChooseTypeRegistrationController implements View.OnClickListener {
 
@@ -46,7 +46,7 @@ public class ChooseTypeRegistrationController implements View.OnClickListener {
                     Animatoo.animateFade(view);
 
                 } else if (this.view.getSearchServiceSwitch().isChecked()) {
-                    Intent i2 = new Intent(this.view, CreateUserActivity.class);
+                    Intent i2 = new Intent(this.view, ClientRegistrationActivity.class);
                     view.startActivity(i2);
                     Animatoo.animateFade(view);
 

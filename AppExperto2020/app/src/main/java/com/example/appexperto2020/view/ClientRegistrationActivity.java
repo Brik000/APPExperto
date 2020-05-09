@@ -1,7 +1,6 @@
 package com.example.appexperto2020.view;
 
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -11,15 +10,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.appexperto2020.R;
-import com.example.appexperto2020.control.UserRegistrationController;
+import com.example.appexperto2020.control.ClientRegistrationController;
 import com.example.appexperto2020.util.MultiSelectionSpinner;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CreateUserActivity extends AppCompatActivity {
+public class ClientRegistrationActivity extends AppCompatActivity {
 
-    private UserRegistrationController controller;
+    private ClientRegistrationController controller;
 
     private EditText txtUserName;
 
@@ -48,7 +47,7 @@ public class CreateUserActivity extends AppCompatActivity {
 
 
 
-        setContentView(R.layout.activity_create_user);
+        setContentView(R.layout.activity_client_registration);
         txtNombreApellido=findViewById(R.id.editTextNombre);
         txtUserName=findViewById(R.id.editTextUserSingIn);
         txtEmailUser=findViewById(R.id.editTextMail);
@@ -64,7 +63,7 @@ public class CreateUserActivity extends AppCompatActivity {
         list.add("List1");
         list.add("List2");
         ((MultiSelectionSpinner)spinnerIntereses).setItems(list);
-        controller=new UserRegistrationController(this);
+        controller=new ClientRegistrationController(this);
     }
     @Override
     public void onBackPressed() {
