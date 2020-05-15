@@ -5,8 +5,6 @@
     <string name="login_expert">Ingresar como experto</string>
     <string name="login_user">Ingresar como cliente</string>
     <string name="register">Registrarme</string>
-    <string name="username">Usuario</string>
-    <string name="password">Contraseña</string>
     <string name="add_pp">Agrega una foto de perfil</string>
     <string name="login">Iniciar sesión</string>
 
@@ -35,7 +33,8 @@
     <string name="descriptionStart">Descripción (Opcional)</string>
     <string name="birthDate">Fecha de nacimiento</string>
     <string name="title_activity_job_line">Selecciona las áreas de interés</string>
-    <string name="addFiles">Adjunte aquí foto de documentos, certificados, o fotos de trabajo que validen su experiencia. (Opcional)</string>
+    <string name="addFilesExpert">Adjunta aquí foto de documentos, certificados, o fotos de trabajo que validen su experiencia. (Opcional)</string>
+    <string name="addFilesClient">Adjunta aquí fotos de los servicios o productos de interés que más te llamen la atención. (Opcional)</string>
 
     <!-- Strings for navigation -->
     <string name="next">Siguiente</string>

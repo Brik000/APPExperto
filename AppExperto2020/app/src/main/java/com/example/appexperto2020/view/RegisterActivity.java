@@ -14,17 +14,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.appexperto2020.R;
-import com.example.appexperto2020.control.ExpertRegistrationController;
+import com.example.appexperto2020.control.RegisterController;
 import com.example.appexperto2020.util.Constants;
 import com.example.appexperto2020.util.MultiSelectionSpinner;
 import com.google.android.material.textfield.TextInputLayout;
 
-public class ExpertRegistrationActivity extends AppCompatActivity {
+import lombok.Getter;
 
-    private ExpertRegistrationController controller;
+public class RegisterActivity extends AppCompatActivity {
 
+    private RegisterController controller;
+    @Getter
     private ImageView sessionImage;
-    private TextView iAmTV;
+    @Getter
+    private TextView iAmTV, addFilesTV;
 
     private TextInputLayout fistNameET;
     private TextInputLayout lastNameET;
@@ -37,7 +40,7 @@ public class ExpertRegistrationActivity extends AppCompatActivity {
     private GridView photoList;
     private Button registerBut;
     private MultiSelectionSpinner  jobSpinner;
-    private ImageView addPhotoIV, ppIV;
+    private ImageView addPhotoIV;
 
     public ImageView getAddPhotoBut() {
         return addPhotoBut;
@@ -50,13 +53,12 @@ public class ExpertRegistrationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_expert_registration);
-        String response = getIntent().getExtras().getString(Constants.SESSION_TYPE);
-        nameExpertET = findViewById(R.id.firstNameET);
-        ppIV = findViewById(R.id.ppIV);
+        setContentView(R.layout.activity_register);
+        String session = getIntent().getExtras().getString(Constants.SESSION_TYPE);
+        fistNameET = findViewById(R.id.firstNameET);
         addPhotoIV = findViewById(R.id.addPhotoIV);
-        fistNameET = findViewById(R.id.firstNameExpertET);
-        lastNameET = findViewById(R.id.lastNameExpertET);
+        fistNameET = findViewById(R.id.firstNameET);
+        lastNameET = findViewById(R.id.lastNameET);
         passwordET = findViewById(R.id.passwordET);
         documentET = findViewById(R.id.documentET);
         celularET = findViewById(R.id.cellphoneET);
@@ -66,26 +68,26 @@ public class ExpertRegistrationActivity extends AppCompatActivity {
         registerBut = findViewById(R.id.registerBut);
         descriptionET = findViewById(R.id.descriptionET);
         jobSpinner = findViewById(R.id.jobSpinner);
-        controller = new ExpertRegistrationController(this);
+        controller = new RegisterController(session,this);
 
         sessionImage = findViewById(R.id.sessionImage);
         iAmTV = findViewById(R.id.iAmTV);
-        if(response.equals(Constants.SESSION_CLIENT)) {
+        addFilesTV = findViewById(R.id.addFilesTV);
+
+        if(session.equals(Constants.SESSION_CLIENT)) {
             sessionImage.setImageResource(R.drawable.client);
             iAmTV.setText(getString(R.string.register_client_title));
+            addFilesTV.setText(R.string.addFilesClient);
         }
         else {
             sessionImage.setImageResource(R.drawable.worker);
             iAmTV.setText(getString(R.string.register_expert_title));
+            addFilesTV.setText(R.string.addFilesExpert);
         }
     }
 
     public ImageView getAddPhotoIV() {
         return addPhotoIV;
-    }
-
-    public ImageView getPpIV() {
-        return ppIV;
     }
 
     public EditText getPasswordET() {
@@ -96,10 +98,10 @@ public class ExpertRegistrationActivity extends AppCompatActivity {
         return documentET.getEditText();
     }
     public EditText getFistNameET() {
-        return fistNameET;
+        return fistNameET.getEditText();
     }
     public EditText getLastNameET() {
-        return lastNameET;
+        return lastNameET.getEditText();
     }
 
 

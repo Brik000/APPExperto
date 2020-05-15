@@ -24,51 +24,14 @@ import java.util.HashMap;
 public class UserMainController implements View.OnClickListener{
 
     private UsersMainActivity activity;
-    private ExpertAdapter expertAdapter;
-    private HashMap<String, String> interests;
-    public ArrayList<Expert> aExperts;
-    public ArrayList<Expert> experts;
-    public ArrayList<Job> interestJobs;
 
     public UserMainController(UsersMainActivity activity)
     {
         this.activity = activity;
         String username = (String) activity.getIntent().getExtras().get("userName");
-        Log.e(">>>>",username);
         String[] firtName = username.split(" ");
-        aExperts= new ArrayList<>();
         activity.getWelcomeTV().setText("Bienvenid@ " +firtName[0]);
-        interests = new HashMap<String, String>();
-        interests.put("-M7Ik4dVFjoJuCPGXj3o", "-M7Ik4dVFjoJuCPGXj3o");
-        interests.put("-M7Ik4eVqhZB1R5B7kaw","-M7Ik4eVqhZB1R5B7kaw");
-
         findExpertsByInterests();
-
-        for(int i = 0; i < interests.size(); i++)
-        {
-            for(int j=0; j<aExperts.size();j++)
-            {
-                for(int k = 0; k<aExperts.get(j).getJobList().size(); k++)
-                {
-                    if(interests.containsKey(aExperts.get(j).getJobList().get(k)))
-                    {
-                        experts.add(aExperts.get(j));
-                    }
-                }
-
-            }
-        }
-
-
-
-
-        LinearLayoutManager linearLayoutManager = new GridLayoutManager(activity, 2);
-      //  linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        activity.getExpertsRV().setLayoutManager(linearLayoutManager);
-        expertAdapter = new ExpertAdapter(experts, this);
-        activity.getExpertsRV().setAdapter(expertAdapter);
-
-
     }
 
     @Override
@@ -78,17 +41,19 @@ public class UserMainController implements View.OnClickListener{
 
     public void findExpertsByInterests(){
         Query q = FirebaseDatabase.getInstance().getReference().child("experts");
-        experts = new ArrayList<>();
+        HashMap<String, String> interests = new HashMap<String, String>();
+        interests.put("-M7Ik4dVFjoJuCPGXj3o", "-M7Ik4dVFjoJuCPGXj3o");
+        interests.put("-M7Ik4eVqhZB1R5B7kaw","-M7Ik4eVqhZB1R5B7kaw");
+        ArrayList experts = new ArrayList<>();
         q.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                aExperts = new ArrayList<>();
                 for (DataSnapshot d : dataSnapshot.getChildren()){
                     Expert expert = d.getValue(Expert.class);
                     Log.e(">>>>>>>",expert.getFirstName());
-
-                    aExperts.add(expert);
+                    experts.add(expert);
                 }
+                activity.getAdapter().setData(experts);
             }
 
             @Override

@@ -1,6 +1,8 @@
 package com.example.appexperto2020.view;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
@@ -9,7 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.appexperto2020.R;
+import com.example.appexperto2020.adapter.ExpertAdapter;
 import com.example.appexperto2020.control.UserMainController;
+
+import lombok.Getter;
 
 public class UsersMainActivity extends AppCompatActivity {
 
@@ -17,6 +22,9 @@ public class UsersMainActivity extends AppCompatActivity {
     private TextView welcomeTV;
     private ImageView logOutIV, profileIV, servicesIV;
     private RecyclerView expertsRV;
+    @Getter
+    private ExpertAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,7 +36,10 @@ public class UsersMainActivity extends AppCompatActivity {
         expertsRV = findViewById(R.id.expertsRV);
 
         controller = new UserMainController(this);
-
+        adapter = new ExpertAdapter(controller);
+        LinearLayoutManager linearLayoutManager = new GridLayoutManager(this, 2);
+        getExpertsRV().setLayoutManager(linearLayoutManager);
+        getExpertsRV().setAdapter(adapter);
     }
 
     public TextView getWelcomeTV() {

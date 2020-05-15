@@ -9,14 +9,12 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @EqualsAndHashCode(callSuper = true)
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 public class Expert extends User {
 
     private long cellphone;
 
-    private ArrayList<Job> jobList;
+    private HashMap<String,Job> jobList;
     //TODAVIA NP
     //private String fotoPerfil;
     //private String fotos;

@@ -12,12 +12,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import com.example.appexperto2020.R;
+import com.example.appexperto2020.adapter.PhotoCustomAdapter;
 import com.example.appexperto2020.model.Expert;
 import com.example.appexperto2020.model.Job;
 import com.example.appexperto2020.util.Constants;
 import com.example.appexperto2020.util.HTTPSWebUtilDomi;
 import com.example.appexperto2020.util.UtilDomi;
-import com.example.appexperto2020.view.ExpertRegistrationActivity;
+import com.example.appexperto2020.view.RegisterActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -27,47 +28,42 @@ import com.google.firebase.storage.FirebaseStorage;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static com.example.appexperto2020.util.Constants.GALLERY_CALLBACK;
 import static com.example.appexperto2020.util.Constants.GALLERY_CALLBACK2;
 
-public class ExpertRegistrationController implements View.OnClickListener, HTTPSWebUtilDomi.OnResponseListener {
+public class RegisterController implements View.OnClickListener, HTTPSWebUtilDomi.OnResponseListener {
 
     public static final int CAMERA_CALLBACK = 1;
-    private ExpertRegistrationActivity activity;
-    private ArrayList<File> photos;
+    private RegisterActivity activity;
     private PhotoCustomAdapter photoAdapter;
     private Uri uriPp;
     private ArrayList<Uri> uris;
     private HTTPSWebUtilDomi httpsUtil;
 
+    private String session;
     private ArrayList<Job> jobsFromServer;
 
-
-    public ExpertRegistrationController(ExpertRegistrationActivity view){
+    public RegisterController(String session, RegisterActivity view){
         activity = view;
+        this.session = session;
         jobsFromServer = new ArrayList<Job>();
         httpsUtil = new HTTPSWebUtilDomi();
         httpsUtil.setListener(this);
         activity.getAddPhotoBut().setOnClickListener(this);
         activity.getRegisterBut().setOnClickListener(this);
         activity.getAddPhotoIV().setOnClickListener(this);
-        photos = new ArrayList<>();
         photoAdapter = new PhotoCustomAdapter();
         this.activity.getPhotoList().setAdapter(photoAdapter);
         File root = new File(view.getExternalFilesDir(null)+"");
         uris = new ArrayList<>();
         bringJobsFromServer();
-
-        Log.e(">>>>>>>>>>>>>", "ENTROOOO");
     }
 
 
     private void bringJobsFromServer() {
-        //Alimentar desde base de datos
         Query q = FirebaseDatabase.getInstance().getReference().child("jobs");
         q.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -107,6 +103,7 @@ public class ExpertRegistrationController implements View.OnClickListener, HTTPS
                 activity.startActivityForResult(g, GALLERY_CALLBACK2);
                 break;
             case R.id.registerBut:
+                //Poner condición de si el atributo session es Constants.SESSION_CLIENT, entonces registrar un Client o en caso contrario, un Expert
                 String pushId =   FirebaseDatabase.getInstance().getReference().child("experts").push().getKey();
                 Expert expert = buildExpert(pushId);
                 FirebaseDatabase.getInstance().getReference().child("experts").child(pushId).setValue(expert);
@@ -174,9 +171,7 @@ public class ExpertRegistrationController implements View.OnClickListener, HTTPS
             {
                 Uri uri = data.getData();
                 uris.add(uri);
-                File file = new File(UtilDomi.getPath(this.activity, uri));
-                PhotoAdapter photo = new PhotoAdapter(file);
-                photos.add(file);
+                File photo = new File(UtilDomi.getPath(this.activity, uri));
                 photoAdapter.addPhoto(photo);
             }
         if (requestCode==GALLERY_CALLBACK2 && resultCode == RESULT_OK)
@@ -185,7 +180,7 @@ public class ExpertRegistrationController implements View.OnClickListener, HTTPS
             File filePp = new File(UtilDomi.getPath(this.activity, uriPp));
             Bitmap i = BitmapFactory.decodeFile(filePp.getPath());
             Bitmap bitmap = Bitmap.createBitmap(i);
-            activity.getPpIV().setImageBitmap(bitmap);
+            activity.getSessionImage().setImageBitmap(bitmap);
         }
         }
 

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.appexperto2020.R;
 import com.example.appexperto2020.control.UserMainController;
 import com.example.appexperto2020.model.Expert;
@@ -19,6 +20,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder> {
 
@@ -26,15 +28,10 @@ public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder
     private UserMainController controller;
     private View.OnClickListener clickListener;
 
-    public ExpertAdapter(ArrayList<Expert> experts, UserMainController controller)
+    public ExpertAdapter(UserMainController controller)
     {
         this.controller = controller;
-        this.experts = experts;
-    }
-
-    public void setOnClickListener(View.OnClickListener callback)
-    {
-        this.clickListener = (View.OnClickListener) callback;
+        this.experts = new ArrayList<>();
     }
 
     public void setData(ArrayList<Expert> experts)
@@ -60,7 +57,27 @@ public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.custom(experts.get(position), controller);
+        Expert expert = experts.get(position);
+        //Optimizar el render de la imagen con el caché
+        //cargar imagen
+        holder.expertNameTV.setText(expert.getFirstName()+" "+expert.getLastName());
+        HashMap<String, Job> jobs = expert.getJobList();
+        String jobDescription = "";
+        for(Job job : jobs.values())
+        {
+            jobDescription += job.getName() + " ";
+        }
+        holder.expertJobTV.setText(jobDescription);
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        storage.getReference().child("pps").child(expert.getId()).getDownloadUrl().
+                addOnSuccessListener(
+                        uri ->{
+                            Log.e(">>>>","PP SUCCESSFULLY DOWNLOAD");
+                        }
+                );
+        holder.goToBtn.setContentDescription(expert.getId());
+        //IMPLEMENTAR EL DETALLE DEL EXPERTO
+        holder.goToBtn.setOnClickListener(controller);
     }
 
     @Override
@@ -87,30 +104,6 @@ public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder
             expertNameTV = view.findViewById(R.id.expertNameTV);
             expertJobTV = view.findViewById(R.id.expertJobTV);
             goToBtn = view.findViewById(R.id.goToBtn);
-
-        }
-
-        public void custom( Expert expert, UserMainController controller)
-        {
-            //expertIV.
-            expertNameTV.setText(expert.getFirstName()+" "+expert.getLastName());
-            ArrayList<Job> jobs = expert.getJobList();
-            String jobDescription = "";
-            for(int i =0; i<jobs.size();i++)
-            {
-                jobDescription += jobs.get(i).getName() + " ";
-            }
-            expertJobTV.setText(jobDescription);
-            FirebaseStorage storage = FirebaseStorage.getInstance();
-            storage.getReference().child("pps").child(expert.getId()).getDownloadUrl().
-                    addOnSuccessListener(
-                            uri ->{
-                                Log.e(">>>>","PP SUCCESSFULLY DOWNLOAD");
-                            }
-                    );
-            goToBtn.setContentDescription(expert.getId());
-            //IMPLEMENTAR EL DETALLE DEL EXPERTO
-            goToBtn.setOnClickListener(controller);
 
         }
     }

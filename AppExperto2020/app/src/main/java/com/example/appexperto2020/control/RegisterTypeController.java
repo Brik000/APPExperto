@@ -5,20 +5,19 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.RadioGroup;
 import android.widget.Switch;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.appexperto2020.R;
 import com.example.appexperto2020.util.Constants;
-import com.example.appexperto2020.view.ChooseTypeOfRegisterActivity;
-import com.example.appexperto2020.view.ExpertRegistrationActivity;
+import com.example.appexperto2020.view.RegisterTypeActivity;
+import com.example.appexperto2020.view.RegisterActivity;
 
-public class ChooseTypeRegistrationController implements View.OnClickListener, Switch.OnCheckedChangeListener {
+public class RegisterTypeController implements View.OnClickListener, Switch.OnCheckedChangeListener {
 
-    private ChooseTypeOfRegisterActivity view;
+    private RegisterTypeActivity view;
 
-    public ChooseTypeRegistrationController(ChooseTypeOfRegisterActivity view)
+    public RegisterTypeController(RegisterTypeActivity view)
     {
         this.view = view;
         this.view.getRegisterBtn().setOnClickListener(this);
@@ -42,7 +41,7 @@ public class ChooseTypeRegistrationController implements View.OnClickListener, S
                 alertDialog.setMessage(view.getString(R.string.choose_one));
                 alertDialog.show();
             } else {
-                Intent i = new Intent(this.view, ExpertRegistrationActivity.class);
+                Intent i = new Intent(this.view, RegisterActivity.class);
 
                 if (view.getOfferServiceSwitch().isChecked()) {
                     i.putExtra(Constants.SESSION_TYPE,Constants.SESSION_EXPERT);

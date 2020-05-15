@@ -2,8 +2,10 @@ package com.example.appexperto2020.model;
 
 import java.util.HashMap;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @EqualsAndHashCode(callSuper = true)
 @Data

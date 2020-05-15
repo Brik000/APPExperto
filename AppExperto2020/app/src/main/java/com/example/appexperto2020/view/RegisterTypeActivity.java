@@ -8,13 +8,13 @@ import android.widget.Switch;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.appexperto2020.R;
-import com.example.appexperto2020.control.ChooseTypeRegistrationController;
+import com.example.appexperto2020.control.RegisterTypeController;
 
-public class ChooseTypeOfRegisterActivity extends AppCompatActivity {
+public class RegisterTypeActivity extends AppCompatActivity {
 
     private Button registerBtn;
     private Switch offerServiceSwitch,searchServiceSwitch;
-    private ChooseTypeRegistrationController controller;
+    private RegisterTypeController controller;
 
     public Button getRegisterBtn() {
         return registerBtn;
@@ -33,13 +33,13 @@ public class ChooseTypeOfRegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_choose_type_of_registration);
+        setContentView(R.layout.activity_register_type);
 
         registerBtn = findViewById(R.id.registerBtn);
         offerServiceSwitch = findViewById(R.id.offerServiceSwitch);
         searchServiceSwitch = findViewById(R.id.searchServiceSwitch);
 
-        controller = new ChooseTypeRegistrationController(this);
+        controller = new RegisterTypeController(this);
 
     }
     @Override

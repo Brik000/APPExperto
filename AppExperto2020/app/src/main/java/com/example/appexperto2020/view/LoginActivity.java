@@ -11,26 +11,27 @@ import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.appexperto2020.R;
 import com.example.appexperto2020.control.LogInController;
 import com.example.appexperto2020.util.Constants;
+import com.google.android.material.textfield.TextInputLayout;
 
 public class LoginActivity extends AppCompatActivity {
 
     private TextView txtLogining;
-    private EditText editUserLog;
-    private EditText editPasswordLog;
+    private TextInputLayout editUserLog;
+    private TextInputLayout editPasswordLog;
     private Button butLogin;
     private LogInController controller;
 
-    private String llegada;
+    private String session;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        String llegada = getIntent().getExtras().getString(Constants.SESSION_TYPE);
+        session = getIntent().getExtras().getString(Constants.SESSION_TYPE);
         txtLogining = findViewById(R.id.txtLogining);
         editUserLog = findViewById(R.id.mailLoginET);
         editPasswordLog = findViewById(R.id.passwordLoginET);
         butLogin = findViewById(R.id.butLogin);
-        txtLogining.setText(llegada);
+        txtLogining.setText(session);
         controller = new LogInController(this);
     }
 
@@ -39,11 +40,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public EditText getEditUserLog() {
-        return editUserLog;
+        return editUserLog.getEditText();
     }
 
     public EditText getEditPasswordLog() {
-        return editPasswordLog;
+        return editPasswordLog.getEditText();
     }
 
     public Button getButLogin() {
@@ -56,8 +57,8 @@ public class LoginActivity extends AppCompatActivity {
         Animatoo.animateFade(this);
     }
 
-    private String getLlegada()
+    private String getSession()
     {
-        return  llegada;
+        return session;
     }
 }
