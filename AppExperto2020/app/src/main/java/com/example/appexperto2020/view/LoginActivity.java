@@ -22,10 +22,10 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        String llegada = getIntent().getExtras().getString(Constants.LOG_IN_TYPE);
+        String llegada = getIntent().getExtras().getString(Constants.SESSION_TYPE);
         txtLogining = findViewById(R.id.txtLogining);
-        editUserLog = findViewById(R.id.editTextUserSingIn);
-        editPasswordLog = findViewById(R.id.editPasswordLog);
+        editUserLog = findViewById(R.id.mailLoginET);
+        editPasswordLog = findViewById(R.id.passwordLoginET);
         butLogin = findViewById(R.id.butLogin);
         txtLogining.setText(llegada);
     }

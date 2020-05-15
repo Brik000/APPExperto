@@ -18,7 +18,6 @@
         <activity android:name=".view.UsersMainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"></activity>
         <activity android:name=".view.ExpertRegistrationActivity" />
-        <activity android:name=".view.ClientRegistrationActivity" />
         <activity android:name=".view.ChooseTypeOfRegisterActivity" />
         <activity android:name=".view.LoginActivity" />
         <activity android:name=".view.SplashScreen">

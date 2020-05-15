@@ -38,13 +38,13 @@ public class MainController implements View.OnClickListener{
         switch (v.getId()){
             case R.id.butLoginClient:
                 Intent i = new Intent(view, LoginActivity.class);
-                i.putExtra(Constants.LOG_IN_TYPE,Constants.LOG_IN_CLIENT);
+                i.putExtra(Constants.SESSION_TYPE,Constants.SESSION_CLIENT);
                 view.startActivity(i);
                 Animatoo.animateFade(view);
                 break;
             case R.id.butLoginWorker:
                 Intent in = new Intent(view, LoginActivity.class);
-                in.putExtra(Constants.LOG_IN_TYPE,Constants.LOG_IN_EXPERT);
+                in.putExtra(Constants.SESSION_TYPE,Constants.SESSION_EXPERT);
                 view.startActivity(in);
                 Animatoo.animateFade(view);
                 break;

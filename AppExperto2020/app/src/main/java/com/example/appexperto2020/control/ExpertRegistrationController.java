@@ -135,7 +135,7 @@ public class ExpertRegistrationController implements View.OnClickListener, HTTPS
         String email = activity.getEmailET().getText().toString();
         String password = activity.getPasswordET().getText().toString();
         String description = activity.getDescriptionET().getText().toString();
-        String idDocument = activity.getIdET().getText().toString();
+        String idDocument = activity.getDocumentET().getText().toString();
         long cellphone = Long.parseLong(activity.getCelularET().getText().toString());
         String profilePicture = "ruta de acceso a la foto en fireBaseStorage";
         HashMap jobs = new HashMap();

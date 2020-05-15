@@ -4,13 +4,17 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.RadioGroup;
+import android.widget.Switch;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
+import com.example.appexperto2020.R;
+import com.example.appexperto2020.util.Constants;
 import com.example.appexperto2020.view.ChooseTypeOfRegisterActivity;
 import com.example.appexperto2020.view.ExpertRegistrationActivity;
-import com.example.appexperto2020.view.ClientRegistrationActivity;
 
-public class ChooseTypeRegistrationController implements View.OnClickListener {
+public class ChooseTypeRegistrationController implements View.OnClickListener, Switch.OnCheckedChangeListener {
 
     private ChooseTypeOfRegisterActivity view;
 
@@ -18,14 +22,15 @@ public class ChooseTypeRegistrationController implements View.OnClickListener {
     {
         this.view = view;
         this.view.getRegisterBtn().setOnClickListener(this);
+        view.getOfferServiceSwitch().setOnCheckedChangeListener(this);
+        view.getSearchServiceSwitch().setOnCheckedChangeListener(this);
     }
 
     @Override
     public void onClick(View v) {
 
-        AlertDialog alertDialog = new AlertDialog.Builder(this.view).create();
-        alertDialog.setTitle("Alert");
-        alertDialog.setMessage("Escoge solo una opción");
+        AlertDialog alertDialog = new AlertDialog.Builder(view).create();
+        alertDialog.setTitle(view.getString(R.string.alert_title));
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -33,26 +38,41 @@ public class ChooseTypeRegistrationController implements View.OnClickListener {
                     }
                 });
 
-            if (this.view.getOfferServiceSwitch().isChecked() && this.view.getSearchServiceSwitch().isChecked()) {
-                alertDialog.show();
-            } else if (!this.view.getOfferServiceSwitch().isChecked() && !this.view.getSearchServiceSwitch().isChecked()) {
-                alertDialog.setMessage("Escoge una opción para poder registrarte");
+            if (!view.getOfferServiceSwitch().isChecked() && !view.getSearchServiceSwitch().isChecked()) {
+                alertDialog.setMessage(view.getString(R.string.choose_one));
                 alertDialog.show();
             } else {
-                if (this.view.getOfferServiceSwitch().isChecked()) {
+                Intent i = new Intent(this.view, ExpertRegistrationActivity.class);
 
-                    Intent i = new Intent(this.view, ExpertRegistrationActivity.class);
-                    view.startActivity(i);
-                    Animatoo.animateFade(view);
-
-                } else if (this.view.getSearchServiceSwitch().isChecked()) {
-                    Intent i2 = new Intent(this.view, ClientRegistrationActivity.class);
-                    view.startActivity(i2);
-                    Animatoo.animateFade(view);
-
+                if (view.getOfferServiceSwitch().isChecked()) {
+                    i.putExtra(Constants.SESSION_TYPE,Constants.SESSION_EXPERT);
+                } else if (view.getSearchServiceSwitch().isChecked()) {
+                    i.putExtra(Constants.SESSION_TYPE, Constants.SESSION_CLIENT);
                 }
+                view.startActivity(i);
+                    Animatoo.animateFade(view);
+
             }
 
 
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Switch other;
+        switch (buttonView.getId()) {
+            case R.id.offerServiceSwitch:
+                other = view.getSearchServiceSwitch();
+                if(isChecked)
+                    other.setChecked(false);
+                else other.setChecked(true);
+                break;
+            case R.id.searchServiceSwitch:
+                other = view.getOfferServiceSwitch();
+                if(isChecked)
+                    other.setChecked(false);
+                else other.setChecked(true);
+                break;
+        }
     }
 }
