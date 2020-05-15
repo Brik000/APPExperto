@@ -26,8 +26,8 @@ public class ExpertRegistrationActivity extends AppCompatActivity {
     private ImageView sessionImage;
     private TextView iAmTV;
 
-    private TextInputLayout nameExpertET;
-    private TextInputLayout lastNameExpertET;
+    private TextInputLayout fistNameET;
+    private TextInputLayout lastNameET;
     private TextInputLayout documentET;
     private TextInputLayout celularET;
     private TextInputLayout emailET;
@@ -37,6 +37,7 @@ public class ExpertRegistrationActivity extends AppCompatActivity {
     private GridView photoList;
     private Button registerBut;
     private MultiSelectionSpinner  jobSpinner;
+    private ImageView addPhotoIV, ppIV;
 
     public ImageView getAddPhotoBut() {
         return addPhotoBut;
@@ -52,6 +53,10 @@ public class ExpertRegistrationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_expert_registration);
         String response = getIntent().getExtras().getString(Constants.SESSION_TYPE);
         nameExpertET = findViewById(R.id.firstNameET);
+        ppIV = findViewById(R.id.ppIV);
+        addPhotoIV = findViewById(R.id.addPhotoIV);
+        fistNameET = findViewById(R.id.firstNameExpertET);
+        lastNameET = findViewById(R.id.lastNameExpertET);
         passwordET = findViewById(R.id.passwordET);
         documentET = findViewById(R.id.documentET);
         celularET = findViewById(R.id.cellphoneET);
@@ -75,17 +80,28 @@ public class ExpertRegistrationActivity extends AppCompatActivity {
         }
     }
 
-    public EditText getPasswordET() {
-        return passwordET.getEditText();
+    public ImageView getAddPhotoIV() {
+        return addPhotoIV;
     }
 
-    public EditText getNameExpertET() {
-        return nameExpertET.getEditText();
+    public ImageView getPpIV() {
+        return ppIV;
+    }
+
+    public EditText getPasswordET() {
+        return passwordET.getEditText();
     }
 
     public EditText getDocumentET() {
         return documentET.getEditText();
     }
+    public EditText getFistNameET() {
+        return fistNameET;
+    }
+    public EditText getLastNameET() {
+        return lastNameET;
+    }
+
 
     public EditText getCelularET() {
         return celularET.getEditText();

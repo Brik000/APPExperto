@@ -1,6 +1,8 @@
 package com.example.appexperto2020.control;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
@@ -26,9 +28,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static com.example.appexperto2020.util.Constants.GALLERY_CALLBACK;
+import static com.example.appexperto2020.util.Constants.GALLERY_CALLBACK2;
 
 public class ExpertRegistrationController implements View.OnClickListener, HTTPSWebUtilDomi.OnResponseListener {
 
@@ -36,35 +40,31 @@ public class ExpertRegistrationController implements View.OnClickListener, HTTPS
     private ExpertRegistrationActivity activity;
     private ArrayList<File> photos;
     private PhotoCustomAdapter photoAdapter;
-    private File file;
+    private Uri uriPp;
     private ArrayList<Uri> uris;
     private HTTPSWebUtilDomi httpsUtil;
+
+    private ArrayList<Job> jobsFromServer;
 
 
     public ExpertRegistrationController(ExpertRegistrationActivity view){
         activity = view;
+        jobsFromServer = new ArrayList<Job>();
         httpsUtil = new HTTPSWebUtilDomi();
         httpsUtil.setListener(this);
         activity.getAddPhotoBut().setOnClickListener(this);
         activity.getRegisterBut().setOnClickListener(this);
-     // this.activity.getJobList().setAdapter(jobAdapter);
+        activity.getAddPhotoIV().setOnClickListener(this);
         photos = new ArrayList<>();
         photoAdapter = new PhotoCustomAdapter();
         this.activity.getPhotoList().setAdapter(photoAdapter);
         File root = new File(view.getExternalFilesDir(null)+"");
         uris = new ArrayList<>();
         bringJobsFromServer();
-//        Agregar Job
-//        ArrayList<String> jobs = new ArrayList<>();
-//        jobs.add("nuevoJob");
-//        for (int i = 0; i<jobs.size();i++)
-//        {
-//            String pushId = FirebaseDatabase.getInstance().getReference().child("jobs").push().getKey();
-//            Job job = new Job(pushId, jobs.get(i), null, null);
-//            FirebaseDatabase.getInstance().getReference().child("jobs").child(pushId).setValue(job);
-//        }
 
+        Log.e(">>>>>>>>>>>>>", "ENTROOOO");
     }
+
 
     private void bringJobsFromServer() {
         //Alimentar desde base de datos
@@ -75,6 +75,10 @@ public class ExpertRegistrationController implements View.OnClickListener, HTTPS
                 ArrayList<String> jobs = new ArrayList<>();
                 for (DataSnapshot d : dataSnapshot.getChildren()){
                     Job j = d.getValue(Job.class);
+
+                    jobsFromServer.add(j);
+                        Log.e(">>>", "job: "+ j.getName());
+
                     jobs.add(j.getName());
                 }
                 activity.getJobSpinner().setItems(jobs);
@@ -97,8 +101,13 @@ public class ExpertRegistrationController implements View.OnClickListener, HTTPS
                 gal.setType("image/*");
                 activity.startActivityForResult(gal, GALLERY_CALLBACK);
                 break;
+            case R.id.addPhotoIV:
+                Intent g = new Intent(Intent.ACTION_GET_CONTENT);
+                g.setType("image/*");
+                activity.startActivityForResult(g, GALLERY_CALLBACK2);
+                break;
             case R.id.registerBut:
-                String pushId =   FirebaseDatabase.getInstance().getReference().child("user").push().getKey();
+                String pushId =   FirebaseDatabase.getInstance().getReference().child("experts").push().getKey();
                 Expert expert = buildExpert(pushId);
                 FirebaseDatabase.getInstance().getReference().child("experts").child(pushId).setValue(expert);
                 for (int i = 0; i < uris.size(); i++) {
@@ -109,50 +118,57 @@ public class ExpertRegistrationController implements View.OnClickListener, HTTPS
                             }
                     );
                 }
-              //AQUI AGREGRARIAMOS A UNA RAMA DE JOB UN NUEVO EXPERTO (CON SU ID Y EL NOMBRE, O ALGO ASI)
-                /**new Thread(
-                        ()-> {
 
-                            String[] jobs1 = j.split(",");
-                            String json;
-                            for(int q=0; q<jobs1.length;q++)
-                            {
-                                 json = gson.toJson(activity.getNameExpertET().getText().toString());
-                                httpsUtil.POSTrequest(13, Constants.BD_URL_LOCAL_LH + Constants.EXPERTS_GROUP+"/"+jobs1[q], json);
-
-
-                            }
-                        }
-                ).start();**/
-
+                addJobsToExpert(pushId);
                 break;
         }
         }
 
     private Expert buildExpert(String pushId) {
-        String j = activity.getJobSpinner().getSelectedItemsAsString();
-        String name = activity.getNameExpertET().getText().toString();
+
+        if(uriPp!= null){
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            storage.getReference().child("pps").child(pushId).putFile(uriPp);
+        }
+
+
+                String j = activity.getJobSpinner().getSelectedItemsAsString();
+        String firstName = activity.getFistNameET().getText().toString();
+        String lastName = activity.getLastNameET().getText().toString();
+
         String email = activity.getEmailET().getText().toString();
         String password = activity.getPasswordET().getText().toString();
         String description = activity.getDescriptionET().getText().toString();
         String idDocument = activity.getDocumentET().getText().toString();
         long cellphone = Long.parseLong(activity.getCelularET().getText().toString());
-        String profilePicture = "ruta de acceso a la foto en fireBaseStorage";
-        HashMap jobs = new HashMap();
-        jobs.put(j,j);
-        return new Expert(pushId, name, name, email, password, description, idDocument, profilePicture, cellphone, jobs);
+        String profilePicture = pushId;
+
+      //  return new Expert(pushId, firstName,lastName, email, password, description, idDocument, profilePicture, cellphone, jobs);
+          return new Expert(pushId, firstName,lastName, email, password, description, idDocument, profilePicture, cellphone);
+
     }
 
+    public void addJobsToExpert(String pushId)
+    {
+        String[] selectedJobs= activity.getJobSpinner().getSelectedItemsAsString().split(",");
+        List<Integer> selectedIndicies =  activity.getJobSpinner().getSelectedIndicies();
+        for(int i = 0; i<selectedJobs.length;i++)
+        {
+            Job j = jobsFromServer.get(selectedIndicies.get(i));
+            Job newJob = new Job();
+            String idJob =   FirebaseDatabase.getInstance().getReference().child("experts").child(pushId).child("jobList").push().getKey();
+            newJob.setId(j.getId());
+            newJob.setName(selectedJobs[i]);
+            FirebaseDatabase.getInstance().getReference().child("experts").child(pushId).child("jobList").child(idJob).setValue(newJob);
+            Log.e(">>>>>>>>","Jobs register to expert");
+            FirebaseDatabase.getInstance().getReference().child("jobs").child(j.getId()).child("experts").child(pushId).setValue(pushId);
+            Log.e(">>>>>>>>","Expert register to job");
+
+        }
+
+    }
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
-            if (requestCode == CAMERA_CALLBACK && resultCode == RESULT_OK) {
-
-                PhotoAdapter photo = new PhotoAdapter(file);
-                photos.add(file);
-
-                photoAdapter.addPhoto(photo);
-
-            }
 
             if (requestCode==GALLERY_CALLBACK && resultCode == RESULT_OK)
             {
@@ -163,13 +179,20 @@ public class ExpertRegistrationController implements View.OnClickListener, HTTPS
                 photos.add(file);
                 photoAdapter.addPhoto(photo);
             }
+        if (requestCode==GALLERY_CALLBACK2 && resultCode == RESULT_OK)
+        {
+            uriPp  = data.getData();
+            File filePp = new File(UtilDomi.getPath(this.activity, uriPp));
+            Bitmap i = BitmapFactory.decodeFile(filePp.getPath());
+            Bitmap bitmap = Bitmap.createBitmap(i);
+            activity.getPpIV().setImageBitmap(bitmap);
+        }
         }
 
     @Override
     public void onResponse(int callbackID, String response) {
         switch (callbackID){
             case Constants.REGISTER_EXPERT_CALLBACK:
-                Log.d(">>>>","HOLA");
                 break;
 
         }
