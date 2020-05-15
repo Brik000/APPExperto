@@ -11,8 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.example.appexperto2020.R;
 import com.example.appexperto2020.control.ExpertRegistrationController;
@@ -22,7 +20,8 @@ public class ExpertRegistrationActivity extends AppCompatActivity {
 
 
     private ExpertRegistrationController controller;
-    private EditText nameExpertET;
+    private EditText fistNameET;
+    private EditText lastNameET;
     private EditText idET;
     private EditText celularET;
     private EditText emailET;
@@ -32,6 +31,7 @@ public class ExpertRegistrationActivity extends AppCompatActivity {
     private GridView photoList;
     private Button registerBut;
     private MultiSelectionSpinner  jobSpinner;
+    private ImageView addPhotoIV, ppIV;
 
     public ImageView getAddPhotoBut() {
         return addPhotoBut;
@@ -45,7 +45,10 @@ public class ExpertRegistrationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expert_registration);
-        nameExpertET = findViewById(R.id.nameExpertET);
+        ppIV = findViewById(R.id.ppIV);
+        addPhotoIV = findViewById(R.id.addPhotoIV);
+        fistNameET = findViewById(R.id.firstNameExpertET);
+        lastNameET = findViewById(R.id.lastNameExpertET);
         passwordET = findViewById(R.id.passwordET);
         idET = findViewById(R.id.idET);
         celularET = findViewById(R.id.celularET);
@@ -60,13 +63,25 @@ public class ExpertRegistrationActivity extends AppCompatActivity {
 
     }
 
+    public ImageView getAddPhotoIV() {
+        return addPhotoIV;
+    }
+
+    public ImageView getPpIV() {
+        return ppIV;
+    }
+
     public EditText getPasswordET() {
         return passwordET;
     }
 
-    public EditText getNameExpertET() {
-        return nameExpertET;
+    public EditText getFistNameET() {
+        return fistNameET;
     }
+    public EditText getLastNameET() {
+        return lastNameET;
+    }
+
 
     public EditText getIdET() {
         return idET;

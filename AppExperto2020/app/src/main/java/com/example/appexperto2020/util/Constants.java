@@ -8,6 +8,8 @@ public abstract class Constants {
     public static final String EXPERTS_GROUP = "experts.json";
     public static final String JOBS_GROUP = "jobs.json";
     public static final int GALLERY_CALLBACK = 9;
+    public static final int GALLERY_CALLBACK2 = 15;
+
 
     public static final int REGISTER_EXPERT_CALLBACK= 1;
     public static final int REGISTER_USER_CALLBACK=2;

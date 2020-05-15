@@ -3,7 +3,9 @@ package com.example.appexperto2020.model;
 import java.util.HashMap;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class Client extends User {
 

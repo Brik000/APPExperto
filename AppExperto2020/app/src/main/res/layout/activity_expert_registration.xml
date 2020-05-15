@@ -32,9 +32,9 @@
 
 
                                 <ImageView
-                                    android:id="@+id/imageView5"
-                                    android:layout_width="116dp"
-                                    android:layout_height="100dp"
+                                    android:id="@+id/ppIV"
+                                    android:layout_width="150dp"
+                                    android:layout_height="150dp"
                                     android:layout_marginTop="10dp"
                                     android:src="@drawable/worker"
                                     app:layout_constraintEnd_toEndOf="parent"
@@ -53,11 +53,11 @@
                                     android:textSize="25sp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+                                    app:layout_constraintTop_toBottomOf="@+id/ppIV" />
 
 
                                 <EditText
-                                    android:id="@+id/nameExpertET"
+                                    android:id="@+id/firstNameExpertET"
                                     android:layout_width="300dp"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="20dp"
@@ -84,10 +84,10 @@
                                     android:textColor="@color/blueText"
                                     android:textColorHint="@color/blueText"
                                     android:textSize="15dp"
-                                    app:layout_constraintEnd_toEndOf="parent"
 
+                                    app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/nameExpertET" />
+                                    app:layout_constraintTop_toBottomOf="@+id/lastNameExpertET" />
 
                                 <EditText
                                     android:id="@+id/idET"
@@ -151,7 +151,11 @@
                                     android:id="@+id/textView8"
                                     android:layout_width="300dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginStart="40dp"
+                                    android:layout_marginLeft="40dp"
                                     android:layout_marginTop="20dp"
+                                    android:layout_marginEnd="40dp"
+                                    android:layout_marginRight="40dp"
                                     android:fontFamily="@font/lato"
                                     android:text="@string/addFiles"
                                     android:textSize="12dp"
@@ -225,6 +229,40 @@
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/jobSpinner" />
+
+                                <EditText
+                                    android:id="@+id/lastNameExpertET"
+                                    android:layout_width="300dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="10dp"
+                                    android:ems="10"
+                                    android:hint="Apellido"
+                                    android:inputType="textPersonName"
+                                    android:textColor="@color/blueText"
+                                    android:textColorHint="@color/blueText"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/firstNameExpertET" />
+
+                                <ImageView
+                                    android:id="@+id/addPhotoIV"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    app:layout_constraintBottom_toBottomOf="@+id/ppIV"
+                                    app:layout_constraintEnd_toEndOf="@+id/ppIV"
+                                    app:srcCompat="@drawable/cam" />
+
+                                <TextView
+                                    android:id="@+id/textView7"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="5dp"
+                                    android:layout_marginLeft="5dp"
+                                    android:fontFamily="@font/lato"
+                                    android:text="@string/add_pp"
+                                    app:layout_constraintBottom_toBottomOf="@+id/ppIV"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/addPhotoIV" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

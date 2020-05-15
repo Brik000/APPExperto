@@ -1,5 +1,6 @@
 package com.example.appexperto2020.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.appexperto2020.R;
 import com.example.appexperto2020.control.UserMainController;
 import com.example.appexperto2020.model.Expert;
+import com.example.appexperto2020.model.Job;
+import com.google.firebase.storage.FirebaseStorage;
 
 import org.w3c.dom.Text;
 
@@ -91,7 +94,20 @@ public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder
         {
             //expertIV.
             expertNameTV.setText(expert.getFirstName()+" "+expert.getLastName());
-            expertJobTV.setText(expert.getJobs().toString());
+            ArrayList<Job> jobs = expert.getJobList();
+            String jobDescription = "";
+            for(int i =0; i<jobs.size();i++)
+            {
+                jobDescription += jobs.get(i).getName() + " ";
+            }
+            expertJobTV.setText(jobDescription);
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            storage.getReference().child("pps").child(expert.getId()).getDownloadUrl().
+                    addOnSuccessListener(
+                            uri ->{
+                                Log.e(">>>>","PP SUCCESSFULLY DOWNLOAD");
+                            }
+                    );
             goToBtn.setContentDescription(expert.getId());
             //IMPLEMENTAR EL DETALLE DEL EXPERTO
             goToBtn.setOnClickListener(controller);

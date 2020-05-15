@@ -6,6 +6,7 @@
     <string name="register">Registrarme</string>
     <string name="username">Usuario</string>
     <string name="password">Contraseña</string>
+    <string name="add_pp">Agrega una foto de perfil</string>
     <string name="login">Iniciar sesión</string>
     <string name="welcome_user">Esperamos que encuentres lo que necesitas</string>
     <string name="userServices">Tus servicios en curso</string>

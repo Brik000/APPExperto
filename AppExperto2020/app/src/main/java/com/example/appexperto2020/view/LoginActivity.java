@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.appexperto2020.R;
+import com.example.appexperto2020.control.LogInController;
 import com.example.appexperto2020.util.Constants;
 
 public class LoginActivity extends AppCompatActivity {
@@ -17,22 +18,46 @@ public class LoginActivity extends AppCompatActivity {
     private EditText editUserLog;
     private EditText editPasswordLog;
     private Button butLogin;
+    private LogInController controller;
 
+    private String llegada;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        String llegada = getIntent().getExtras().getString(Constants.LOG_IN_TYPE);
+         llegada = getIntent().getExtras().getString(Constants.LOG_IN_TYPE);
         txtLogining = findViewById(R.id.txtLogining);
         editUserLog = findViewById(R.id.editTextUserSingIn);
         editPasswordLog = findViewById(R.id.editPasswordLog);
         butLogin = findViewById(R.id.butLogin);
         txtLogining.setText(llegada);
+        controller = new LogInController(this);
+    }
+
+    public TextView getTxtLogining() {
+        return txtLogining;
+    }
+
+    public EditText getEditUserLog() {
+        return editUserLog;
+    }
+
+    public EditText getEditPasswordLog() {
+        return editPasswordLog;
+    }
+
+    public Button getButLogin() {
+        return butLogin;
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         Animatoo.animateFade(this);
+    }
+
+    private String getLlegada()
+    {
+        return  llegada;
     }
 }
