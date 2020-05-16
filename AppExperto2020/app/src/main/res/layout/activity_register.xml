@@ -95,7 +95,8 @@
 
                                         <com.google.android.material.textfield.TextInputEditText
                                             android:layout_width="match_parent"
-                                            android:layout_height="wrap_content" />
+                                            android:layout_height="wrap_content"
+                                            android:inputType="textEmailAddress" />
                                 </com.google.android.material.textfield.TextInputLayout>
 
                                 <com.google.android.material.textfield.TextInputLayout
@@ -108,15 +109,16 @@
                                     android:layout_marginEnd="32dp"
                                     android:layout_marginRight="32dp"
                                     android:hint="@string/password"
+                                    app:endIconMode="password_toggle"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/mailET"
-                                    app:startIconContentDescription="@string/email"
                                     app:startIconDrawable="@android:drawable/ic_secure">
 
                                         <com.google.android.material.textfield.TextInputEditText
                                             android:layout_width="match_parent"
-                                            android:layout_height="wrap_content" />
+                                            android:layout_height="wrap_content"
+                                            android:inputType="textPassword" />
                                 </com.google.android.material.textfield.TextInputLayout>
 
                                 <com.google.android.material.textfield.TextInputLayout
@@ -129,6 +131,7 @@
                                     android:layout_marginEnd="32dp"
                                     android:layout_marginRight="32dp"
                                     android:hint="@string/password_validation"
+                                    app:endIconMode="password_toggle"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/passwordET"
@@ -137,7 +140,8 @@
 
                                         <com.google.android.material.textfield.TextInputEditText
                                             android:layout_width="match_parent"
-                                            android:layout_height="wrap_content" />
+                                            android:layout_height="wrap_content"
+                                            android:inputType="textPassword" />
                                 </com.google.android.material.textfield.TextInputLayout>
 
                                 <com.google.android.material.textfield.TextInputLayout
@@ -175,7 +179,7 @@
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/repeatPasswordET"
                                     app:startIconContentDescription="@string/document"
-                                    app:startIconDrawable="@drawable/ic_profile">
+                                    app:startIconDrawable="@android:drawable/ic_menu_info_details">
 
                                         <com.google.android.material.textfield.TextInputEditText
                                             android:layout_width="match_parent"
@@ -192,15 +196,17 @@
                                     android:layout_marginEnd="32dp"
                                     android:layout_marginRight="32dp"
                                     android:hint="@string/cellphone"
+                                    android:visibility="visible"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/documentET"
                                     app:startIconContentDescription="@string/cellphone"
-                                    app:startIconDrawable="@drawable/ic_profile">
+                                    app:startIconDrawable="@android:drawable/stat_sys_phone_call">
 
                                         <com.google.android.material.textfield.TextInputEditText
                                             android:layout_width="match_parent"
-                                            android:layout_height="wrap_content" />
+                                            android:layout_height="wrap_content"
+                                            android:inputType="phone" />
                                 </com.google.android.material.textfield.TextInputLayout>
 
                                 <ImageView
@@ -284,7 +290,7 @@
                                 <com.google.android.material.textfield.TextInputLayout
                                     android:id="@+id/descriptionET"
                                     android:layout_width="0dp"
-                                    android:layout_height="200dp"
+                                    android:layout_height="140dp"
                                     android:layout_marginStart="32dp"
                                     android:layout_marginLeft="32dp"
                                     android:layout_marginTop="8dp"

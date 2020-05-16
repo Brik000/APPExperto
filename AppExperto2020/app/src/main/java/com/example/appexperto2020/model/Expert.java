@@ -9,19 +9,17 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 @Data
 public class Expert extends User {
 
     private long cellphone;
 
     private HashMap<String,Job> jobList;
-    //TODAVIA NP
-    //private String fotoPerfil;
-    //private String fotos;
 
-    public Expert(String id, String firstName, String lastName, String email, String password, String description, String idDocument, String profilePicture, long cellphone ) {
-        super(id, firstName, lastName, email, password, description, idDocument, profilePicture);
+    public Expert(String id, String firstName, String lastName, String email, String password, String description, String idDocument, long cellphone, HashMap<String, Job> jobList) {
+        super(id, firstName, lastName, email, password, description, idDocument);
         this.cellphone = cellphone;
+        this.jobList = jobList;
     }
-
 }

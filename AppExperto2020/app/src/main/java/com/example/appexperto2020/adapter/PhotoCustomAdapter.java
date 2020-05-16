@@ -40,7 +40,7 @@ public class PhotoCustomAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View row = inflater.inflate(R.layout.image_line, null);
+        View row = inflater.inflate(R.layout.fragment_image, null);
         ImageView image = row.findViewById(R.id.image);
         Bitmap i = BitmapFactory.decodeFile(photos.get(position).getPath());
         Bitmap bitmap = Bitmap.createScaledBitmap(i,
@@ -48,7 +48,6 @@ public class PhotoCustomAdapter extends BaseAdapter {
                 i.getHeight()/4,
                 false);
         image.setImageBitmap(bitmap);
-
 
         return row;
     }

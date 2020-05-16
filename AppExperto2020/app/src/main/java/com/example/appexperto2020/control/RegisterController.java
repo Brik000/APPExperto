@@ -1,5 +1,7 @@
 package com.example.appexperto2020.control;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,28 +15,34 @@ import androidx.annotation.RequiresApi;
 
 import com.example.appexperto2020.R;
 import com.example.appexperto2020.adapter.PhotoCustomAdapter;
+import com.example.appexperto2020.model.Client;
 import com.example.appexperto2020.model.Expert;
 import com.example.appexperto2020.model.Job;
+import com.example.appexperto2020.model.User;
 import com.example.appexperto2020.util.Constants;
 import com.example.appexperto2020.util.HTTPSWebUtilDomi;
 import com.example.appexperto2020.util.UtilDomi;
 import com.example.appexperto2020.view.RegisterActivity;
+import com.example.appexperto2020.view.UsersMainActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
-import static com.example.appexperto2020.util.Constants.GALLERY_CALLBACK;
-import static com.example.appexperto2020.util.Constants.GALLERY_CALLBACK2;
+import static com.example.appexperto2020.util.Constants.GALLERY_CALLBACK_DOCS;
+import static com.example.appexperto2020.util.Constants.GALLERY_CALLBACK_PP;
 
-public class RegisterController implements View.OnClickListener, HTTPSWebUtilDomi.OnResponseListener {
+public class RegisterController implements View.OnClickListener {
 
     public static final int CAMERA_CALLBACK = 1;
     private RegisterActivity activity;
@@ -44,14 +52,13 @@ public class RegisterController implements View.OnClickListener, HTTPSWebUtilDom
     private HTTPSWebUtilDomi httpsUtil;
 
     private String session;
-    private ArrayList<Job> jobsFromServer;
+    private HashMap<String, Job> jobsFromServer;
 
     public RegisterController(String session, RegisterActivity view){
         activity = view;
         this.session = session;
-        jobsFromServer = new ArrayList<Job>();
+        jobsFromServer = new HashMap<>();
         httpsUtil = new HTTPSWebUtilDomi();
-        httpsUtil.setListener(this);
         activity.getAddPhotoBut().setOnClickListener(this);
         activity.getRegisterBut().setOnClickListener(this);
         activity.getAddPhotoIV().setOnClickListener(this);
@@ -72,7 +79,7 @@ public class RegisterController implements View.OnClickListener, HTTPSWebUtilDom
                 for (DataSnapshot d : dataSnapshot.getChildren()){
                     Job j = d.getValue(Job.class);
 
-                    jobsFromServer.add(j);
+                    jobsFromServer.put(j.getName(), j);
                         Log.e(">>>", "job: "+ j.getName());
 
                     jobs.add(j.getName());
@@ -95,86 +102,119 @@ public class RegisterController implements View.OnClickListener, HTTPSWebUtilDom
             case R.id.addPhotoBut:
                 Intent gal = new Intent(Intent.ACTION_GET_CONTENT);
                 gal.setType("image/*");
-                activity.startActivityForResult(gal, GALLERY_CALLBACK);
+                activity.startActivityForResult(gal, GALLERY_CALLBACK_DOCS);
                 break;
             case R.id.addPhotoIV:
                 Intent g = new Intent(Intent.ACTION_GET_CONTENT);
                 g.setType("image/*");
-                activity.startActivityForResult(g, GALLERY_CALLBACK2);
+                activity.startActivityForResult(g, GALLERY_CALLBACK_PP);
                 break;
             case R.id.registerBut:
-                //Poner condición de si el atributo session es Constants.SESSION_CLIENT, entonces registrar un Client o en caso contrario, un Expert
-                String pushId =   FirebaseDatabase.getInstance().getReference().child("experts").push().getKey();
-                Expert expert = buildExpert(pushId);
-                FirebaseDatabase.getInstance().getReference().child("experts").child(pushId).setValue(expert);
-                for (int i = 0; i < uris.size(); i++) {
-                    FirebaseStorage storage = FirebaseStorage.getInstance();
-                    storage.getReference().child("experts").child(expert.getId()).child("Doc"+i).putFile(uris.get(i)).addOnCompleteListener(
-                            task -> {
-                                Log.e(">>>>>>>", "photos were successfully uploaded");
-                            }
-                    );
+                DatabaseReference dBUser;
+                StorageReference storageUser;
+                if(session.equals(Constants.SESSION_CLIENT)) {
+                    dBUser = FirebaseDatabase.getInstance().getReference().child(Constants.FOLDER_CLIENTS);
+                    storageUser = FirebaseStorage.getInstance().getReference().child(Constants.FOLDER_CLIENTS);
                 }
+                else {
+                    dBUser = FirebaseDatabase.getInstance().getReference().child(Constants.FOLDER_EXPERTS);
+                    storageUser = FirebaseStorage.getInstance().getReference().child(Constants.FOLDER_EXPERTS);
+                }
+                String pushId = dBUser.push().getKey();
+                User user = buildUser(pushId);
 
-                addJobsToExpert(pushId);
+                dBUser.child(pushId).setValue(user);
+                for (int i = 0; i < uris.size(); i++) {
+                        storageUser.child(user.getId()).child("Doc"+i).putFile(uris.get(i)).addOnCompleteListener(
+                                task -> {
+                                    Log.e(">>>>>>>", "photos were successfully uploaded");
+                                }
+                        );
+                    }
+                setupJobsSelected(pushId, user.getFirstName(), dBUser);
                 break;
         }
         }
 
-    private Expert buildExpert(String pushId) {
+    private User buildUser(String pushId) {
 
         if(uriPp!= null){
             FirebaseStorage storage = FirebaseStorage.getInstance();
-            storage.getReference().child("pps").child(pushId).putFile(uriPp);
+            storage.getReference().child(Constants.FOLDER_PROFILE_PICTURES).child(pushId).putFile(uriPp);
         }
-
-
-                String j = activity.getJobSpinner().getSelectedItemsAsString();
         String firstName = activity.getFistNameET().getText().toString();
         String lastName = activity.getLastNameET().getText().toString();
-
         String email = activity.getEmailET().getText().toString();
         String password = activity.getPasswordET().getText().toString();
         String description = activity.getDescriptionET().getText().toString();
         String idDocument = activity.getDocumentET().getText().toString();
-        long cellphone = Long.parseLong(activity.getCelularET().getText().toString());
         String profilePicture = pushId;
-
-      //  return new Expert(pushId, firstName,lastName, email, password, description, idDocument, profilePicture, cellphone, jobs);
-          return new Expert(pushId, firstName,lastName, email, password, description, idDocument, profilePicture, cellphone);
-
+        if(session.equals(Constants.SESSION_CLIENT)) {
+            return new Client(pushId, firstName, lastName, email, password, description, idDocument, null);
+        }
+        else {
+            long cellphone = Long.parseLong(activity.getCelularET().getText().toString());
+            return new Expert(pushId, firstName, lastName, email, password, description, idDocument, cellphone, null);
+        }
     }
 
-    public void addJobsToExpert(String pushId)
+    public void setupJobsSelected(String pushId, String userName, DatabaseReference dBUser)
     {
-        String[] selectedJobs= activity.getJobSpinner().getSelectedItemsAsString().split(",");
-        List<Integer> selectedIndicies =  activity.getJobSpinner().getSelectedIndicies();
+        String[] selectedJobs= activity.getJobSpinner().getSelectedItemsAsString().split(", ");
+        String jobType;
+        String userType;
+        if(session.equals(Constants.SESSION_CLIENT)){
+            jobType = "interests";
+            userType = Constants.FOLDER_CLIENTS;
+        } else {
+            jobType = "jobList";
+            userType = Constants.FOLDER_EXPERTS;
+        }
         for(int i = 0; i<selectedJobs.length;i++)
         {
-            Job j = jobsFromServer.get(selectedIndicies.get(i));
-            Job newJob = new Job();
-            String idJob =   FirebaseDatabase.getInstance().getReference().child("experts").child(pushId).child("jobList").push().getKey();
-            newJob.setId(j.getId());
-            newJob.setName(selectedJobs[i]);
-            FirebaseDatabase.getInstance().getReference().child("experts").child(pushId).child("jobList").child(idJob).setValue(newJob);
-            Log.e(">>>>>>>>","Jobs register to expert");
-            FirebaseDatabase.getInstance().getReference().child("jobs").child(j.getId()).child("experts").child(pushId).setValue(pushId);
-            Log.e(">>>>>>>>","Expert register to job");
-
+            Job j = jobsFromServer.get(selectedJobs[i]);
+            if(j != null) {
+                Job newJob = new Job();
+                newJob.setId(j.getId());
+                newJob.setName(j.getName());
+                dBUser.child(pushId).child(jobType).child(j.getId()).setValue(newJob);
+                FirebaseDatabase.getInstance().getReference().child("jobs").child(j.getId()).child(userType).child(pushId).setValue(pushId);
+                goToUserMain(userName);
+            }
+            else {
+                AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
+                alertDialog.setTitle(activity.getString(R.string.alert_title));
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Vale",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                goToUserMain(userName);
+                            }
+                        });
+                alertDialog.setMessage(activity.getString(R.string.no_choosen));
+                alertDialog.show();
+            }
         }
-
     }
+
+    public void goToUserMain(String userName) {
+        Intent i = new Intent(activity, UsersMainActivity.class);
+        i.putExtra("userName", userName);
+        i.putExtra(Constants.SESSION_TYPE, session);
+        activity.startActivity(i);
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-            if (requestCode==GALLERY_CALLBACK && resultCode == RESULT_OK)
+            if (requestCode== GALLERY_CALLBACK_DOCS && resultCode == RESULT_OK)
             {
                 Uri uri = data.getData();
                 uris.add(uri);
                 File photo = new File(UtilDomi.getPath(this.activity, uri));
                 photoAdapter.addPhoto(photo);
             }
-        if (requestCode==GALLERY_CALLBACK2 && resultCode == RESULT_OK)
+        if (requestCode== GALLERY_CALLBACK_PP && resultCode == RESULT_OK)
         {
             uriPp  = data.getData();
             File filePp = new File(UtilDomi.getPath(this.activity, uriPp));
@@ -183,13 +223,4 @@ public class RegisterController implements View.OnClickListener, HTTPSWebUtilDom
             activity.getSessionImage().setImageBitmap(bitmap);
         }
         }
-
-    @Override
-    public void onResponse(int callbackID, String response) {
-        switch (callbackID){
-            case Constants.REGISTER_EXPERT_CALLBACK:
-                break;
-
-        }
-    }
 }

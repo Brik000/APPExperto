@@ -10,14 +10,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.appexperto2020.R;
 import com.example.appexperto2020.control.UserMainController;
 import com.example.appexperto2020.model.Expert;
 import com.example.appexperto2020.model.Job;
+import com.example.appexperto2020.util.Constants;
 import com.google.firebase.storage.FirebaseStorage;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,7 +41,7 @@ public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.expert_fragement, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_user, parent, false);
         ViewHolder holder = new ViewHolder(v);
         holder.itemView.setOnClickListener(new View.OnClickListener()
         {
@@ -63,13 +61,14 @@ public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder
         holder.expertNameTV.setText(expert.getFirstName()+" "+expert.getLastName());
         HashMap<String, Job> jobs = expert.getJobList();
         String jobDescription = "";
+        if(jobs != null)
         for(Job job : jobs.values())
         {
             jobDescription += job.getName() + " ";
         }
         holder.expertJobTV.setText(jobDescription);
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        storage.getReference().child("pps").child(expert.getId()).getDownloadUrl().
+        storage.getReference().child(Constants.FOLDER_PROFILE_PICTURES).child(expert.getId()).getDownloadUrl().
                 addOnSuccessListener(
                         uri ->{
                             Log.e(">>>>","PP SUCCESSFULLY DOWNLOAD");

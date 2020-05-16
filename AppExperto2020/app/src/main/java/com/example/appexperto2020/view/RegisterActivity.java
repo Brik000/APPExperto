@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -78,11 +79,13 @@ public class RegisterActivity extends AppCompatActivity {
             sessionImage.setImageResource(R.drawable.client);
             iAmTV.setText(getString(R.string.register_client_title));
             addFilesTV.setText(R.string.addFilesClient);
+            celularET.setVisibility(View.GONE);
         }
         else {
             sessionImage.setImageResource(R.drawable.worker);
             iAmTV.setText(getString(R.string.register_expert_title));
             addFilesTV.setText(R.string.addFilesExpert);
+            celularET.setVisibility(View.VISIBLE);
         }
     }
 

@@ -23,16 +23,6 @@ public class LogInController implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId())
         {
-            case R.id.butLoginClient:
-                Intent i = new Intent(activity, UsersMainActivity.class);
-                i.putExtra("userName", "Maria Camila");
-                activity.startActivity(i);
-                break;
-            case R.id.butLoginWorker:
-                Intent i2 = new Intent(activity, UsersMainActivity.class);
-                i2.putExtra("userName", "Maria Camila");
-                activity.startActivity(i2);
-                break;
             case R.id.butLogin:
                 Intent i3 = new Intent(activity, UsersMainActivity.class);
                 i3.putExtra("userName", "Maria Camila");

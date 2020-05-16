@@ -30,7 +30,7 @@ public class RegisterTypeController implements View.OnClickListener, Switch.OnCh
 
         AlertDialog alertDialog = new AlertDialog.Builder(view).create();
         alertDialog.setTitle(view.getString(R.string.alert_title));
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Vale",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();

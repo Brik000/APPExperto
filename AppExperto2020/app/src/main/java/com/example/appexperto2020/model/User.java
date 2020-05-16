@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public abstract class User {
-    private String id, firstName, lastName, email, password, description, idDocument, profilePicture;
+    private String id, firstName, lastName, email, password, description, idDocument;
 
 }

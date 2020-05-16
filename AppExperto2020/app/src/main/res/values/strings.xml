@@ -43,5 +43,6 @@
     <string name="action_settings">Configuración</string>
     <string name="choose_one">Escoge una de las opciones</string>
     <string name="alert_title">¡Hey!</string>
+    <string name="no_choosen">No ingresante ninguna experticie, ¡Pero no importa! Luego podrás agregarlas en tu perfil.</string>
 
 </resources>
