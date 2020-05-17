@@ -43,10 +43,12 @@ public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_user, parent, false);
         ViewHolder holder = new ViewHolder(v);
+
         holder.itemView.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view) {
+
                 clickListener.onClick(view);
             }
         });

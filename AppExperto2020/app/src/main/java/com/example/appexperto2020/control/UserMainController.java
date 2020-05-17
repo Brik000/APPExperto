@@ -1,5 +1,6 @@
 package com.example.appexperto2020.control;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 
@@ -7,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.appexperto2020.ExpertDetails;
 import com.example.appexperto2020.adapter.ExpertAdapter;
 import com.example.appexperto2020.model.Expert;
 import com.example.appexperto2020.model.Job;
@@ -37,6 +39,9 @@ public class UserMainController implements View.OnClickListener{
     @Override
     public void onClick(View v) {
 
+        Intent i = new Intent(v.getContext(), ExpertDetails.class);
+        i.putExtra("id", v.getContentDescription().toString());
+        v.getContext().startActivity(i);
     }
 
     public void findExpertsByInterests(){

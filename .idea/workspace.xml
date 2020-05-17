@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9206dded-23af-4987-a3ee-3fb4b530f4a2" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/AppExperto2020/app/src/main/java/com/example/appexperto2020/control/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/AppExperto2020/app/src/main/java/com/example/appexperto2020/control/MainController.java" afterDir="false" />
-    </list>
+    <list default="true" id="9206dded-23af-4987-a3ee-3fb4b530f4a2" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,7 +13,7 @@
   </component>
   <component name="ProjectId" id="1baw4aL6FxDb0sxpqOjviEZLnnQ" />
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/AppExperto2020" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -47,7 +45,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>

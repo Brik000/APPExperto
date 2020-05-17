@@ -15,8 +15,10 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.UsersMainActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"></activity>
+        <activity android:name=".ExpertDetails"></activity>
+        <activity
+            android:name=".view.UsersMainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity android:name=".view.RegisterActivity" />
         <activity android:name=".view.RegisterTypeActivity" />
         <activity android:name=".view.LoginActivity" />
@@ -38,6 +40,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/paths" />
         </provider>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
