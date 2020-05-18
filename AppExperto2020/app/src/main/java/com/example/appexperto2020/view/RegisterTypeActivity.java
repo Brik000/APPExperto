@@ -2,6 +2,7 @@ package com.example.appexperto2020.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Switch;
@@ -44,7 +45,8 @@ public class RegisterTypeActivity extends AppCompatActivity {
     }
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
         Animatoo.animateFade(this);
     }
 }

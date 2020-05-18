@@ -12,8 +12,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.appexperto2020.R;
 import com.example.appexperto2020.control.RegisterController;
 import com.example.appexperto2020.util.Constants;
@@ -22,6 +24,8 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import lombok.Getter;
 
+import static com.example.appexperto2020.util.Constants.SESSION_TYPE;
+
 public class RegisterActivity extends AppCompatActivity {
 
     private RegisterController controller;
@@ -29,6 +33,8 @@ public class RegisterActivity extends AppCompatActivity {
     private ImageView sessionImage;
     @Getter
     private TextView iAmTV, addFilesTV;
+    @Getter
+    private ProgressBar progressBar;
 
     private TextInputLayout fistNameET;
     private TextInputLayout lastNameET;
@@ -43,19 +49,11 @@ public class RegisterActivity extends AppCompatActivity {
     private MultiSelectionSpinner  jobSpinner;
     private ImageView addPhotoIV;
 
-    public ImageView getAddPhotoBut() {
-        return addPhotoBut;
-    }
-
-    public GridView getPhotoList() {
-        return photoList;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        String session = getIntent().getExtras().getString(Constants.SESSION_TYPE);
+        String session = getIntent().getExtras().getString(SESSION_TYPE);
         fistNameET = findViewById(R.id.firstNameET);
         addPhotoIV = findViewById(R.id.addPhotoIV);
         fistNameET = findViewById(R.id.firstNameET);
@@ -69,8 +67,8 @@ public class RegisterActivity extends AppCompatActivity {
         registerBut = findViewById(R.id.registerBut);
         descriptionET = findViewById(R.id.descriptionET);
         jobSpinner = findViewById(R.id.jobSpinner);
+        progressBar = findViewById(R.id.progressBarRegister);
         controller = new RegisterController(session,this);
-
         sessionImage = findViewById(R.id.sessionImage);
         iAmTV = findViewById(R.id.iAmTV);
         addFilesTV = findViewById(R.id.addFilesTV);
@@ -128,6 +126,14 @@ public class RegisterActivity extends AppCompatActivity {
         return jobSpinner;
     }
 
+    public ImageView getAddPhotoBut() {
+        return addPhotoBut;
+    }
+
+    public GridView getPhotoList() {
+        return photoList;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -135,4 +141,10 @@ public class RegisterActivity extends AppCompatActivity {
         controller.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(this, RegisterTypeActivity.class);
+        startActivity(i);
+        Animatoo.animateCard(this);
+    }
 }

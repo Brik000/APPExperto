@@ -9,18 +9,17 @@ import androidx.core.app.ActivityCompat;
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.appexperto2020.R;
 import com.example.appexperto2020.util.Constants;
-import com.example.appexperto2020.view.RegisterTypeActivity;
 
 import com.example.appexperto2020.view.LoginActivity;
 import com.example.appexperto2020.view.MainActivity;
+import com.example.appexperto2020.view.RegisterTypeActivity;
+import com.example.appexperto2020.view.UserMainActivity;
 
 public class MainController implements View.OnClickListener{
 
     private MainActivity view;
 
     public MainController(MainActivity view) {
-
-
         this.view = view;
 
         ActivityCompat.requestPermissions(view, new String[]{
@@ -52,9 +51,15 @@ public class MainController implements View.OnClickListener{
                 Intent reg = new Intent(view, RegisterTypeActivity.class);
                 view.startActivity(reg);
                 Animatoo.animateFade(view);
-
-
                 break;
         }
+    }
+
+    public void goToUserMain() {
+        Intent i = new Intent(view, UserMainActivity.class);
+        //Hacer una búsqueda para saber si se encuentra en expertos o en clientes
+        i.putExtra(Constants.SESSION_TYPE,Constants.SESSION_CLIENT);
+        view.startActivity(i);
+        Animatoo.animateCard(view);
     }
 }

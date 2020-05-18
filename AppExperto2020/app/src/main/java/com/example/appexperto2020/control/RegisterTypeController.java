@@ -49,8 +49,7 @@ public class RegisterTypeController implements View.OnClickListener, Switch.OnCh
                     i.putExtra(Constants.SESSION_TYPE, Constants.SESSION_CLIENT);
                 }
                 view.startActivity(i);
-                    Animatoo.animateFade(view);
-
+                    Animatoo.animateCard(view);
             }
 
 

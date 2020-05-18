@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -23,7 +24,8 @@ import com.example.appexperto2020.util.Constants;
 import com.example.appexperto2020.util.HTTPSWebUtilDomi;
 import com.example.appexperto2020.util.UtilDomi;
 import com.example.appexperto2020.view.RegisterActivity;
-import com.example.appexperto2020.view.UsersMainActivity;
+import com.example.appexperto2020.view.UserMainActivity;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,15 +38,15 @@ import com.google.firebase.storage.StorageReference;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static com.example.appexperto2020.util.Constants.GALLERY_CALLBACK_DOCS;
 import static com.example.appexperto2020.util.Constants.GALLERY_CALLBACK_PP;
+import static com.example.appexperto2020.util.Constants.SESSION_EXPERT;
+import static com.example.appexperto2020.util.Constants.SESSION_TYPE;
 
 public class RegisterController implements View.OnClickListener {
 
-    public static final int CAMERA_CALLBACK = 1;
     private RegisterActivity activity;
     private PhotoCustomAdapter photoAdapter;
     private Uri uriPp;
@@ -78,10 +80,7 @@ public class RegisterController implements View.OnClickListener {
                 ArrayList<String> jobs = new ArrayList<>();
                 for (DataSnapshot d : dataSnapshot.getChildren()){
                     Job j = d.getValue(Job.class);
-
                     jobsFromServer.put(j.getName(), j);
-                        Log.e(">>>", "job: "+ j.getName());
-
                     jobs.add(j.getName());
                 }
                 activity.getJobSpinner().setItems(jobs);
@@ -110,6 +109,17 @@ public class RegisterController implements View.OnClickListener {
                 activity.startActivityForResult(g, GALLERY_CALLBACK_PP);
                 break;
             case R.id.registerBut:
+                if(activity.getFistNameET().getText().toString().trim().isEmpty()
+                        || activity.getLastNameET().getText().toString().trim().isEmpty()
+                        || activity.getDocumentET().getText().toString().trim().isEmpty()
+                        || activity.getEmailET().getText().toString().trim().isEmpty()
+                        || activity.getPasswordET().getText().toString().trim().isEmpty()
+                        || (session.equals(SESSION_EXPERT) && activity.getCelularET().getText().toString().length()<1)){
+                    Toast.makeText(activity, activity.getString(R.string.fill_blank_spaces), Toast.LENGTH_LONG).show();
+                    return;
+                }
+                activity.getRegisterBut().setEnabled(false);
+                activity.getProgressBar().setVisibility(View.VISIBLE);
                 DatabaseReference dBUser;
                 StorageReference storageUser;
                 if(session.equals(Constants.SESSION_CLIENT)) {
@@ -120,41 +130,56 @@ public class RegisterController implements View.OnClickListener {
                     dBUser = FirebaseDatabase.getInstance().getReference().child(Constants.FOLDER_EXPERTS);
                     storageUser = FirebaseStorage.getInstance().getReference().child(Constants.FOLDER_EXPERTS);
                 }
-                String pushId = dBUser.push().getKey();
-                User user = buildUser(pushId);
+                User user = buildUser();
 
-                dBUser.child(pushId).setValue(user);
-                for (int i = 0; i < uris.size(); i++) {
-                        storageUser.child(user.getId()).child("Doc"+i).putFile(uris.get(i)).addOnCompleteListener(
-                                task -> {
-                                    Log.e(">>>>>>>", "photos were successfully uploaded");
-                                }
-                        );
-                    }
-                setupJobsSelected(pushId, user.getFirstName(), dBUser);
+                FirebaseAuth.getInstance().createUserWithEmailAndPassword(user.getEmail(), user.getPassword()).addOnSuccessListener(
+                        (authResult) -> {
+                            loadingFinished();
+                            String id = FirebaseAuth.getInstance().getUid();
+                            user.setId(id);
+                            if(uriPp!= null){
+                                FirebaseStorage storage = FirebaseStorage.getInstance();
+                                storage.getReference().child(Constants.FOLDER_PROFILE_PICTURES).child(id).putFile(uriPp);
+                            }
+                            dBUser.child(id).setValue(user);
+                            for (int i = 0; i < uris.size(); i++) {
+                                storageUser.child(user.getId()).child("Doc"+i).putFile(uris.get(i)).addOnCompleteListener(
+                                        task -> {
+                                            Log.e(">>>>>>>", "photos were successfully uploaded");
+                                        }
+                                );
+                            }
+                            setupJobsSelected(id, user.getFirstName(), dBUser);
+                        }
+                ).addOnFailureListener(
+                        (e) -> {
+                            loadingFinished();
+                            Toast.makeText(activity, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        }
+                );
+
                 break;
         }
         }
 
-    private User buildUser(String pushId) {
+        private void loadingFinished() {
+            activity.getRegisterBut().setEnabled(true);
+            activity.getProgressBar().setVisibility(View.GONE);
+    }
 
-        if(uriPp!= null){
-            FirebaseStorage storage = FirebaseStorage.getInstance();
-            storage.getReference().child(Constants.FOLDER_PROFILE_PICTURES).child(pushId).putFile(uriPp);
-        }
+    private User buildUser() {
         String firstName = activity.getFistNameET().getText().toString();
         String lastName = activity.getLastNameET().getText().toString();
         String email = activity.getEmailET().getText().toString();
         String password = activity.getPasswordET().getText().toString();
         String description = activity.getDescriptionET().getText().toString();
         String idDocument = activity.getDocumentET().getText().toString();
-        String profilePicture = pushId;
         if(session.equals(Constants.SESSION_CLIENT)) {
-            return new Client(pushId, firstName, lastName, email, password, description, idDocument, null);
+            return new Client(null, firstName, lastName, email, password, description, idDocument, null);
         }
         else {
             long cellphone = Long.parseLong(activity.getCelularET().getText().toString());
-            return new Expert(pushId, firstName, lastName, email, password, description, idDocument, cellphone, null);
+            return new Expert(null, firstName, lastName, email, password, description, idDocument, cellphone, null);
         }
     }
 
@@ -184,7 +209,7 @@ public class RegisterController implements View.OnClickListener {
             else {
                 AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
                 alertDialog.setTitle(activity.getString(R.string.alert_title));
-                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Vale",
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, activity.getString(R.string.agree),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -198,9 +223,8 @@ public class RegisterController implements View.OnClickListener {
     }
 
     public void goToUserMain(String userName) {
-        Intent i = new Intent(activity, UsersMainActivity.class);
-        i.putExtra("userName", userName);
-        i.putExtra(Constants.SESSION_TYPE, session);
+        Intent i = new Intent(activity, UserMainActivity.class);
+        i.putExtra(SESSION_TYPE, session);
         activity.startActivity(i);
     }
 

@@ -10,7 +10,4 @@ public abstract class Constants {
     public static final String FOLDER_CLIENTS = "clients";
     public static final String FOLDER_EXPERTS = "experts";
     public static final String FOLDER_PROFILE_PICTURES = "profilePictures";
-
-    public static final int REGISTER_EXPERT_CALLBACK= 1;
-    public static final int REGISTER_CLIENT_CALLBACK=2;
 }

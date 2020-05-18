@@ -70,12 +70,12 @@ public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder
         }
         holder.expertJobTV.setText(jobDescription);
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        storage.getReference().child(Constants.FOLDER_PROFILE_PICTURES).child(expert.getId()).getDownloadUrl().
-                addOnSuccessListener(
-                        uri ->{
-                            Log.e(">>>>","PP SUCCESSFULLY DOWNLOAD");
-                        }
-                );
+//        storage.getReference().child(Constants.FOLDER_PROFILE_PICTURES).child(expert.getId()).getDownloadUrl().
+//                addOnSuccessListener(
+//                        uri ->{
+//                            Log.e(">>>>","PP SUCCESSFULLY DOWNLOAD");
+//                        }
+//                );
         holder.goToBtn.setContentDescription(expert.getId());
         //IMPLEMENTAR EL DETALLE DEL EXPERTO
         holder.goToBtn.setOnClickListener(controller);
