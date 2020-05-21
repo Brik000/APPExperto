@@ -25,6 +25,7 @@ import com.example.appexperto2020.util.HTTPSWebUtilDomi;
 import com.example.appexperto2020.util.UtilDomi;
 import com.example.appexperto2020.view.RegisterActivity;
 import com.example.appexperto2020.view.UserMainActivity;
+import com.facebook.AccessToken;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,6 +40,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import static android.app.Activity.RESULT_OK;
 import static com.example.appexperto2020.util.Constants.GALLERY_CALLBACK_DOCS;
 import static com.example.appexperto2020.util.Constants.GALLERY_CALLBACK_PP;
@@ -49,9 +53,9 @@ public class RegisterController implements View.OnClickListener {
 
     private RegisterActivity activity;
     private PhotoCustomAdapter photoAdapter;
+    @Setter
     private Uri uriPp;
     private ArrayList<Uri> uris;
-    private HTTPSWebUtilDomi httpsUtil;
 
     private String session;
     private HashMap<String, Job> jobsFromServer;
@@ -60,7 +64,6 @@ public class RegisterController implements View.OnClickListener {
         activity = view;
         this.session = session;
         jobsFromServer = new HashMap<>();
-        httpsUtil = new HTTPSWebUtilDomi();
         activity.getAddPhotoBut().setOnClickListener(this);
         activity.getRegisterBut().setOnClickListener(this);
         activity.getAddPhotoIV().setOnClickListener(this);
@@ -109,13 +112,22 @@ public class RegisterController implements View.OnClickListener {
                 activity.startActivityForResult(g, GALLERY_CALLBACK_PP);
                 break;
             case R.id.registerBut:
-                if(activity.getFistNameET().getText().toString().trim().isEmpty()
-                        || activity.getLastNameET().getText().toString().trim().isEmpty()
-                        || activity.getDocumentET().getText().toString().trim().isEmpty()
-                        || activity.getEmailET().getText().toString().trim().isEmpty()
-                        || activity.getPasswordET().getText().toString().trim().isEmpty()
-                        || (session.equals(SESSION_EXPERT) && activity.getCelularET().getText().toString().length()<1)){
+                if(AccessToken.getCurrentAccessToken() != null && (activity.getDocumentET().getEditText().getText().toString().trim().isEmpty()
+                        || (session.equals(SESSION_EXPERT) && activity.getCellphoneET().getEditText().getText().toString().length()<1))) {
                     Toast.makeText(activity, activity.getString(R.string.fill_blank_spaces), Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if(AccessToken.getCurrentAccessToken() == null && (activity.getFistNameET().getEditText().getText().toString().trim().isEmpty()
+                        || activity.getLastNameET().getEditText().getText().toString().trim().isEmpty()
+                        || activity.getDocumentET().getEditText().getText().toString().trim().isEmpty()
+                        || activity.getEmailET().getEditText().getText().toString().trim().isEmpty()
+                        || activity.getPasswordET().getEditText().getText().toString().trim().isEmpty()
+                        || (session.equals(SESSION_EXPERT) && activity.getCellphoneET().getEditText().getText().toString().length()<1))){
+                    Toast.makeText(activity, activity.getString(R.string.fill_blank_spaces), Toast.LENGTH_LONG).show();
+                    return;
+                } if (!activity.getPasswordET().getEditText().getText().toString().trim().equals(
+                        activity.getRepeatPasswordET().getEditText().getText().toString().trim())) {
+                    Toast.makeText(activity, activity.getString(R.string.password_repeat_wrong), Toast.LENGTH_LONG).show();
                     return;
                 }
                 activity.getRegisterBut().setEnabled(false);
@@ -131,25 +143,10 @@ public class RegisterController implements View.OnClickListener {
                     storageUser = FirebaseStorage.getInstance().getReference().child(Constants.FOLDER_EXPERTS);
                 }
                 User user = buildUser();
-
+                if (AccessToken.getCurrentAccessToken() == null)
                 FirebaseAuth.getInstance().createUserWithEmailAndPassword(user.getEmail(), user.getPassword()).addOnSuccessListener(
                         (authResult) -> {
-                            loadingFinished();
-                            String id = FirebaseAuth.getInstance().getUid();
-                            user.setId(id);
-                            if(uriPp!= null){
-                                FirebaseStorage storage = FirebaseStorage.getInstance();
-                                storage.getReference().child(Constants.FOLDER_PROFILE_PICTURES).child(id).putFile(uriPp);
-                            }
-                            dBUser.child(id).setValue(user);
-                            for (int i = 0; i < uris.size(); i++) {
-                                storageUser.child(user.getId()).child("Doc"+i).putFile(uris.get(i)).addOnCompleteListener(
-                                        task -> {
-                                            Log.e(">>>>>>>", "photos were successfully uploaded");
-                                        }
-                                );
-                            }
-                            setupJobsSelected(id, user.getFirstName(), dBUser);
+                            registerInDataBase(user,dBUser,storageUser);
                         }
                 ).addOnFailureListener(
                         (e) -> {
@@ -157,28 +154,50 @@ public class RegisterController implements View.OnClickListener {
                             Toast.makeText(activity, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                         }
                 );
-
+                else {
+                    Log.e(">>","Ingresa datos en DB con auth de facebook");
+                    registerInDataBase(user, dBUser, storageUser);
+                }
                 break;
         }
         }
 
-        private void loadingFinished() {
+    private void registerInDataBase(User user, DatabaseReference dBUser, StorageReference storageUser) {
+        loadingFinished();
+        String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        user.setId(id);
+        if(uriPp!= null){
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            storage.getReference().child(Constants.FOLDER_PROFILE_PICTURES).child(id).putFile(uriPp);
+        }
+        dBUser.child(id).setValue(user);
+        for (int i = 0; i < uris.size(); i++) {
+            storageUser.child(user.getId()).child("Doc"+i).putFile(uris.get(i)).addOnCompleteListener(
+                    task -> {
+                        Log.e(">>>>>>>", "photos were successfully uploaded");
+                    }
+            );
+        }
+        setupJobsSelected(id, user.getFirstName(), dBUser);
+    }
+
+    private void loadingFinished() {
             activity.getRegisterBut().setEnabled(true);
             activity.getProgressBar().setVisibility(View.GONE);
     }
 
     private User buildUser() {
-        String firstName = activity.getFistNameET().getText().toString();
-        String lastName = activity.getLastNameET().getText().toString();
-        String email = activity.getEmailET().getText().toString();
-        String password = activity.getPasswordET().getText().toString();
-        String description = activity.getDescriptionET().getText().toString();
-        String idDocument = activity.getDocumentET().getText().toString();
+        String firstName = activity.getFistNameET().getEditText().getText().toString();
+        String lastName = activity.getLastNameET().getEditText().getText().toString();
+        String email = activity.getEmailET().getEditText().getText().toString();
+        String password = activity.getPasswordET().getEditText().getText().toString();
+        String description = activity.getDescriptionET().getEditText().getText().toString();
+        String idDocument = activity.getDocumentET().getEditText().getText().toString();
         if(session.equals(Constants.SESSION_CLIENT)) {
             return new Client(null, firstName, lastName, email, password, description, idDocument, null);
         }
         else {
-            long cellphone = Long.parseLong(activity.getCelularET().getText().toString());
+            long cellphone = Long.parseLong(activity.getCellphoneET().getEditText().getText().toString());
             return new Expert(null, firstName, lastName, email, password, description, idDocument, cellphone, null);
         }
     }

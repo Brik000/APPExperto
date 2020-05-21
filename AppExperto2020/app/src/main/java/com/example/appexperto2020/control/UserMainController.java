@@ -17,6 +17,8 @@ import com.example.appexperto2020.model.Expert;
 import com.example.appexperto2020.model.User;
 import com.example.appexperto2020.view.LoginActivity;
 import com.example.appexperto2020.view.UserMainActivity;
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -44,12 +46,14 @@ public class UserMainController implements View.OnClickListener{
     public UserMainController(UserMainActivity activity)
     {
         this.activity = activity;
-        String uid = FirebaseAuth.getInstance().getUid();
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         session = activity.getIntent().getExtras().getString(SESSION_TYPE);
 
         if(session.equals(SESSION_EXPERT))
             folder = FOLDER_EXPERTS;
         else folder = FOLDER_CLIENTS;
+
         FirebaseDatabase.getInstance().getReference().child(folder).child(uid)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -84,7 +88,11 @@ public class UserMainController implements View.OnClickListener{
     }
 
     public void signOut() {
-        FirebaseAuth.getInstance().signOut();
+
+        if(AccessToken.getCurrentAccessToken() != null && !AccessToken.getCurrentAccessToken().isExpired())
+            LoginManager.getInstance().logOut();
+        if(FirebaseAuth.getInstance().getCurrentUser() != null)
+            FirebaseAuth.getInstance().signOut();
         Intent i1 = new Intent(activity, LoginActivity.class);
         i1.putExtra(SESSION_TYPE, session);
         activity.startActivity(i1);

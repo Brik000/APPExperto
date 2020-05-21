@@ -58,4 +58,7 @@
 
 
     <string name="fill_blank_spaces">Recuerda llenar todos los campos obligatorios</string>
+    <string name="near_to_complete_register">Falta poco</string>
+    <string name="near_to_register_body">Ya puedes acceder a la aplicación con facebook, sólo faltan unos datos más.</string>
+    <string name="password_repeat_wrong">Las contraseñas no coinciden, asegúrate de que sean iguales</string>
 </resources>

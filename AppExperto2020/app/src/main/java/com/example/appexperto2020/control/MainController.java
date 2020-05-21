@@ -55,11 +55,21 @@ public class MainController implements View.OnClickListener{
         }
     }
 
-    public void goToUserMain() {
+    public void goToUserMain(String session) {
         Intent i = new Intent(view, UserMainActivity.class);
         //Hacer una búsqueda para saber si se encuentra en expertos o en clientes
-        i.putExtra(Constants.SESSION_TYPE,Constants.SESSION_CLIENT);
+        i.putExtra(Constants.SESSION_TYPE, session);
         view.startActivity(i);
         Animatoo.animateCard(view);
+    }
+
+    public void goToRegisterAfterFacebook(String firstName, String lastName, String urlPP) {
+        Intent reg = new Intent(view, RegisterTypeActivity.class);
+        reg.putExtra(Constants.FACEBOOK_FIRST_NAME, firstName);
+        reg.putExtra(Constants.FACEBOOK_LAST_NAME, lastName);
+        if(urlPP != null)
+        reg.putExtra(Constants.FACEBOOK_PP_URL, urlPP);
+        view.startActivity(reg);
+        Animatoo.animateFade(view);
     }
 }
