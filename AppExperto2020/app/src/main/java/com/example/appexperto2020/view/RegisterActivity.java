@@ -5,72 +5,81 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
+import com.bumptech.glide.Glide;
 import com.example.appexperto2020.R;
 import com.example.appexperto2020.control.RegisterController;
 import com.example.appexperto2020.util.Constants;
+import com.example.appexperto2020.util.HTTPSWebUtilDomi;
 import com.example.appexperto2020.util.MultiSelectionSpinner;
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
 
+import java.io.File;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 import lombok.Getter;
+
+import static com.example.appexperto2020.util.Constants.SESSION_TYPE;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private RegisterController controller;
     @Getter
-    private ImageView sessionImage;
+    private CircleImageView sessionImage;
     @Getter
     private TextView iAmTV, addFilesTV;
-
-    private TextInputLayout fistNameET;
-    private TextInputLayout lastNameET;
-    private TextInputLayout documentET;
-    private TextInputLayout celularET;
-    private TextInputLayout emailET;
-    private TextInputLayout descriptionET;
+    @Getter
+    private ProgressBar progressBar;
+    @Getter
+    private TextInputLayout fistNameET, lastNameET, documentET, cellphoneET, emailET, descriptionET, passwordET, repeatPasswordET;
+    @Getter
     private ImageView addPhotoBut;
-    private TextInputLayout passwordET;
+    @Getter
     private GridView photoList;
+    @Getter
     private Button registerBut;
+    @Getter
     private MultiSelectionSpinner  jobSpinner;
+    @Getter
     private ImageView addPhotoIV;
-
-    public ImageView getAddPhotoBut() {
-        return addPhotoBut;
-    }
-
-    public GridView getPhotoList() {
-        return photoList;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        String session = getIntent().getExtras().getString(Constants.SESSION_TYPE);
+        Bundle extras = getIntent().getExtras();
+        String session = extras.getString(SESSION_TYPE);
         fistNameET = findViewById(R.id.firstNameET);
         addPhotoIV = findViewById(R.id.addPhotoIV);
         fistNameET = findViewById(R.id.firstNameET);
         lastNameET = findViewById(R.id.lastNameET);
         passwordET = findViewById(R.id.passwordET);
+        repeatPasswordET = findViewById(R.id.repeatPasswordET);
         documentET = findViewById(R.id.documentET);
-        celularET = findViewById(R.id.cellphoneET);
+        cellphoneET = findViewById(R.id.cellphoneET);
         emailET = findViewById(R.id.mailET);
         addPhotoBut = findViewById(R.id.addPhotoBut);
         photoList = findViewById(R.id.photoList);
         registerBut = findViewById(R.id.registerBut);
         descriptionET = findViewById(R.id.descriptionET);
         jobSpinner = findViewById(R.id.jobSpinner);
+        progressBar = findViewById(R.id.progressBarRegister);
         controller = new RegisterController(session,this);
-
         sessionImage = findViewById(R.id.sessionImage);
         iAmTV = findViewById(R.id.iAmTV);
         addFilesTV = findViewById(R.id.addFilesTV);
@@ -79,53 +88,33 @@ public class RegisterActivity extends AppCompatActivity {
             sessionImage.setImageResource(R.drawable.client);
             iAmTV.setText(getString(R.string.register_client_title));
             addFilesTV.setText(R.string.addFilesClient);
-            celularET.setVisibility(View.GONE);
-        }
-        else {
+            cellphoneET.setVisibility(View.GONE);
+        } else {
             sessionImage.setImageResource(R.drawable.worker);
             iAmTV.setText(getString(R.string.register_expert_title));
             addFilesTV.setText(R.string.addFilesExpert);
-            celularET.setVisibility(View.VISIBLE);
+            cellphoneET.setVisibility(View.VISIBLE);
         }
-    }
-
-    public ImageView getAddPhotoIV() {
-        return addPhotoIV;
-    }
-
-    public EditText getPasswordET() {
-        return passwordET.getEditText();
-    }
-
-    public EditText getDocumentET() {
-        return documentET.getEditText();
-    }
-    public EditText getFistNameET() {
-        return fistNameET.getEditText();
-    }
-    public EditText getLastNameET() {
-        return lastNameET.getEditText();
-    }
-
-
-    public EditText getCelularET() {
-        return celularET.getEditText();
-    }
-
-    public EditText getEmailET() {
-        return emailET.getEditText();
-    }
-
-    public EditText getDescriptionET() {
-        return descriptionET.getEditText();
-    }
-
-    public Button getRegisterBut() {
-        return registerBut;
-    }
-
-    public MultiSelectionSpinner getJobSpinner() {
-        return jobSpinner;
+        if(extras.getString(Constants.FACEBOOK_FIRST_NAME) != null) {
+            getFistNameET().getEditText().setText(extras.getString(Constants.FACEBOOK_FIRST_NAME));
+            getFistNameET().setVisibility(View.GONE);
+            getEmailET().setVisibility(View.GONE);
+            getPasswordET().setVisibility(View.GONE);
+            getRepeatPasswordET().setVisibility(View.GONE);
+        }
+        if(extras.getString(Constants.FACEBOOK_LAST_NAME) != null) {
+            getLastNameET().getEditText().setText(extras.getString(Constants.FACEBOOK_LAST_NAME));
+            getLastNameET().setVisibility(View.GONE);
+        }
+        if(extras.getString(Constants.FACEBOOK_PP_URL) != null) {
+            Glide.with(this).load(extras.getString(Constants.FACEBOOK_PP_URL)).fitCenter().into(sessionImage);
+            File f = new File(getExternalFilesDir(null)+"/"+FirebaseAuth.getInstance().getCurrentUser().getUid());
+            new Thread(() -> {
+                HTTPSWebUtilDomi utilDomi = new HTTPSWebUtilDomi();
+                utilDomi.saveURLImageOnFile(extras.getString(Constants.FACEBOOK_PP_URL), f);
+                controller.setUriPp(Uri.fromFile(f));
+            }).start();
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -135,4 +124,11 @@ public class RegisterActivity extends AppCompatActivity {
         controller.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(this, RegisterTypeActivity.class);
+        i.putExtras(getIntent());
+        startActivity(i);
+        Animatoo.animateCard(this);
+    }
 }

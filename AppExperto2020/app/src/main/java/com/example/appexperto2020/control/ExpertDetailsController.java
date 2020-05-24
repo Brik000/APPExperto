@@ -1,11 +1,10 @@
 package com.example.appexperto2020.control;
 
-import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 
-import com.example.appexperto2020.ExpertDetails;
+import com.example.appexperto2020.view.UserProfileActivity;
 import com.example.appexperto2020.model.Expert;
 import com.example.appexperto2020.model.Job;
 import com.google.firebase.database.DataSnapshot;
@@ -17,9 +16,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class ExpertDetailsController {
-    private ExpertDetails activity;
+    private UserProfileActivity activity;
 
-    public ExpertDetailsController(ExpertDetails activity) {
+    public ExpertDetailsController(UserProfileActivity activity) {
         this.activity = activity;
         Query query = FirebaseDatabase.getInstance()
                 .getReference()

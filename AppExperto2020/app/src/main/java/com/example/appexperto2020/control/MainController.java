@@ -9,18 +9,17 @@ import androidx.core.app.ActivityCompat;
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.appexperto2020.R;
 import com.example.appexperto2020.util.Constants;
-import com.example.appexperto2020.view.RegisterTypeActivity;
 
 import com.example.appexperto2020.view.LoginActivity;
 import com.example.appexperto2020.view.MainActivity;
+import com.example.appexperto2020.view.RegisterTypeActivity;
+import com.example.appexperto2020.view.UserMainActivity;
 
 public class MainController implements View.OnClickListener{
 
     private MainActivity view;
 
     public MainController(MainActivity view) {
-
-
         this.view = view;
 
         ActivityCompat.requestPermissions(view, new String[]{
@@ -52,9 +51,25 @@ public class MainController implements View.OnClickListener{
                 Intent reg = new Intent(view, RegisterTypeActivity.class);
                 view.startActivity(reg);
                 Animatoo.animateFade(view);
-
-
                 break;
         }
+    }
+
+    public void goToUserMain(String session) {
+        Intent i = new Intent(view, UserMainActivity.class);
+        //Hacer una búsqueda para saber si se encuentra en expertos o en clientes
+        i.putExtra(Constants.SESSION_TYPE, session);
+        view.startActivity(i);
+        Animatoo.animateCard(view);
+    }
+
+    public void goToRegisterAfterFacebook(String firstName, String lastName, String urlPP) {
+        Intent reg = new Intent(view, RegisterTypeActivity.class);
+        reg.putExtra(Constants.FACEBOOK_FIRST_NAME, firstName);
+        reg.putExtra(Constants.FACEBOOK_LAST_NAME, lastName);
+        if(urlPP != null)
+        reg.putExtra(Constants.FACEBOOK_PP_URL, urlPP);
+        view.startActivity(reg);
+        Animatoo.animateFade(view);
     }
 }

@@ -11,6 +11,7 @@ public abstract class Constants {
     public static final String FOLDER_EXPERTS = "experts";
     public static final String FOLDER_PROFILE_PICTURES = "profilePictures";
 
-    public static final int REGISTER_EXPERT_CALLBACK= 1;
-    public static final int REGISTER_CLIENT_CALLBACK=2;
+    public static final String FACEBOOK_FIRST_NAME = "first_name";
+    public static final String FACEBOOK_LAST_NAME = "last_name";
+    public static final String FACEBOOK_PP_URL = "picture";
 }

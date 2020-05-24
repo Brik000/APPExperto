@@ -1,4 +1,4 @@
-package com.example.appexperto2020;
+package com.example.appexperto2020.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,14 +6,13 @@ import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.appexperto2020.R;
 import com.example.appexperto2020.control.ExpertDetailsController;
-
-import org.w3c.dom.Text;
 
 import lombok.Data;
 
 @Data
-public class ExpertDetails extends AppCompatActivity {
+public class UserProfileActivity extends AppCompatActivity {
     private TextView expertDetailsNameTxt,expertDetailsLastNameTxt,expertDetailsDescriptionTxt,expertDetailsCellphoneTxt;
     private ListView expertDetailJobsList;
     private String id;
@@ -21,7 +20,7 @@ public class ExpertDetails extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_expert_details);
+        setContentView(R.layout.activity_user_profile);
 
         expertDetailsNameTxt= findViewById(R.id.expertDetailsNameTxt);
         expertDetailsLastNameTxt= findViewById(R.id.expertDetailsLastNameTxt);

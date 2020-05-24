@@ -1,8 +1,12 @@
 package com.example.appexperto2020.util;
 
+import android.util.Log;
+
 import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -181,6 +185,27 @@ public class HTTPSWebUtilDomi {
             ex.printStackTrace();
         }
 
+    }
+
+    public void saveURLImageOnFile(String url, File file) {
+        try {
+            URL page = new URL(url);
+            HttpsURLConnection connection = (HttpsURLConnection) page.openConnection();
+            InputStream is = connection.getInputStream();
+            FileOutputStream fos = new FileOutputStream(file);
+            byte[] buffer = new byte[4096];
+            int bytesRead;
+            while ((bytesRead = is.read(buffer)) != -1) {
+                fos.write(buffer, 0, bytesRead);
+            }
+            is.close();
+            fos.close();
+            connection.disconnect();
+            Log.e(">>>","Foto descargada!");
+
+        }catch (IOException ex){
+            ex.printStackTrace();
+        }
     }
 
     public interface OnResponseListener {

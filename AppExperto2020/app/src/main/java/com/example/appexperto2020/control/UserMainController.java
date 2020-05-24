@@ -1,59 +1,79 @@
 package com.example.appexperto2020.control;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.example.appexperto2020.ExpertDetails;
-import com.example.appexperto2020.adapter.ExpertAdapter;
-import com.example.appexperto2020.model.Expert;
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.appexperto2020.model.Job;
-import com.example.appexperto2020.view.UsersMainActivity;
+import com.example.appexperto2020.view.UserProfileActivity;
+import com.example.appexperto2020.R;
+import com.example.appexperto2020.model.Client;
+import com.example.appexperto2020.model.Expert;
+import com.example.appexperto2020.model.User;
+import com.example.appexperto2020.view.LoginActivity;
+import com.example.appexperto2020.view.UserMainActivity;
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
+import static com.example.appexperto2020.util.Constants.FOLDER_CLIENTS;
+import static com.example.appexperto2020.util.Constants.FOLDER_EXPERTS;
+import static com.example.appexperto2020.util.Constants.SESSION_EXPERT;
+import static com.example.appexperto2020.util.Constants.SESSION_TYPE;
+
 public class UserMainController implements View.OnClickListener{
 
-    private UsersMainActivity activity;
-    private ExpertAdapter expertAdapter;
+    private UserMainActivity activity;
+    private String user;
+    String session;
+    private String folder;
 
-    private ArrayList<Expert> experts;
-    private HashMap<String, String> interests;
-    public UserMainController(UsersMainActivity activity)
+    public UserMainController(UserMainActivity activity)
     {
 
         this.experts = new ArrayList<>();
         this.expertAdapter = new ExpertAdapter();
         this.activity = activity;
-        activity.getExpertsRV().setAdapter(expertAdapter);
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+        session = activity.getIntent().getExtras().getString(SESSION_TYPE);
 
-        String username = (String) activity.getIntent().getExtras().get("userName");
-        activity.getExpertsRV().setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        activity.getExpertsRV().setLayoutManager(linearLayoutManager);
+        if(session.equals(SESSION_EXPERT))
+            folder = FOLDER_EXPERTS;
+        else folder = FOLDER_CLIENTS;
 
-        activity.getExpertsRV().addItemDecoration(new DividerItemDecoration(activity.getExpertsRV().getContext()
-                , DividerItemDecoration.VERTICAL));
-
-        String[] firstName = username.split(" ");
-
-        activity.getWelcomeTV().setText("Bienvenid@ " +firstName[0]);
-        getInterests();
+        FirebaseDatabase.getInstance().getReference().child(folder).child(uid)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Log.e(">>>","LLega antes del rechazo");
+                        if(folder.equals(FOLDER_EXPERTS))
+                        user = dataSnapshot.child("firstName").getValue(String.class);
+                        else user = dataSnapshot.child("firstName").getValue(String.class);
+                        activity.getWelcomeTV().setText(activity.getString(R.string.welcome_word)+" " +user);
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+    }
+        );
+        activity.getLogOutIV().setOnClickListener(this);
         findExpertsByInterests();
 
     }
@@ -61,33 +81,59 @@ public class UserMainController implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-
-        Intent i = new Intent(v.getContext(), ExpertDetails.class);
-        i.putExtra("id", v.getContentDescription().toString());
-        v.getContext().startActivity(i);
+        switch (v.getId()){
+            case R.id.logOutIV:
+                logOutDialog();
+                break;
+            case R.id.goToBtn:
+            Intent i = new Intent(v.getContext(), UserProfileActivity.class);
+            i.putExtra("id", v.getContentDescription().toString());
+            v.getContext().startActivity(i);
+            break;
+        }
     }
 
-    public void getInterests()
-    {
-        interests = new HashMap<>();
-        interests.put("-M7IlMXw4PfA1HKejHC3","-M7IlMXw4PfA1HKejHC3");
-        interests.put( "-M7IlMXzdZlx9zcnGJ1i", "-M7IlMXzdZlx9zcnGJ1i");
+    public void signOut() {
+
+        if(AccessToken.getCurrentAccessToken() != null && !AccessToken.getCurrentAccessToken().isExpired())
+            LoginManager.getInstance().logOut();
+        if(FirebaseAuth.getInstance().getCurrentUser() != null)
+            FirebaseAuth.getInstance().signOut();
+        Intent i1 = new Intent(activity, LoginActivity.class);
+        i1.putExtra(SESSION_TYPE, session);
+        activity.startActivity(i1);
+        Animatoo.animateDiagonal(activity);
     }
 
-    public void findExpertsByInterests() {
-
-        ArrayList<Expert> expertsFromServer = new ArrayList<>();
-        Query q = FirebaseDatabase.getInstance().getReference().child("experts");
-
+    public void findExpertsByInterests(){
+        activity.getProgressBar().setVisibility(View.VISIBLE);
+        Query q  = FirebaseDatabase.getInstance().getReference().child("experts");
+        HashMap<String, String> interests = new HashMap<String, String>();
+        interests.put("-M7Ik4dVFjoJuCPGXj3o", "-M7Ik4dVFjoJuCPGXj3o");
+        interests.put("-M7Ik4eVqhZB1R5B7kaw","-M7Ik4eVqhZB1R5B7kaw");
+        ArrayList experts = new ArrayList<>();
         q.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot d : dataSnapshot.getChildren()){
-                    Expert expert = d.getValue(Expert.class);
-                    Log.e(">>>>>>>",expert.getFirstName());
-                    checkJob(expert);
-                    expertsFromServer.add(expert);
+                for (DataSnapshot user : dataSnapshot.getChildren()){
+                    Expert expert = user.getValue(Expert.class);
+//                    Log.e(">>","va a obtener el firstName");
+//                    String attribute = user.child("firstName").getValue(String.class);
+//                    expert.setFirstName(attribute);
+//                    Log.e(">>","va a obtener el lastName");
+//                    attribute = user.child("lastName").getValue(String.class);
+//                    expert.setLastName(attribute);
+//                    Log.e(">>","va a obtener el jobList");
+//                    if(user.child("jobList").getKey() != null) {
+//                        Type t = new TypeToken<HashMap<String, Job>>() {
+//                        }.getType();
+//                        expert.setJobList(user.child("jobList").getValue(t));
+//                    }
+//                    Log.e(">>>>>>>", expert.getFirstName());
+                    experts.add(expert);
                 }
+                activity.getProgressBar().setVisibility(View.GONE);
+                activity.getAdapter().setData(experts);
             }
 
             @Override
@@ -98,27 +144,23 @@ public class UserMainController implements View.OnClickListener{
         });
     }
 
-    public void checkJob(Expert expert)
-    {
-        Object[] keys  = interests.keySet().toArray();
-        HashMap<String,Job> jobs = expert.getJobList();
-        for(int i = 0; i<keys.length;i++)
-        {
-            if(jobs.containsKey(keys[i]))
-            {
-                Log.e(">>>>>>>>", "INTEREST"+expert.getFirstName());
-                experts.add(expert);
-                Log.e(">>>>>>>>", expertAdapter.toString());
-
-
-                expertAdapter.addExpert(expert);
-                expertAdapter.notifyDataSetChanged();
-
-
-                break;
+    public void logOutDialog() {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        signOut();
+                        break;
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                        break;
+                }
             }
-        }
-
+        };
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setMessage(activity.getString(R.string.sign_out_ask_message)).setPositiveButton(activity.getString(R.string.agree), dialogClickListener)
+                .setNegativeButton(R.string.no_answer, dialogClickListener).show();
     }
 }
 
