@@ -9,6 +9,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
+import com.example.appexperto2020.adapter.ExpertAdapter;
 import com.example.appexperto2020.model.Job;
 import com.example.appexperto2020.view.UserProfileActivity;
 import com.example.appexperto2020.R;
@@ -47,8 +48,6 @@ public class UserMainController implements View.OnClickListener{
     public UserMainController(UserMainActivity activity)
     {
 
-        this.experts = new ArrayList<>();
-        this.expertAdapter = new ExpertAdapter();
         this.activity = activity;
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
