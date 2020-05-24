@@ -1,0 +1,19 @@
+   "experts":{
+      ".read": "auth != null",
+      "$uid":{
+        ".write": "$uid === auth.uid",
+        ".read": "auth != null",
+        "firstName":{
+        	".read": "auth != null"
+        },
+          "lastName":{
+        	".read": "auth != null"
+        },
+          "jobList":{
+        	".read": "auth != null"
+        },
+          "password":{
+        	".read": "$uid === auth.uid"
+          }
+      }
+    },

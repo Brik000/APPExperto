@@ -36,7 +36,7 @@ public class UsersMainActivity extends AppCompatActivity {
         expertsRV = findViewById(R.id.expertsRV);
 
         controller = new UserMainController(this);
-        adapter = new ExpertAdapter(controller);
+        adapter = new ExpertAdapter();
         LinearLayoutManager linearLayoutManager = new GridLayoutManager(this, 2);
         getExpertsRV().setLayoutManager(linearLayoutManager);
         getExpertsRV().setAdapter(adapter);

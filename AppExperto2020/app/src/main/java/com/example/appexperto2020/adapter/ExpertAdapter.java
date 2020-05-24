@@ -10,102 +10,117 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.appexperto2020.R;
-import com.example.appexperto2020.control.UserMainController;
 import com.example.appexperto2020.model.Expert;
 import com.example.appexperto2020.model.Job;
-import com.example.appexperto2020.util.Constants;
-import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder> {
 
     private ArrayList<Expert> experts;
-    private UserMainController controller;
-    private View.OnClickListener clickListener;
+    private View.OnClickListener mClickListener;
 
-    public ExpertAdapter(UserMainController controller)
+
+    public ExpertAdapter()
     {
-        this.controller = controller;
-        this.experts = new ArrayList<>();
+        Log.e("", "INIT");
+
+        experts = new ArrayList<>();
     }
+
+    public void setClickListener(View.OnClickListener callback) {
+        mClickListener = (View.OnClickListener) callback;
+    }
+
 
     public void setData(ArrayList<Expert> experts)
     {
         this.experts = experts;
         notifyDataSetChanged();
     }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_user, parent, false);
-        ViewHolder holder = new ViewHolder(v);
+        Log.e("", "VIEW HOLDER");
 
-        holder.itemView.setOnClickListener(new View.OnClickListener()
-        {
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.fragment_expert, parent, false);
+        ViewHolder holder = new ViewHolder(v);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                clickListener.onClick(view);
+                mClickListener.onClick(view);
             }
         });
         return holder;
     }
 
+    public Expert getItem(int position)
+    {
+        return experts.get(position);
+    }
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Expert expert = experts.get(position);
-        //Optimizar el render de la imagen con el caché
-        //cargar imagen
-        holder.expertNameTV.setText(expert.getFirstName()+" "+expert.getLastName());
-        HashMap<String, Job> jobs = expert.getJobList();
-        String jobDescription = "";
-        if(jobs != null)
-        for(Job job : jobs.values())
-        {
-            jobDescription += job.getName() + " ";
-        }
-        holder.expertJobTV.setText(jobDescription);
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        storage.getReference().child(Constants.FOLDER_PROFILE_PICTURES).child(expert.getId()).getDownloadUrl().
-                addOnSuccessListener(
-                        uri ->{
-                            Log.e(">>>>","PP SUCCESSFULLY DOWNLOAD");
-                        }
-                );
-        holder.goToBtn.setContentDescription(expert.getId());
-        //IMPLEMENTAR EL DETALLE DEL EXPERTO
-        holder.goToBtn.setOnClickListener(controller);
+        Log.e("", "BIND");
+
+        holder.custom(experts.get(position));
     }
 
     @Override
     public int getItemCount() {
+
         return experts.size();
     }
 
-    public Expert getItem(int position){
-        return experts.get(position);
-    }
 
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
-
-        private View view;
+        private TextView expertNameTv, expertJobTV;
         private ImageView expertIV;
-        private TextView expertNameTV;
-        private TextView expertJobTV;
-        private ImageView goToBtn;
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            this.view = itemView;
+        private View view;
+
+        public ViewHolder(View view) {
+            super(view);
+            Log.e("", "VIEW HOLDER");
+
+            this. view = view;
             expertIV = view.findViewById(R.id.expertIV);
-            expertNameTV = view.findViewById(R.id.expertNameTV);
             expertJobTV = view.findViewById(R.id.expertJobTV);
-            goToBtn = view.findViewById(R.id.goToBtn);
+            expertNameTv = view.findViewById(R.id.expertNameTV);
+            view.setTag(this);
 
         }
+
+
+        // Personalizamos un ViewHolder a partir de un lugar
+        public void custom(Expert expert) {
+            Log.e("", "CUSTOM");
+            expertNameTv.setText(expert.getFirstName() + " " + expert.getLastName());
+            String jobs = "";
+            Object[] keySet = expert.getJobList().keySet().toArray();
+            for(int i = 0; i<keySet.length;i++){
+                Job j = expert.getJobList().get(keySet[i]);
+                if(jobs.equals(""))
+                {
+                    jobs += " "+j.getName();
+                }else
+                {
+                    jobs += " || "+j.getName();
+
+                }
+            }
+            expertJobTV.setText(jobs);
+        }
+    }
+    public void addExpert(Expert ex)
+    {
+        Log.e("", "EXO ADD");
+
+        experts.add(ex);
+
+        notifyDataSetChanged();
     }
 }
