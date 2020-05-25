@@ -14,4 +14,8 @@ public abstract class Constants {
     public static final String FACEBOOK_FIRST_NAME = "first_name";
     public static final String FACEBOOK_LAST_NAME = "last_name";
     public static final String FACEBOOK_PP_URL = "picture";
+
+    public final static String AWAITING="Awaiting";
+    public final static String ACCEPTED="Accepted";
+    public final static String DECLINED="Declined";
 }

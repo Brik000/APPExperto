@@ -65,7 +65,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout3"
+        android:id="@+id/rewardrtxt"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="1dp"
@@ -102,7 +102,7 @@
         android:textColorLink="@color/blueExpert"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3" />
+        app:layout_constraintTop_toBottomOf="@+id/rewardrtxt" />
 
     <ImageView
         android:id="@+id/imagereqservice"
