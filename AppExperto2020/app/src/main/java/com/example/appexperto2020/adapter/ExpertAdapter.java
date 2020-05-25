@@ -1,5 +1,8 @@
 package com.example.appexperto2020.adapter;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +15,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.appexperto2020.R;
+import com.example.appexperto2020.control.UserMainController;
 import com.example.appexperto2020.model.Expert;
 import com.example.appexperto2020.model.Job;
+import com.example.appexperto2020.util.HTTPSWebUtilDomi;
+import com.google.firebase.storage.FirebaseStorage;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder> {
@@ -113,14 +120,51 @@ public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder
                 }
             }
             expertJobTV.setText(jobs);
+            File imageFile = new File(view.getContext().getExternalFilesDir(null)+"/"+expert.getId());
+            if(imageFile.exists())
+            {
+                loadImage(expertIV, imageFile);
+                Log.e("-------", "image exists");
+            }else{
+
+
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                Log.e("-------", "image doesnt exists");
+
+                storage.getReference().child("profilePictures").child("-M7pd7jmsrLHTKIn9YHj").getDownloadUrl().
+                        addOnSuccessListener(
+                                uri ->{
+
+                                    File file = new File(view.getContext().getExternalFilesDir(null) +"/"+expert.getId());
+                                    new Thread(
+                                            () ->
+                                            {
+                                                HTTPSWebUtilDomi utilDomi = new HTTPSWebUtilDomi();
+                                                utilDomi.saveURLImageOnFile(uri.toString(), file);
+                                                Log.e("---->","se guarda");
+                                                loadImage(expertIV, imageFile);
+                                            }
+                                    ).start();
+
+                                }
+                        );
+            }
+
+
+        }
+
+
+
+        private void loadImage(ImageView expertIV, File file) {
+            Bitmap bitmap = BitmapFactory.decodeFile(file.toString());
+            expertIV.setImageBitmap(bitmap);
         }
     }
+
+
     public void addExpert(Expert ex)
     {
-        Log.e("", "EXO ADD");
-
         experts.add(ex);
-
         notifyDataSetChanged();
     }
 }
