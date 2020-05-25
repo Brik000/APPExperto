@@ -57,8 +57,8 @@ public class UserMainController implements View.OnClickListener{
 
     public UserMainController(UserMainActivity activity)
     {
-        this.experts = new ArrayList<>();
-        this.expertAdapter = new ExpertAdapter();
+     
+
         this.activity = activity;
         activity.getExpertsRV().setAdapter(expertAdapter);
 

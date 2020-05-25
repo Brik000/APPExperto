@@ -41,6 +41,14 @@
     <string name="next">Siguiente</string>
     <string name="previous">Atrás</string>
 
+    <!-- Strings needed to request a service -->
+    <string name="Screntitle">Solicitud de Servicio</string>
+    <string name="ServiceTitle">Servicio</string>
+    <string name="ServiceDescription">Haz una breve descripcion del lo que requieres</string>
+    <string name="ServiceOffer">$ Ofrezco en moneda local (opcional)</string>
+    <string name="RequestBtn">Solicitar</string>
+    <!-- End Strings needed to request a service -->
+
     <string name="action_settings">Configuración</string>
     <string name="choose_one">Escoge una de las opciones</string>
     <string name="alert_title">¡Hey!</string>
