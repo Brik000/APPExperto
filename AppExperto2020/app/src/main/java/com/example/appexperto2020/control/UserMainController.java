@@ -46,6 +46,8 @@ import static com.example.appexperto2020.util.Constants.SESSION_TYPE;
 
 public class UserMainController implements View.OnClickListener{
 
+    private ExpertAdapter expertAdapter;
+    private  ArrayList<Expert> experts;
     private UserMainActivity activity;
     private ExpertAdapter expertAdapter;
 

@@ -69,4 +69,7 @@
     <string name="near_to_complete_register">Falta poco</string>
     <string name="near_to_register_body">Ya puedes acceder a la aplicación con facebook, sólo faltan unos datos más.</string>
     <string name="password_repeat_wrong">Las contraseñas no coinciden, asegúrate de que sean iguales</string>
+
+    <!-- Chat Activity -->
+    <string name="chat_hint"> Escribe un mensaje... </string>
 </resources>
