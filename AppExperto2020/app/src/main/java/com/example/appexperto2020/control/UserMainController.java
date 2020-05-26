@@ -54,14 +54,10 @@ public class UserMainController implements View.OnClickListener{
     String session;
     private String folder;
 
-    public UserMainController(UserMainActivity activity)
+    public UserMainController(UserMainActivity activity, String session)
     {
         this.activity = activity;
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        activity.getExpertsRV().setLayoutManager(linearLayoutManager);
-
+        this.session = session;
         activity.getExpertsRV().addItemDecoration(new DividerItemDecoration(activity.getExpertsRV().getContext()
                 , DividerItemDecoration.HORIZONTAL));
 
@@ -70,8 +66,6 @@ public class UserMainController implements View.OnClickListener{
 
 
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        session = activity.getIntent().getExtras().getString(SESSION_TYPE);
 
         if(session.equals(SESSION_EXPERT))
             folder = FOLDER_EXPERTS;
@@ -92,8 +86,6 @@ public class UserMainController implements View.OnClickListener{
                 }
     }
         );
-        activity.getServicesIV().setOnClickListener(this);
-        activity.getLogOutIV().setOnClickListener(this);
         getInterests();
         findExpertsByInterests();
 
@@ -131,31 +123,11 @@ public class UserMainController implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.logOutIV:
-                logOutDialog();
-                break;
             case R.id.goToBtn:
-            Intent i = new Intent(v.getContext(), UserProfileActivity.class);
-            i.putExtra("id", v.getContentDescription().toString());
-            v.getContext().startActivity(i);
+                String id = v.getContentDescription().toString();
+                activity.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentSelected, new UserProfileActivity(id)).commit();
             break;
-            case R.id.servicesIV:
-                Intent i2 = new Intent(v.getContext(), MyServicesActivity.class);
-                v.getContext().startActivity(i2);
-                break;
         }
-    }
-
-    public void signOut() {
-
-        if(AccessToken.getCurrentAccessToken() != null && !AccessToken.getCurrentAccessToken().isExpired())
-            LoginManager.getInstance().logOut();
-        if(FirebaseAuth.getInstance().getCurrentUser() != null)
-            FirebaseAuth.getInstance().signOut();
-        Intent i1 = new Intent(activity, LoginActivity.class);
-        i1.putExtra(SESSION_TYPE, session);
-        activity.startActivity(i1);
-        Animatoo.animateDiagonal(activity);
     }
 
     public void findExpertsByInterests() {
@@ -186,24 +158,6 @@ public class UserMainController implements View.OnClickListener{
 
             }
         });
-    }
-    public void logOutDialog() {
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which){
-                    case DialogInterface.BUTTON_POSITIVE:
-                        signOut();
-                        break;
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        dialog.dismiss();
-                        break;
-                }
-            }
-        };
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setMessage(activity.getString(R.string.sign_out_ask_message)).setPositiveButton(activity.getString(R.string.agree), dialogClickListener)
-                .setNegativeButton(R.string.no_answer, dialogClickListener).show();
     }
 
 }

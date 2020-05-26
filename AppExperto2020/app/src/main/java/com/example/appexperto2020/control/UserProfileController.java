@@ -29,19 +29,19 @@ public class UserProfileController implements View.OnClickListener{
         Query query = FirebaseDatabase.getInstance()
                 .getReference()
                 .child("experts")
-                .child(activity.getId());
+                .child(activity.getUId());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 expert = dataSnapshot.getValue(Expert.class);
 
                 ArrayList<String> data = new ArrayList<>();
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(activity,android.R.layout.simple_list_item_1,data);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(activity.getActivity(),android.R.layout.simple_list_item_1,data);
                 for(Job j: expert.getJobList().values()){
                     data.add(j.getName());
                     adapter.notifyDataSetChanged();
                 }
-                activity.runOnUiThread(
+                activity.getActivity().runOnUiThread(
                         ()->{
                             activity.getExpertDetailsCellphoneTxt().setText(expert.getCellphone()+"");
                             activity.getExpertDetailsDescriptionTxt().setText(expert.getDescription());

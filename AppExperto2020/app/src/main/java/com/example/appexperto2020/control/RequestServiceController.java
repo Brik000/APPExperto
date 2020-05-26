@@ -6,6 +6,7 @@ import android.view.View;
 import com.example.appexperto2020.R;
 import com.example.appexperto2020.model.Service;
 import com.example.appexperto2020.util.HTTPSWebUtilDomi;
+import com.example.appexperto2020.view.NavBarActivity;
 import com.example.appexperto2020.view.RequestServiceActivity;
 import com.example.appexperto2020.view.UserProfileActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,10 +42,9 @@ public class RequestServiceController implements View.OnClickListener{
                 this.GenerateService();
                 FirebaseDatabase.getInstance().getReference().child("services").setValue(servicio);
             case R.id.gobackBtn:
-                Intent i = new Intent(v.getContext(), UserProfileActivity.class);
-                i.putExtra("id", expertId);
-                v.getContext().startActivity(i);
-
+//                Intent i = new Intent(v.getContext(), NavBarActivity.class);
+//                i.putExtra("id", expertId);
+//                v.getContext().startActivity(i);
 
         }
     }

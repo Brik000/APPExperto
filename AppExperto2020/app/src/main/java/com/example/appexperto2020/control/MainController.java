@@ -12,6 +12,7 @@ import com.example.appexperto2020.util.Constants;
 
 import com.example.appexperto2020.view.LoginActivity;
 import com.example.appexperto2020.view.MainActivity;
+import com.example.appexperto2020.view.NavBarActivity;
 import com.example.appexperto2020.view.RegisterTypeActivity;
 import com.example.appexperto2020.view.UserMainActivity;
 
@@ -56,7 +57,7 @@ public class MainController implements View.OnClickListener{
     }
 
     public void goToUserMain(String session) {
-        Intent i = new Intent(view, UserMainActivity.class);
+        Intent i = new Intent(view, NavBarActivity.class);
         //Hacer una búsqueda para saber si se encuentra en expertos o en clientes
         i.putExtra(Constants.SESSION_TYPE, session);
         view.startActivity(i);

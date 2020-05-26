@@ -19,9 +19,8 @@
         <activity android:name=".view.MyServicesActivity"></activity>
         <activity android:name=".view.ChatRoomTempActivity" />
         <activity android:name=".view.ChatActivity" />
-        <activity android:name=".view.UserProfileActivity" />
         <activity
-            android:name=".view.UserMainActivity"
+            android:name=".view.NavBarActivity"
             android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity android:name=".view.RegisterActivity" />
         <activity android:name=".view.RegisterTypeActivity" />

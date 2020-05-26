@@ -1,11 +1,17 @@
 package com.example.appexperto2020.view;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -15,58 +21,47 @@ import com.example.appexperto2020.adapter.ExpertAdapter;
 import com.example.appexperto2020.control.UserMainController;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-public class UserMainActivity extends AppCompatActivity {
+@NoArgsConstructor
+public class UserMainActivity extends Fragment {
 
     private UserMainController controller;
     private TextView welcomeTV;
-    private ImageView logOutIV, profileIV, servicesIV;
     private RecyclerView expertsRV;
     @Getter
     private ExpertAdapter adapter;
     @Getter
     private ProgressBar progressBar;
 
+    private String session;
+
+    public UserMainActivity(String session) {
+        this.session = session;
+    }
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_main);
-        welcomeTV = findViewById(R.id.welcomeTV);
-        logOutIV = findViewById(R.id.logOutIV);
-        profileIV = findViewById(R.id.profileiv);
-        servicesIV = findViewById(R.id.servicesIV);
-        expertsRV = findViewById(R.id.expertsRV);
-        progressBar = findViewById(R.id.progressBarList);
-        controller = new UserMainController(this);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.activity_user_main, container, false);
+        welcomeTV = view.findViewById(R.id.welcomeTV);
+        expertsRV = view.findViewById(R.id.expertsRV);
+        progressBar = view.findViewById(R.id.progressBarList);
+        controller = new UserMainController(this, session);
         adapter = new ExpertAdapter(controller);
-        LinearLayoutManager linearLayoutManager = new GridLayoutManager(this, 2);
+        LinearLayoutManager linearLayoutManager = new GridLayoutManager(getActivity(), 2);
         getExpertsRV().setLayoutManager(linearLayoutManager);
         getExpertsRV().setAdapter(adapter);
+        return view;
     }
 
     public TextView getWelcomeTV() {
         return welcomeTV;
     }
 
-    public ImageView getLogOutIV() {
-        return logOutIV;
-    }
-
-    public ImageView getProfileIV() {
-        return profileIV;
-    }
-
-    public ImageView getServicesIV() {
-        return servicesIV;
-    }
-
     public RecyclerView getExpertsRV() {
         return expertsRV;
     }
 
-
-    @Override
-    public void onBackPressed() {
-        controller.logOutDialog();
-    }
 }
