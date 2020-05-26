@@ -70,6 +70,8 @@
         android:layout_gravity="start"
         android:background="@color/colorPrimaryDark"
         android:visibility="visible"
+        app:itemIconTint="@color/backgroundExpert"
+        app:itemTextColor="@color/backgroundExpert"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/bottom_menu"
         tools:layout_editor_absoluteX="0dp">

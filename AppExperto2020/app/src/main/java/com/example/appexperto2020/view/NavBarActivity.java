@@ -18,6 +18,8 @@ import com.facebook.login.LoginManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Objects;
+
 import static com.example.appexperto2020.util.Constants.SESSION_TYPE;
 
 public class NavBarActivity extends AppCompatActivity implements View.OnClickListener {
@@ -39,30 +41,38 @@ public class NavBarActivity extends AppCompatActivity implements View.OnClickLis
         logOutIV.setOnClickListener(this);
         bottomNavigationView = findViewById(R.id.bottomNav);
         userMainFragment = new UserMainFragment(session);
-//        getSupportFragmentManager().putFragment(getIntent(),"key",userMainFragment);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentSelected, userMainFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragmentSelected, userMainFragment, "userMain").commit();
+        getSupportFragmentManager().beginTransaction().setPrimaryNavigationFragment(userMainFragment).commit();
+        bottomNavigationView.setSelectedItemId(R.id.mainMenu);
+        getSupportFragmentManager().beginTransaction().show(userMainFragment).commit();
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 item ->{
                     Fragment fragmentActivity = null;
                     switch (item.getItemId()) {
                         case R.id.profileMenu:
-                            if(userProfileFragment == null)
-                        userProfileFragment = new UserProfileFragment(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            if(userProfileFragment == null) {
+                                userProfileFragment = new UserProfileFragment(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                getSupportFragmentManager().beginTransaction().add(R.id.fragmentSelected, userProfileFragment, "userProfile").commit();
+                            }
                             fragmentActivity = userProfileFragment;
                         break;
                         case R.id.mainMenu:
                             fragmentActivity = userMainFragment;
                             break;
                         case R.id.servicesMenu:
-                            if(myServicesFragment == null)
-                            myServicesFragment = new MyServicesFragment();
+                            if(myServicesFragment == null) {
+                                myServicesFragment = new MyServicesFragment();
+                                getSupportFragmentManager().beginTransaction().add(R.id.fragmentSelected, myServicesFragment, "myServices").commit();
+                            }
                             fragmentActivity = myServicesFragment;
                             break;
             }
                 if(fragmentActivity != null) {
-                    fragmentActivity.setRetainInstance(true);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentSelected, fragmentActivity).commit();
-//                    getSupportFragmentManager().beginTransaction().show(myServicesFragment).commit();
+                    if(getSupportFragmentManager().getPrimaryNavigationFragment().getTag().equals("temporal"))
+                        getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().getPrimaryNavigationFragment()).commit();
+                    else getSupportFragmentManager().beginTransaction().hide(getSupportFragmentManager().getPrimaryNavigationFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().setPrimaryNavigationFragment(fragmentActivity).commit();
+                    getSupportFragmentManager().beginTransaction().show(fragmentActivity).commit();
                 }
                     return true;
                 });
@@ -101,7 +111,11 @@ public class NavBarActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onBackPressed() {
-        logOutDialog();
+        if(getSupportFragmentManager().getPrimaryNavigationFragment().getTag().equals("temporal"))
+            getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().getPrimaryNavigationFragment()).commit();
+        else getSupportFragmentManager().beginTransaction().hide(getSupportFragmentManager().getPrimaryNavigationFragment()).commit();
+        getSupportFragmentManager().beginTransaction().setPrimaryNavigationFragment(userMainFragment).commit();
+        getSupportFragmentManager().beginTransaction().show(userMainFragment).commit();
     }
 
     @Override

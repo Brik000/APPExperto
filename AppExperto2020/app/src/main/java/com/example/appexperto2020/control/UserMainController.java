@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 
 import com.example.appexperto2020.model.Job;
@@ -105,7 +106,12 @@ public class UserMainController implements View.OnClickListener{
         switch (v.getId()){
             case R.id.goToBtn:
                 String id = v.getContentDescription().toString();
-                activity.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentSelected, new UserProfileFragment(id)).commit();
+                FragmentManager fm = activity.getActivity().getSupportFragmentManager();
+                UserProfileFragment userProfileFragment = new UserProfileFragment(id);
+                fm.beginTransaction().add(R.id.fragmentSelected, userProfileFragment, "temporal").commit();
+                fm.beginTransaction().hide(fm.getPrimaryNavigationFragment()).commit();
+                fm.beginTransaction().setPrimaryNavigationFragment(userProfileFragment).commit();
+                fm.beginTransaction().show(userProfileFragment).commit();
             break;
         }
     }

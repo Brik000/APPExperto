@@ -39,10 +39,7 @@ public class RequestServiceController implements View.OnClickListener{
                 this.GenerateService();
                 FirebaseDatabase.getInstance().getReference().child("services").setValue(servicio);
             case R.id.gobackBtn:
-//                Intent i = new Intent(v.getContext(), NavBarActivity.class);
-//                i.putExtra("id", expertId);
-//                v.getContext().startActivity(i);
-
+                view.onBackPressed();
         }
     }
 

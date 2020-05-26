@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.appexperto2020">
-
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -13,27 +13,35 @@
         android:icon="@drawable/expert"
         android:label="@string/app_name"
         android:roundIcon="@drawable/expert"
-        android:screenOrientation="portrait"
         android:supportsRtl="true"
+        tools:ignore="LockedOrientationActivity"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.MyServicesFragment"></activity>
+        <activity android:name=".view.MyServicesFragment"
+            android:screenOrientation="portrait"></activity>
         <activity android:name=".view.ChatRoomTempActivity" />
         <activity android:name=".view.ChatActivity" />
         <activity
             android:name=".view.NavBarActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
-        <activity android:name=".view.RegisterActivity" />
-        <activity android:name=".view.RegisterTypeActivity" />
-        <activity android:name=".view.LoginActivity" />
-        <activity android:name=".view.RequestServiceActivity" />
-        <activity android:name=".view.SplashScreen">
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.RegisterActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.RegisterTypeActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.LoginActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.RequestServiceActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.SplashScreen"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.MainActivity" />
+        <activity android:name=".view.MainActivity"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
