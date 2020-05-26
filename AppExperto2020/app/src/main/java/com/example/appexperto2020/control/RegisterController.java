@@ -21,10 +21,9 @@ import com.example.appexperto2020.model.Expert;
 import com.example.appexperto2020.model.Job;
 import com.example.appexperto2020.model.User;
 import com.example.appexperto2020.util.Constants;
-import com.example.appexperto2020.util.HTTPSWebUtilDomi;
 import com.example.appexperto2020.util.UtilDomi;
 import com.example.appexperto2020.view.RegisterActivity;
-import com.example.appexperto2020.view.UserMainActivity;
+import com.example.appexperto2020.view.UserMainFragment;
 import com.facebook.AccessToken;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -40,7 +39,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import lombok.Getter;
 import lombok.Setter;
 
 import static android.app.Activity.RESULT_OK;
@@ -242,7 +240,7 @@ public class RegisterController implements View.OnClickListener {
     }
 
     public void goToUserMain(String userName) {
-        Intent i = new Intent(activity, UserMainActivity.class);
+        Intent i = new Intent(activity, UserMainFragment.class);
         i.putExtra(SESSION_TYPE, session);
         activity.startActivity(i);
     }

@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.appexperto2020.R;
@@ -24,10 +23,13 @@ import static com.example.appexperto2020.util.Constants.SESSION_TYPE;
 public class NavBarActivity extends AppCompatActivity implements View.OnClickListener {
 
     private BottomNavigationView bottomNavigationView;
-    private UserMainActivity userMainActivity;
+
+    private UserMainFragment userMainFragment;
+    private UserProfileFragment userProfileFragment;
+    private MyServicesFragment myServicesFragment;
+
     private String session;
     private ImageView logOutIV;
-    private FragmentActivity fragmentActivity;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,23 +38,32 @@ public class NavBarActivity extends AppCompatActivity implements View.OnClickLis
         logOutIV = findViewById(R.id.logOutIV);
         logOutIV.setOnClickListener(this);
         bottomNavigationView = findViewById(R.id.bottomNav);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentSelected, new UserMainActivity(session)).commit();
+        userMainFragment = new UserMainFragment(session);
+//        getSupportFragmentManager().putFragment(getIntent(),"key",userMainFragment);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentSelected, userMainFragment).commit();
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 item ->{
                     Fragment fragmentActivity = null;
                     switch (item.getItemId()) {
                         case R.id.profileMenu:
-                        fragmentActivity = new UserProfileActivity(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            if(userProfileFragment == null)
+                        userProfileFragment = new UserProfileFragment(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            fragmentActivity = userProfileFragment;
                         break;
                         case R.id.mainMenu:
-                            fragmentActivity = new UserMainActivity(session);
+                            fragmentActivity = userMainFragment;
                             break;
                         case R.id.servicesMenu:
-                            fragmentActivity = new MyServicesActivity();
+                            if(myServicesFragment == null)
+                            myServicesFragment = new MyServicesFragment();
+                            fragmentActivity = myServicesFragment;
                             break;
             }
-                if(fragmentActivity != null)
+                if(fragmentActivity != null) {
+                    fragmentActivity.setRetainInstance(true);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragmentSelected, fragmentActivity).commit();
+//                    getSupportFragmentManager().beginTransaction().show(myServicesFragment).commit();
+                }
                     return true;
                 });
     }

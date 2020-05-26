@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 
 import com.example.appexperto2020.R;
 import com.example.appexperto2020.view.RequestServiceActivity;
-import com.example.appexperto2020.view.UserProfileActivity;
+import com.example.appexperto2020.view.UserProfileFragment;
 import com.example.appexperto2020.model.Expert;
 import com.example.appexperto2020.model.Job;
 import com.google.firebase.database.DataSnapshot;
@@ -21,9 +21,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class UserProfileController implements View.OnClickListener{
-    private UserProfileActivity activity;
+    private UserProfileFragment activity;
     private Expert expert;
-    public UserProfileController(UserProfileActivity activity) {
+    public UserProfileController(UserProfileFragment activity) {
         this.activity = activity;
         activity.getServiceButton().setOnClickListener(this);
         Query query = FirebaseDatabase.getInstance()

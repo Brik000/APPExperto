@@ -24,7 +24,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class UserMainActivity extends Fragment {
+public class UserMainFragment extends Fragment {
 
     private UserMainController controller;
     private TextView welcomeTV;
@@ -36,7 +36,7 @@ public class UserMainActivity extends Fragment {
 
     private String session;
 
-    public UserMainActivity(String session) {
+    public UserMainFragment(String session) {
         this.session = session;
     }
 

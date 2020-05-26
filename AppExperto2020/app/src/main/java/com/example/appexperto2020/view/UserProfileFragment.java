@@ -18,7 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import lombok.Getter;
 
-public class UserProfileActivity extends Fragment {
+public class UserProfileFragment extends Fragment {
     @Getter
     private TextView expertDetailsNameTxt,expertDetailsLastNameTxt,expertDetailsDescriptionTxt,expertDetailsCellphoneTxt;
     @Getter
@@ -29,7 +29,7 @@ public class UserProfileActivity extends Fragment {
     private String uId;
     private UserProfileController controller;
 
-    public UserProfileActivity (String id) {
+    public UserProfileFragment(String id) {
         this.uId = id;
     }
 

@@ -18,13 +18,13 @@ import com.example.appexperto2020.model.Service;
 
 import java.util.ArrayList;
 
-public class MyServicesActivity extends Fragment {
+public class MyServicesFragment extends Fragment {
 
     private ArrayList<Service> services;
     private RecyclerView servicesRV;
     private ServiceRecyclerViewAdapter adapter;
 
-    public MyServicesActivity() {
+    public MyServicesFragment() {
         //Constructor donde puedes pasarle los parámetros que necesites desde NavbarActivity
     }
     @Nullable

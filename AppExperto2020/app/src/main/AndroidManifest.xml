@@ -16,7 +16,7 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.MyServicesActivity"></activity>
+        <activity android:name=".view.MyServicesFragment"></activity>
         <activity android:name=".view.ChatRoomTempActivity" />
         <activity android:name=".view.ChatActivity" />
         <activity

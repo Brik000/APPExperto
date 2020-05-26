@@ -14,7 +14,6 @@ import com.example.appexperto2020.view.LoginActivity;
 import com.example.appexperto2020.view.MainActivity;
 import com.example.appexperto2020.view.NavBarActivity;
 import com.example.appexperto2020.view.RegisterTypeActivity;
-import com.example.appexperto2020.view.UserMainActivity;
 
 public class MainController implements View.OnClickListener{
 

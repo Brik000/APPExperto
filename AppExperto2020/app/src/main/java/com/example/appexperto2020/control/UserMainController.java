@@ -1,60 +1,40 @@
 package com.example.appexperto2020.control;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.blogspot.atifsoftwares.animatoolib.Animatoo;
-import com.example.appexperto2020.adapter.ExpertAdapter;
 import com.example.appexperto2020.model.Job;
-import com.example.appexperto2020.util.HTTPSWebUtilDomi;
-import com.example.appexperto2020.view.MyServicesActivity;
-import com.example.appexperto2020.view.UserProfileActivity;
+import com.example.appexperto2020.view.UserProfileFragment;
 import com.example.appexperto2020.R;
-import com.example.appexperto2020.model.Client;
 import com.example.appexperto2020.model.Expert;
-import com.example.appexperto2020.model.User;
-import com.example.appexperto2020.view.LoginActivity;
-import com.example.appexperto2020.view.UserMainActivity;
-import com.facebook.AccessToken;
-import com.facebook.login.LoginManager;
+import com.example.appexperto2020.view.UserMainFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.gson.reflect.TypeToken;
 
-import java.io.File;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 import static com.example.appexperto2020.util.Constants.FOLDER_CLIENTS;
 import static com.example.appexperto2020.util.Constants.FOLDER_EXPERTS;
 import static com.example.appexperto2020.util.Constants.SESSION_EXPERT;
-import static com.example.appexperto2020.util.Constants.SESSION_TYPE;
 
 public class UserMainController implements View.OnClickListener{
 
-    private UserMainActivity activity;
+    private UserMainFragment activity;
 
     private HashMap<String, String> interests;
     private String user;
     String session;
     private String folder;
 
-    public UserMainController(UserMainActivity activity, String session)
+    public UserMainController(UserMainFragment activity, String session)
     {
         this.activity = activity;
         this.session = session;
@@ -125,7 +105,7 @@ public class UserMainController implements View.OnClickListener{
         switch (v.getId()){
             case R.id.goToBtn:
                 String id = v.getContentDescription().toString();
-                activity.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentSelected, new UserProfileActivity(id)).commit();
+                activity.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentSelected, new UserProfileFragment(id)).commit();
             break;
         }
     }

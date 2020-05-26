@@ -7,7 +7,7 @@ import android.widget.Toast;
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.appexperto2020.R;
 import com.example.appexperto2020.view.LoginActivity;
-import com.example.appexperto2020.view.UserMainActivity;
+import com.example.appexperto2020.view.UserMainFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
 import static com.example.appexperto2020.util.Constants.SESSION_TYPE;
@@ -43,7 +43,7 @@ public class LogInController implements View.OnClickListener {
                         activity.getEditPasswordLog().getEditText().getText().toString()).addOnSuccessListener(
                                 authResult -> {
                                     loadingFinished();
-                                    Intent i = new Intent(activity, UserMainActivity.class);
+                                    Intent i = new Intent(activity, UserMainFragment.class);
                                     i.putExtra(SESSION_TYPE, session);
                                     activity.startActivity(i);
                                     Animatoo.animateSwipeLeft(activity);
