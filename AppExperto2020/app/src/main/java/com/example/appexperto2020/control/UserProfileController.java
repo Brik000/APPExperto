@@ -37,6 +37,7 @@ public class UserProfileController implements View.OnClickListener{
 
                 ArrayList<String> data = new ArrayList<>();
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(activity.getActivity(),android.R.layout.simple_list_item_1,data);
+                if(expert.getJobList() != null)
                 for(Job j: expert.getJobList().values()){
                     data.add(j.getName());
                     adapter.notifyDataSetChanged();

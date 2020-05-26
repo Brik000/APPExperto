@@ -100,18 +100,18 @@ public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder
             Log.e("", "CUSTOM");
             expertNameTv.setText(expert.getFirstName() + " " + expert.getLastName());
             String jobs = "";
-            Object[] keySet = expert.getJobList().keySet().toArray();
-            for(int i = 0; i<keySet.length;i++){
-                Job j = expert.getJobList().get(keySet[i]);
-                if(jobs.equals(""))
-                {
-                    jobs += " "+j.getName();
-                }else
-                {
-                    jobs += " || "+j.getName();
+            if(expert.getJobList() != null) {
+                Object[] keySet = expert.getJobList().keySet().toArray();
+                for (int i = 0; i < keySet.length; i++) {
+                    Job j = expert.getJobList().get(keySet[i]);
+                    if (jobs.equals("")) {
+                        jobs += " " + j.getName();
+                    } else {
+                        jobs += " || " + j.getName();
+                    }
                 }
+                expertJobTV.setText(jobs);
             }
-            expertJobTV.setText(jobs);
             File imageFile = new File(view.getContext().getExternalFilesDir(null)+"/"+expert.getId());
             if(imageFile.exists())
             {
