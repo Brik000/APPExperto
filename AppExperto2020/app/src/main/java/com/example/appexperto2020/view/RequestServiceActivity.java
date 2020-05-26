@@ -26,11 +26,16 @@ public class RequestServiceActivity extends AppCompatActivity {
     @Getter
     private ImageView serviceImg;
 
+    private String expertId;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_request_service);
+
+        expertId = getIntent().getExtras().getString("idE");
+
         maintitletxt=findViewById(R.id.reqTitletxt);
         titleTxt=findViewById(R.id.titleReqSer);
         descriptionTxt=findViewById(R.id.descriptionReqSer);
@@ -38,5 +43,6 @@ public class RequestServiceActivity extends AppCompatActivity {
         requestBtn=findViewById(R.id.butonreqser);
         backBtn=findViewById(R.id.gobackBtn);
         serviceImg=findViewById(R.id.imagereqservice);
+
     }
 }
