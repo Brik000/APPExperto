@@ -15,6 +15,7 @@ import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.appexperto2020.adapter.ExpertAdapter;
 import com.example.appexperto2020.model.Job;
 import com.example.appexperto2020.util.HTTPSWebUtilDomi;
+import com.example.appexperto2020.view.MyServicesActivity;
 import com.example.appexperto2020.view.UserProfileActivity;
 import com.example.appexperto2020.R;
 import com.example.appexperto2020.model.Client;
@@ -91,6 +92,7 @@ public class UserMainController implements View.OnClickListener{
                 }
     }
         );
+        activity.getServicesIV().setOnClickListener(this);
         activity.getLogOutIV().setOnClickListener(this);
         getInterests();
         findExpertsByInterests();
@@ -137,6 +139,10 @@ public class UserMainController implements View.OnClickListener{
             i.putExtra("id", v.getContentDescription().toString());
             v.getContext().startActivity(i);
             break;
+            case R.id.servicesIV:
+                Intent i2 = new Intent(v.getContext(), MyServicesActivity.class);
+                v.getContext().startActivity(i2);
+                break;
         }
     }
 

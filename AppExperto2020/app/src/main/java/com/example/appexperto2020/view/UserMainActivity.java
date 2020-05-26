@@ -5,10 +5,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -33,7 +30,7 @@ public class UserMainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_users_main);
+        setContentView(R.layout.activity_user_main);
         welcomeTV = findViewById(R.id.welcomeTV);
         logOutIV = findViewById(R.id.logOutIV);
         profileIV = findViewById(R.id.profileiv);
