@@ -9,7 +9,9 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.appexperto2020.R;
+import com.example.appexperto2020.control.RequestServiceController;
 import com.google.android.material.textfield.TextInputLayout;
 
 import lombok.Getter;
@@ -25,8 +27,10 @@ public class RequestServiceActivity extends AppCompatActivity {
     private ImageButton backBtn;
     @Getter
     private ImageView serviceImg;
-
+    @Getter
     private String expertId;
+
+    private RequestServiceController controller;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,6 +47,13 @@ public class RequestServiceActivity extends AppCompatActivity {
         requestBtn=findViewById(R.id.butonreqser);
         backBtn=findViewById(R.id.gobackBtn);
         serviceImg=findViewById(R.id.imagereqservice);
-
+        controller=new RequestServiceController(this,getExpertId());
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Animatoo.animateFade(this);
+    }
+
 }
