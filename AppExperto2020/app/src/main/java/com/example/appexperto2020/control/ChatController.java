@@ -1,16 +1,27 @@
 package com.example.appexperto2020.control;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import com.example.appexperto2020.R;
 import com.example.appexperto2020.adapter.MessagesAdapter;
+import com.example.appexperto2020.model.FCMMessage;
 import com.example.appexperto2020.model.Message;
 import com.example.appexperto2020.model.User;
+import com.example.appexperto2020.util.Constants;
+import com.example.appexperto2020.util.HTTPSWebUtilDomi;
+import com.example.appexperto2020.util.NotificationUtils;
+import com.example.appexperto2020.util.UtilDomi;
 import com.example.appexperto2020.view.ChatActivity;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -18,9 +29,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.gson.Gson;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import static android.app.Activity.RESULT_OK;
 
 public class ChatController implements View.OnClickListener {
 
@@ -29,6 +46,7 @@ public class ChatController implements View.OnClickListener {
     private String chatroom;
     private MessagesAdapter adapter;
     private User user;
+    private Uri tempUri;
 
     public ChatController(ChatActivity activity) {
         this.activity = activity;
@@ -39,6 +57,7 @@ public class ChatController implements View.OnClickListener {
         chatroom = activity.getIntent().getExtras().getString("chatroom");
 
         activity.getSendBtn().setOnClickListener(this);
+        activity.getGalBtn().setOnClickListener(this);
 
 //        //Si es un objeto
 //        Query query = FirebaseDatabase.getInstance()
@@ -64,12 +83,23 @@ public class ChatController implements View.OnClickListener {
         importante.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot coincidence: dataSnapshot.getChildren()){
-                    user = coincidence.getValue(User.class);
-                    adapter.setUserId(user.getId());
-                    activity.getUsernameTV().setText(user.getIdDocument());
-                    break;
+
+                //Ninguna coincidencia
+                if(dataSnapshot.getChildrenCount() == 0){
+//                  String pushid = FirebaseDatabase.getInstance().getReference().child("users").push().getKey();
+//                  user = new User();
+//                  user.setId(pushid);
+//                  FirebaseDatabase.getInstance().getReference().child("users").child(pushid).setValue(user);
+                }else {
+                    for (DataSnapshot coincidence : dataSnapshot.getChildren()) {
+                        user = coincidence.getValue(User.class);
+
+                        break;
+                    }
                 }
+                adapter.setUserId(user.getId());
+                activity.getUsernameTV().setText(user.getIdDocument());
+
                 Log.e(">>>", user.getId() + ":" + user.getEmail());
             }
 
@@ -81,7 +111,7 @@ public class ChatController implements View.OnClickListener {
         //Si es una lista
         Query query = FirebaseDatabase.getInstance()
                 .getReference()
-                .child("chats").child(chatroom);
+                .child("chats").child(chatroom).limitToLast(10);
         // Publisher - Subscriber
         query.addChildEventListener(new ChildEventListener() {
             @Override
@@ -111,7 +141,6 @@ public class ChatController implements View.OnClickListener {
             }
         });
 
-
     }
 
     public ChatActivity getActivity() {
@@ -129,9 +158,80 @@ public class ChatController implements View.OnClickListener {
                 String body = activity.getMessageET().getText().toString();
                 String pushid = FirebaseDatabase.getInstance().getReference()
                                 .child("chats").child(chatroom).push().getKey();
-                Message message = new Message(pushid,body,user.getId(), Calendar.getInstance().getTime().getTime());
-                FirebaseDatabase.getInstance().getReference()
-                        .child("chats").child(chatroom).child(pushid).setValue(message);
+
+                Message message = new Message( tempUri == null ? Constants.MESSAGE_TYPE_TEXT : Constants.MESSAGE_TYPE_IMAGE,
+                        pushid,body,user.getId(), Calendar.getInstance().getTime().getTime());
+
+
+                FCMMessage fcm = new FCMMessage();
+                fcm.setTo("/topics/" + chatroom);
+                fcm.setData(message);
+                Gson gson = new Gson();
+                String json = gson.toJson(fcm);
+
+                new Thread(
+                        ()->{
+                            HTTPSWebUtilDomi utilDomi = new HTTPSWebUtilDomi();
+                            utilDomi.POSTtoFCM(Constants.FCM_API_KEY,json);
+                        }
+                ).start();
+
+                if(tempUri != null){
+                    FirebaseStorage storage = FirebaseStorage.getInstance();
+                    storage.getReference().child("chats").child(message.getId())
+                            .putFile(tempUri).addOnCompleteListener(
+                      task -> {
+                          if(task.isSuccessful()){
+                              Log.e(">>>", "Foto subida con exito");
+                              FirebaseDatabase.getInstance().getReference()
+                                      .child("chats").child(chatroom).child(pushid).setValue(message);
+                          }
+                      }
+                    );
+                }
+                else{
+                    FirebaseDatabase.getInstance().getReference()
+                            .child("chats").child(chatroom).child(pushid).setValue(message);
+                }
+                activity.hideImage();
+                tempUri = null;
+
+                break;
+            case R.id.galBtn:
+                Intent gal = new Intent((Intent.ACTION_GET_CONTENT));
+                gal.setType("image/*");
+                activity.startActivityForResult(gal, Constants.GALLERY_CALLBACK_CHAT);
         }
     }
+
+    public void beforePause() {
+        //Suscribirme a un topic
+        FirebaseMessaging.getInstance().subscribeToTopic(chatroom).addOnCompleteListener(
+                task->{
+                    if (task.isSuccessful()){
+                        Log.e(">>>","Suscrito");
+                    }
+                }
+        );
+
+    }
+
+    public void beforeResume() {
+        //Suscribirme a un topic
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(chatroom);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == Constants.GALLERY_CALLBACK_CHAT && resultCode == RESULT_OK){
+             tempUri = data.getData();
+             File file = new File(UtilDomi.getPath(activity,tempUri));
+             Bitmap image = BitmapFactory.decodeFile(file.toString());
+             activity.getMessageIV().setImageBitmap(image);
+             activity.showImage();
+
+        }
+    }
+
+
 }

@@ -208,6 +208,41 @@ public class HTTPSWebUtilDomi {
         }
     }
 
+    public void POSTtoFCM(String API_KEY, String data){
+        try {
+            URL page = new URL("https://fcm.googleapis.com/fcm/send");
+            HttpsURLConnection connection = (HttpsURLConnection) page.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Authorization", "key="+API_KEY);
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+
+            OutputStream os = connection.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+
+            writer.write(data);
+            writer.flush();
+
+            InputStream is = connection.getInputStream();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+            byte[] buffer = new byte[4096];
+            int bytesRead;
+            while ((bytesRead = is.read(buffer)) != -1) {
+                baos.write(buffer, 0, bytesRead);
+            }
+            is.close();
+            baos.close();
+            os.close();
+            connection.disconnect();
+            String response = new String(baos.toByteArray(), "UTF-8");
+            Log.e(">>>",response);
+        }catch (IOException ex){
+            ex.printStackTrace();
+        }
+    }
+
     public interface OnResponseListener {
         void onResponse(int callbackID, String response);
     }

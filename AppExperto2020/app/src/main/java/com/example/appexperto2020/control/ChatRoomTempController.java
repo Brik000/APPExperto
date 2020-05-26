@@ -34,10 +34,7 @@ public class ChatRoomTempController implements View.OnClickListener {
 
                 String chatroom = activity.getChatroomET().getText().toString();
                 String username = activity.getUsernameET().getText().toString();
-//                String pushid = FirebaseDatabase.getInstance().getReference().child("users").push().getKey();
-//                User user = new User();
-//                user.setId(pushid);
-//                FirebaseDatabase.getInstance().getReference().child("users").child(pushid).setValue(user);
+
                 Intent intent = new Intent(activity, ChatActivity.class);
                 intent.putExtra("username",username);
                 intent.putExtra("chatroom",chatroom);

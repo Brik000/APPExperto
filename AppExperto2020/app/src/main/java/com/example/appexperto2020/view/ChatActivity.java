@@ -1,9 +1,12 @@
 package com.example.appexperto2020.view;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -36,6 +39,26 @@ public class ChatActivity extends AppCompatActivity {
         messageIV = findViewById(R.id.messageIV);
         controlsContainer = findViewById(R.id.controlsContainer);
         controller = new ChatController(this);
+    }
+
+    //Mi activiad pierde el primer plano
+    @Override
+    protected void onPause() {
+        super.onPause();
+        controller.beforePause();
+    }
+
+    // Mi actividad retoma el primer plano
+    @Override
+    protected void onResume() {
+        super.onResume();
+        controller.beforeResume();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        controller.onActivityResult(requestCode,resultCode,data);
     }
 
     public TextView getUsernameTV() {
@@ -92,5 +115,13 @@ public class ChatActivity extends AppCompatActivity {
 
     public void setMessageIV(ImageView messageIV) {
         this.messageIV = messageIV;
+    }
+
+    public void hideImage(){
+        messageIV.setVisibility(View.GONE);
+    }
+
+    public void showImage(){
+        messageIV.setVisibility(View.VISIBLE);
     }
 }
