@@ -24,6 +24,9 @@ public abstract class Constants {
     public static final String CHANNEL_ID = "ChatExperto";
     public static final String CHANNEL_NAME = "ChatExpertoMessages";
     public static final int CHANNEL_IMPORTANCE = NotificationManager.IMPORTANCE_HIGH;
-
     public static final String FCM_API_KEY = "AAAAEC95IrE:APA91bFujHZ3pKHZebVImNDS1rcFmElDmdy7Drw3kZGPBpC-N0geooqNults7IczCZN8uH87ErqckluJD7aEdAjwdG9AiICxUnymAzSE0qEugjbVjEg_jJYCZp7qT4ePzkEFjqApS1uq";
+    public final static String AWAITING="Awaiting";
+    public final static String ACCEPTED="Accepted";
+    public final static String DECLINED="Declined";
+
 }

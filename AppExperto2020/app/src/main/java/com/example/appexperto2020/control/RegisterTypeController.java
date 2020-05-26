@@ -36,6 +36,7 @@ public class RegisterTypeController implements View.OnClickListener, Switch.OnCh
         if(view.getIntent().getExtras() != null && !view.getIntent().getExtras().isEmpty()){
             alertDialog.setTitle(view.getString(R.string.near_to_complete_register));
             alertDialog.setMessage(view.getString(R.string.near_to_register_body));
+            alertDialog.show();
         }
     }
 

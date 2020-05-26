@@ -16,7 +16,8 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.ChatRoomTempActivity"></activity>
+        <activity android:name=".view.MyServicesActivity"></activity>
+        <activity android:name=".view.ChatRoomTempActivity" />
         <activity android:name=".view.ChatActivity" />
         <activity android:name=".view.UserProfileActivity" />
         <activity
@@ -25,6 +26,7 @@
         <activity android:name=".view.RegisterActivity" />
         <activity android:name=".view.RegisterTypeActivity" />
         <activity android:name=".view.LoginActivity" />
+        <activity android:name=".view.RequestServiceActivity" />
         <activity android:name=".view.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
