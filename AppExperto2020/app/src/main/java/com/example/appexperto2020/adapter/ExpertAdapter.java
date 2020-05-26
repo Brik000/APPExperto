@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,20 +28,14 @@ import java.util.ArrayList;
 public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder> {
 
     private ArrayList<Expert> experts;
-    private View.OnClickListener mClickListener;
+    private UserMainController controller;
 
-
-    public ExpertAdapter()
+    public ExpertAdapter(UserMainController controller)
     {
         Log.e("", "INIT");
-
+        this.controller = controller;
         experts = new ArrayList<>();
     }
-
-    public void setClickListener(View.OnClickListener callback) {
-        mClickListener = (View.OnClickListener) callback;
-    }
-
 
     public void setData(ArrayList<Expert> experts)
     {
@@ -55,12 +50,7 @@ public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_expert, parent, false);
         ViewHolder holder = new ViewHolder(v);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mClickListener.onClick(view);
-            }
-        });
+
         return holder;
     }
 
@@ -74,6 +64,8 @@ public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder
         Log.e("", "BIND");
 
         holder.custom(experts.get(position));
+        holder.goToBtn.setContentDescription(experts.get(position).getId());
+        holder.goToBtn.setOnClickListener(controller);
     }
 
     @Override
@@ -86,7 +78,7 @@ public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView expertNameTv, expertJobTV;
-        private ImageView expertIV;
+        private ImageView expertIV, goToBtn;
         private View view;
 
         public ViewHolder(View view) {
@@ -97,6 +89,7 @@ public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder
             expertIV = view.findViewById(R.id.expertIV);
             expertJobTV = view.findViewById(R.id.expertJobTV);
             expertNameTv = view.findViewById(R.id.expertNameTV);
+            goToBtn = view.findViewById(R.id.goToBtn);
             view.setTag(this);
 
         }
@@ -116,7 +109,6 @@ public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder
                 }else
                 {
                     jobs += " || "+j.getName();
-
                 }
             }
             expertJobTV.setText(jobs);
@@ -126,7 +118,6 @@ public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder
                 loadImage(expertIV, imageFile);
                 Log.e("-------", "image exists");
             }else{
-
 
                 FirebaseStorage storage = FirebaseStorage.getInstance();
                 Log.e("-------", "image doesnt exists");
@@ -145,12 +136,9 @@ public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder
                                                 loadImage(expertIV, imageFile);
                                             }
                                     ).start();
-
                                 }
                         );
             }
-
-
         }
 
 

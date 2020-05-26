@@ -25,6 +25,7 @@
         <activity android:name=".view.RegisterActivity" />
         <activity android:name=".view.RegisterTypeActivity" />
         <activity android:name=".view.LoginActivity" />
+        <activity android:name=".view.RequestServiceActivity" />
         <activity android:name=".view.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -46,12 +46,8 @@ import static com.example.appexperto2020.util.Constants.SESSION_TYPE;
 
 public class UserMainController implements View.OnClickListener{
 
-    private ExpertAdapter expertAdapter;
-    private  ArrayList<Expert> experts;
     private UserMainActivity activity;
-    private ExpertAdapter expertAdapter;
 
-    private ArrayList<Expert> experts;
     private HashMap<String, String> interests;
     private String user;
     String session;
@@ -59,11 +55,7 @@ public class UserMainController implements View.OnClickListener{
 
     public UserMainController(UserMainActivity activity)
     {
-     
-
         this.activity = activity;
-        activity.getExpertsRV().setAdapter(expertAdapter);
-
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -109,6 +101,7 @@ public class UserMainController implements View.OnClickListener{
     {
         Object[] keys  = interests.keySet().toArray();
         HashMap<String,Job> jobs = expert.getJobList();
+        ArrayList<Expert> experts = new ArrayList<>();
         for(int i = 0; i<keys.length;i++)
         {
             if(jobs.containsKey(keys[i]))
@@ -116,11 +109,8 @@ public class UserMainController implements View.OnClickListener{
                 Log.e(">>>>>>>>", "INTEREST"+expert.getFirstName());
                 experts.add(expert);
 
-                Log.e(">>>>>>>>", expertAdapter.toString());
-
-
-                expertAdapter.addExpert(expert);
-                expertAdapter.notifyDataSetChanged();
+                activity.getAdapter().addExpert(expert);
+                activity.getAdapter().notifyDataSetChanged();
 
             }
 
@@ -197,7 +187,7 @@ public class UserMainController implements View.OnClickListener{
             public void onClick(DialogInterface dialog, int which) {
                 switch (which){
                     case DialogInterface.BUTTON_POSITIVE:
-                   //     signOut();
+                        signOut();
                         break;
                     case DialogInterface.BUTTON_NEGATIVE:
                         dialog.dismiss();

@@ -41,7 +41,7 @@ public class UserMainActivity extends AppCompatActivity {
         expertsRV = findViewById(R.id.expertsRV);
         progressBar = findViewById(R.id.progressBarList);
         controller = new UserMainController(this);
-        adapter = new ExpertAdapter();
+        adapter = new ExpertAdapter(controller);
         LinearLayoutManager linearLayoutManager = new GridLayoutManager(this, 2);
         getExpertsRV().setLayoutManager(linearLayoutManager);
         getExpertsRV().setAdapter(adapter);
