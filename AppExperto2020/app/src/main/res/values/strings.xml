@@ -72,4 +72,11 @@
 
     <!-- Chat Activity -->
     <string name="chat_hint"> Escribe un mensaje... </string>
+
+    <!-- Service Activity -->
+    <string name="job_service_hint">Job Service</string>
+    <string name="status_service_hint">Status</string>
+    <string name="user_name_service_hint">Name Last Name</string>
+    <string name="body_service_hint"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, </string>
+    <string name="button_go_chat">Chatea con tu experto</string>
 </resources>
