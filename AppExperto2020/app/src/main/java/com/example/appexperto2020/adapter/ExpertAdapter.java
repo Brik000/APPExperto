@@ -37,6 +37,15 @@ public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder
         experts = new ArrayList<>();
     }
 
+    public void removeData()
+    {
+        int s = experts.size();
+        for(int i = 0; i<s; i++)
+        {
+            experts.remove(s-i-1);
+        }
+
+    }
     public void setData(ArrayList<Expert> experts)
     {
         this.experts = experts;

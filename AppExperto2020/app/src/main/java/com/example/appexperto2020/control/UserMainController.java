@@ -1,7 +1,10 @@
 package com.example.appexperto2020.control;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
@@ -9,6 +12,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 
 import com.example.appexperto2020.model.Client;
 import com.example.appexperto2020.model.Job;
+import com.example.appexperto2020.util.Constants;
 import com.example.appexperto2020.view.UserProfileFragment;
 import com.example.appexperto2020.R;
 import com.example.appexperto2020.model.Expert;
@@ -16,6 +20,7 @@ import com.example.appexperto2020.view.UserMainFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
@@ -42,14 +47,16 @@ public class UserMainController implements View.OnClickListener{
 
     private HashMap<String, Job> jobsFromServer;
     private ArrayList<Expert> experts;
+    private ArrayList<Expert> expertsFromServer;
+
 
     public UserMainController(UserMainFragment activity, String session)
     {
         this.activity = activity;
         experts = new ArrayList<>();
         jobsFromServer = new HashMap<>();
-     //   activity.getSearchView().setOnSearchClickListener(this);
-
+        activity.getSearchView().setOnSearchClickListener(this);
+        bringJobsFromServer();
         this.session = session;
         activity.getExpertsRV().addItemDecoration(new DividerItemDecoration(activity.getExpertsRV().getContext()
                 , DividerItemDecoration.HORIZONTAL));
@@ -87,13 +94,14 @@ public class UserMainController implements View.OnClickListener{
 
     }
 
-    public void checkJob(Expert expert)
+    public void checkJob(Expert expert, HashMap<String, String> j)
     {
-        Object[] keys  = interests.keySet().toArray();
+        Object[] keys  = j.keySet().toArray();
         HashMap<String,Job> jobs = expert.getJobList();
         ArrayList<Expert> experts = new ArrayList<>();
         for(int i = 0; i<keys.length;i++)
         {
+
             if(jobs != null && jobs.containsKey(keys[i]))
             {
                 experts.add(expert);
@@ -127,6 +135,29 @@ public class UserMainController implements View.OnClickListener{
 
     }
 
+    public void setupJobsSelected()
+    {
+        String[] selectedJobs= activity.getJobSpinner().getSelectedItemsAsString().split(", ");
+
+        HashMap<String, String> jobsToSearch = new HashMap<>();
+        for(int i = 0; i<selectedJobs.length;i++)
+        {
+            Job j = jobsFromServer.get(selectedJobs[i]);
+            jobsToSearch.put(j.getId(), j.getId());
+        }
+        activity.getAdapter().removeData();
+        searchCoincidences(jobsToSearch);
+
+    }
+
+    public void searchCoincidences( HashMap<String, String>  j){
+        for(int i = 0; i<expertsFromServer.size();i++)
+        {
+            checkJob(expertsFromServer.get(i), j);
+        }
+
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -142,14 +173,16 @@ public class UserMainController implements View.OnClickListener{
             break;
             case R.id.searchView:
             {
-                this.activity.getJobSpinner().setVisibility(View.VISIBLE);
+                setupJobsSelected();
+                break;
             }
+
         }
     }
 
     public void findExpertsByInterests() {
 
-        ArrayList<Expert> expertsFromServer = new ArrayList<>();
+       expertsFromServer = new ArrayList<>();
         Query q = FirebaseDatabase.getInstance().getReference().child(FOLDER_EXPERTS);
 
         q.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -157,7 +190,8 @@ public class UserMainController implements View.OnClickListener{
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot d : dataSnapshot.getChildren()){
                     Expert expert = d.getValue(Expert.class);
-                    checkJob(expert);
+                    expertsFromServer.add(expert);
+                    checkJob(expert, interests);
                 }
             }
 

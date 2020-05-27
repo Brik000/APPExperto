@@ -54,9 +54,11 @@ public class UserMainFragment extends Fragment {
         welcomeTV = view.findViewById(R.id.welcomeTV);
         expertsRV = view.findViewById(R.id.expertsRV);
         progressBar = view.findViewById(R.id.progressBarList);
+        searchView = view.findViewById(R.id.searchView);
+        jobSpinner = view.findViewById(R.id.jobSpinner);
+
         controller = new UserMainController(this, session);
         adapter = new ExpertAdapter(controller);
-        searchView = view.findViewById(R.id.searchView);
         LinearLayoutManager linearLayoutManager = new GridLayoutManager(getActivity(), 2);
         getExpertsRV().setLayoutManager(linearLayoutManager);
         getExpertsRV().setAdapter(adapter);

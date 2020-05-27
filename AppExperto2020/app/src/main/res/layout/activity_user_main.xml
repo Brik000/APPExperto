@@ -13,7 +13,6 @@
         android:layout_height="30dp"
         android:layout_marginStart="40dp"
         android:layout_marginLeft="40dp"
-        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/searchView"
         app:layout_constraintStart_toStartOf="@+id/searchView"
         app:layout_constraintTop_toTopOf="@+id/searchView" />
