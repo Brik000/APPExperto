@@ -1,5 +1,6 @@
 package com.example.appexperto2020.control;
 
+import android.util.Log;
 import android.view.View;
 
 import com.example.appexperto2020.R;
@@ -8,6 +9,7 @@ import com.example.appexperto2020.util.HTTPSWebUtilDomi;
 import com.example.appexperto2020.view.RequestServiceActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
 
 public class RequestServiceController implements View.OnClickListener{
 
@@ -37,25 +39,19 @@ public class RequestServiceController implements View.OnClickListener{
         switch(v.getId()){
             case R.id.butonreqser:
                 this.GenerateService();
-                FirebaseDatabase.getInstance().getReference().child("services").setValue(servicio);
+                FirebaseDatabase.getInstance().getReference().child("services").child(servicio.getId()).setValue(servicio);
             case R.id.gobackBtn:
                 view.onBackPressed();
         }
     }
 
     public void GenerateService(){
-
          String clientId=userId;
          String description=view.getDescriptionTxt().getEditText().getText().toString();
          String expertId1=expertId;
          String id= FirebaseDatabase.getInstance().getReference().child("services").push().getKey();
          double reward= Double.parseDouble(view.getRewardTxt().getEditText().getText().toString());
          String title=view.getTitleTxt().getEditText().getText().toString();
-
         servicio=new Service(clientId,description,expertId1,id,reward,title);
-
-
-
-
     }
 }

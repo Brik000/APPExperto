@@ -139,9 +139,6 @@ public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder
 
             }
         }
-
-
-
         private void loadImage(ImageView expertIV, File file) {
             Bitmap bitmap = BitmapFactory.decodeFile(file.toString());
             expertIV.setImageBitmap(bitmap);
