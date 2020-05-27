@@ -52,7 +52,6 @@ public class RequestServiceController implements View.OnClickListener{
          String id= FirebaseDatabase.getInstance().getReference().child("services").push().getKey();
          double reward= Double.parseDouble(view.getRewardTxt().getEditText().getText().toString());
          String title=view.getTitleTxt().getEditText().getText().toString();
-
         servicio=new Service(clientId,description,expertId1,id,reward,title);
     }
 }
