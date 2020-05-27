@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 
+import com.example.appexperto2020.model.Client;
 import com.example.appexperto2020.model.Job;
 import com.example.appexperto2020.view.UserProfileFragment;
 import com.example.appexperto2020.R;
@@ -24,6 +25,7 @@ import java.util.HashMap;
 
 import static com.example.appexperto2020.util.Constants.FOLDER_CLIENTS;
 import static com.example.appexperto2020.util.Constants.FOLDER_EXPERTS;
+import static com.example.appexperto2020.util.Constants.SESSION_CLIENT;
 import static com.example.appexperto2020.util.Constants.SESSION_EXPERT;
 
 public class UserMainController implements View.OnClickListener{
@@ -35,9 +37,13 @@ public class UserMainController implements View.OnClickListener{
     String session;
     private String folder;
 
+    ArrayList<Expert> experts;
+
     public UserMainController(UserMainFragment activity, String session)
     {
         this.activity = activity;
+        experts = new ArrayList<>();
+
         this.session = session;
         activity.getExpertsRV().addItemDecoration(new DividerItemDecoration(activity.getExpertsRV().getContext()
                 , DividerItemDecoration.HORIZONTAL));
@@ -47,7 +53,6 @@ public class UserMainController implements View.OnClickListener{
 
 
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
         if(session.equals(SESSION_EXPERT))
             folder = FOLDER_EXPERTS;
         else folder = FOLDER_CLIENTS;
@@ -56,7 +61,6 @@ public class UserMainController implements View.OnClickListener{
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Log.e(">>>","LLega antes del rechazo");
                         if(folder.equals(FOLDER_EXPERTS))
                         user = dataSnapshot.child("firstName").getValue(String.class);
                         else user = dataSnapshot.child("firstName").getValue(String.class);
@@ -67,8 +71,13 @@ public class UserMainController implements View.OnClickListener{
                 }
     }
         );
-        getInterests();
-        findExpertsByInterests();
+
+        if(session.equals(SESSION_CLIENT)){
+            getInterests(uid);
+            findExpertsByInterests();
+        }
+
+
 
     }
 
@@ -81,9 +90,7 @@ public class UserMainController implements View.OnClickListener{
         {
             if(jobs != null && jobs.containsKey(keys[i]))
             {
-                Log.e(">>>>>>>>", "INTEREST"+expert.getFirstName());
                 experts.add(expert);
-
                 activity.getAdapter().addExpert(expert);
                 activity.getAdapter().notifyDataSetChanged();
 
@@ -93,11 +100,25 @@ public class UserMainController implements View.OnClickListener{
         }
     }
 
-    public void getInterests()
-    {
+    public void getInterests(String uid) {
         interests = new HashMap<>();
-        interests.put("-M7IlMXw4PfA1HKejHC3","-M7IlMXw4PfA1HKejHC3");
-        interests.put( "-M7IlMXzdZlx9zcnGJ1i", "-M7IlMXzdZlx9zcnGJ1i");
+
+        FirebaseDatabase.getInstance().getReference().child("clients").child(uid).child("interests")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot d : dataSnapshot.getChildren()){
+                            Job job = d.getValue(Job.class);
+                            interests.put(job.getId(), job.getId());
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
+                });
+
     }
 
 
@@ -119,23 +140,15 @@ public class UserMainController implements View.OnClickListener{
     public void findExpertsByInterests() {
 
         ArrayList<Expert> expertsFromServer = new ArrayList<>();
-        Query q = FirebaseDatabase.getInstance().getReference().child("experts");
-        HashMap<String, String> interests = new HashMap<String, String>();
-        interests.put("-M7Ik4dVFjoJuCPGXj3o", "-M7Ik4dVFjoJuCPGXj3o");
-        interests.put("-M7Ik4eVqhZB1R5B7kaw","-M7Ik4eVqhZB1R5B7kaw");
-        ArrayList experts = new ArrayList<>();
+        Query q = FirebaseDatabase.getInstance().getReference().child(FOLDER_EXPERTS);
 
         q.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot d : dataSnapshot.getChildren()){
                     Expert expert = d.getValue(Expert.class);
-                    Log.e(">>>>>>>",expert.getFirstName());
-                    experts.add(expert);
                     checkJob(expert);
-                    expertsFromServer.add(expert);
                 }
-                activity.getAdapter().setData(experts);
             }
 
             @Override

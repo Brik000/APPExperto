@@ -16,6 +16,8 @@ import com.example.appexperto2020.view.RequestServiceActivity;
 import com.example.appexperto2020.view.UserProfileFragment;
 import com.example.appexperto2020.model.Expert;
 import com.example.appexperto2020.model.Job;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,14 +26,19 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
+
+import lombok.Getter;
 
 import static com.example.appexperto2020.util.Constants.FOLDER_EXPERTS;
 import static com.example.appexperto2020.util.Constants.FOLDER_PROFILE_PICTURES;
 
 public class UserProfileController implements View.OnClickListener{
+   @Getter
     private UserProfileFragment activity;
     private Expert expert;
     private String jobs;
@@ -85,7 +92,26 @@ public class UserProfileController implements View.OnClickListener{
 
     public void setJobPhotos()
     {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        ArrayList<String> uris = new ArrayList<>();
+        StorageReference listRef = storage.getReference().child(FOLDER_EXPERTS).child(expert.getId());
+        listRef.listAll()
+                .addOnSuccessListener(listResult -> {
 
+                    for (StorageReference item : listResult.getItems()) {
+                           String[] ref = item.toString().split("/");
+                           String uri = ref[ref.length-1];
+                           uris.add(uri);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(">>>>>", "ERROR BRINGING ITEMS");
+                    }
+                });
+        activity.getAdapter().setIdExpert(expert.getId());
+        activity.getAdapter().setData(uris);
     }
     public void setProfilePicture()
     {
@@ -95,7 +121,6 @@ public class UserProfileController implements View.OnClickListener{
             storage.getReference().child(FOLDER_PROFILE_PICTURES).child(expert.getId()).getDownloadUrl().
                     addOnSuccessListener(
                             uri ->{
-
                               activity.getActivity().runOnUiThread(
                                       () ->
                                       {

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.example.appexperto2020.R;
 import com.example.appexperto2020.adapter.ServiceRecyclerViewAdapter;
+import com.example.appexperto2020.control.ServiceController;
 import com.example.appexperto2020.model.Service;
 
 import java.util.ArrayList;
@@ -22,22 +23,17 @@ public class MyServicesFragment extends Fragment {
 
     private ArrayList<Service> services;
     private RecyclerView servicesRV;
-    private ServiceRecyclerViewAdapter adapter;
-
-    public MyServicesFragment() {
+    private ServiceController controller;
+    private String actualSession;
+    public MyServicesFragment(String session) {
         //Constructor donde puedes pasarle los parámetros que necesites desde NavbarActivity
+        actualSession = session;
     }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_my_services, container, false);
-
-        services = new ArrayList<>();
-        Service temp = new Service();
-        services.add(temp);
-        services.add(temp);
-        services.add(temp);
-
+        controller = new ServiceController(this);
         initRecyclerView(view);
         return view;
     }
@@ -47,7 +43,10 @@ public class MyServicesFragment extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         servicesRV.setLayoutManager(llm);
-        adapter = new ServiceRecyclerViewAdapter(services,getActivity());
-        servicesRV.setAdapter(adapter);
+        servicesRV.setAdapter(controller.getAdapter());
+    }
+
+    public String getActualSession() {
+        return actualSession;
     }
 }

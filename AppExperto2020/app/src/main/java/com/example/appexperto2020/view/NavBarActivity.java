@@ -78,7 +78,7 @@ public class NavBarActivity extends AppCompatActivity implements View.OnClickLis
                             break;
                         case R.id.servicesMenu:
                             if(myServicesFragment == null) {
-                                myServicesFragment = new MyServicesFragment();
+                                myServicesFragment = new MyServicesFragment(session);
                                 getSupportFragmentManager().beginTransaction().add(R.id.fragmentSelected, myServicesFragment, "myServices").commit();
                             }
                             fragmentActivity = myServicesFragment;
