@@ -44,7 +44,7 @@ public class NavBarActivity extends AppCompatActivity implements View.OnClickLis
         bottomNavigationView = findViewById(R.id.bottomNav);
         if (session.equals(Constants.SESSION_EXPERT)){
             bottomNavigationView.getMenu().removeItem(R.id.mainMenu);
-            myServicesFragment = new MyServicesFragment();
+            myServicesFragment = new MyServicesFragment(session);
             getSupportFragmentManager().beginTransaction().add(R.id.fragmentSelected, myServicesFragment, "myServices").commit();
             getSupportFragmentManager().beginTransaction().setPrimaryNavigationFragment(myServicesFragment).commit();
             bottomNavigationView.setSelectedItemId(R.id.servicesMenu);

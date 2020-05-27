@@ -112,18 +112,17 @@ public class RegisterController implements View.OnClickListener {
                 break;
             case R.id.registerBut:
                 String[] selectedJobs= activity.getJobSpinner().getSelectedItemsAsString().split(", ");
-                if(AccessToken.getCurrentAccessToken() != null && (activity.getDocumentET().getEditText().getText().toString().trim().isEmpty()
-                        || (session.equals(SESSION_EXPERT) && activity.getCellphoneET().getEditText().getText().toString().length()<1) || jobsFromServer.get(selectedJobs[0]) == null)) {
+                if(activity.getDocumentET().getEditText().getText().toString().trim().isEmpty()
+                        || (session.equals(SESSION_EXPERT) && activity.getCellphoneET().getEditText().getText().toString().length()<1)
+                        || jobsFromServer.get(selectedJobs[0]) == null
+                        || uriPp == null) {
                     Toast.makeText(activity, activity.getString(R.string.fill_blank_spaces), Toast.LENGTH_LONG).show();
                     return;
                 }
                 if(AccessToken.getCurrentAccessToken() == null && (activity.getFistNameET().getEditText().getText().toString().trim().isEmpty()
                         || activity.getLastNameET().getEditText().getText().toString().trim().isEmpty()
-                        || activity.getDocumentET().getEditText().getText().toString().trim().isEmpty()
                         || activity.getEmailET().getEditText().getText().toString().trim().isEmpty()
-                        || activity.getPasswordET().getEditText().getText().toString().trim().isEmpty()
-                        || (session.equals(SESSION_EXPERT) && activity.getCellphoneET().getEditText().getText().toString().length()<1)
-                        || jobsFromServer.get(selectedJobs[0]) == null)){
+                        || activity.getPasswordET().getEditText().getText().toString().trim().isEmpty())){
                     Toast.makeText(activity, activity.getString(R.string.fill_blank_spaces), Toast.LENGTH_LONG).show();
                     return;
                 } if (!activity.getPasswordET().getEditText().getText().toString().trim().equals(
