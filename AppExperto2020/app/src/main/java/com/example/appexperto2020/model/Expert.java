@@ -17,8 +17,8 @@ public class Expert extends User {
 
     private HashMap<String,Job> jobList;
 
-    public Expert(String id, String firstName, String lastName, String email, String password, String description, String idDocument, long cellphone, HashMap<String, Job> jobList) {
-        super(id, firstName, lastName, email, password, description, idDocument,null);
+    public Expert(String id, String firstName, String lastName, String email, String password, String description, String idDocument, HashMap<String, String> services, long cellphone, HashMap<String, Job> jobList) {
+        super(id, firstName, lastName, email, password, description, idDocument, services);
         this.cellphone = cellphone;
         this.jobList = jobList;
     }
