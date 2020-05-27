@@ -3,6 +3,8 @@ package com.example.appexperto2020.view;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.appexperto2020.R;
+import com.example.appexperto2020.adapter.PhotosAdapter;
 import com.example.appexperto2020.control.UserProfileController;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -29,6 +32,8 @@ public class UserProfileFragment extends Fragment {
     private ImageView serviceBtn, expertPp;
     @Getter
     private RecyclerView photosRV;
+    @Getter
+    private PhotosAdapter adapter;
 
     @Getter
     private String uId;
@@ -51,9 +56,15 @@ public class UserProfileFragment extends Fragment {
         phoneTV = view.findViewById(R.id.phoneTV);
         descriptionTV = view.findViewById(R.id.descriptionTV);
         expertPp = view.findViewById(R.id.expertPp);
-        photosRV = view.findViewById(R.id.photosRV);
 
+        photosRV = view.findViewById(R.id.photosRV);
         controller = new UserProfileController(this);
+
+        adapter = new PhotosAdapter(controller);
+        LinearLayoutManager linearLayoutManager = new GridLayoutManager(getActivity(), 2);
+        getPhotosRV().setLayoutManager(linearLayoutManager);
+        getPhotosRV().setAdapter(adapter);
+
         if(uId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))
             getServiceButton().setVisibility(View.GONE);
         else getServiceButton().setVisibility(View.VISIBLE);

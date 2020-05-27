@@ -45,8 +45,6 @@ public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Log.e("", "VIEW HOLDER");
-
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_expert, parent, false);
         ViewHolder holder = new ViewHolder(v);
@@ -61,8 +59,6 @@ public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Log.e("", "BIND");
-
         holder.custom(experts.get(position));
         holder.goToBtn.setContentDescription(experts.get(position).getId());
         holder.goToBtn.setOnClickListener(controller);
@@ -83,15 +79,12 @@ public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder
 
         public ViewHolder(View view) {
             super(view);
-            Log.e("", "VIEW HOLDER");
-
             this. view = view;
             expertIV = view.findViewById(R.id.expertIV);
             expertJobTV = view.findViewById(R.id.expertJobTV);
             expertNameTv = view.findViewById(R.id.expertNameTV);
             goToBtn = view.findViewById(R.id.goToBtn);
             view.setTag(this);
-
         }
 
 
