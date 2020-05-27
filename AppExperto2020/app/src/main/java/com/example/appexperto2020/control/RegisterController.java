@@ -194,11 +194,11 @@ public class RegisterController implements View.OnClickListener {
         String description = activity.getDescriptionET().getEditText().getText().toString();
         String idDocument = activity.getDocumentET().getEditText().getText().toString();
         if(session.equals(Constants.SESSION_CLIENT)) {
-            return new Client(null, firstName, lastName, email, password, description, idDocument, null);
+            return new Client(null, firstName, lastName, email, password, description, idDocument, null, null);
         }
         else {
             long cellphone = Long.parseLong(activity.getCellphoneET().getEditText().getText().toString());
-            return new Expert(null, firstName, lastName, email, password, description, idDocument, cellphone, null);
+            return new Expert(null, firstName, lastName, email, password, description, idDocument, null, cellphone, null);
         }
     }
 

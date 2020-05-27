@@ -11,9 +11,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.appexperto2020.R;
@@ -27,7 +25,7 @@ public class UserProfileFragment extends Fragment {
     @Getter
     private TextView nameTV,mailTV, jobTV, descriptionTV, phoneTV;
     @Getter
-    private TextView serviceButton;
+    private TextView serviceText;
     @Getter
     private ImageView serviceBtn, expertPp;
     @Getter
@@ -48,7 +46,7 @@ public class UserProfileFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_user_profile, container, false);
-        serviceButton = view.findViewById(R.id.serviceButton);
+        serviceText = view.findViewById(R.id.serviceButton);
         serviceBtn = view.findViewById(R.id.serviceBtn);
         nameTV = view.findViewById(R.id.nameTV);
         jobTV = view.findViewById(R.id.jobTV);
@@ -66,8 +64,8 @@ public class UserProfileFragment extends Fragment {
         getPhotosRV().setAdapter(adapter);
 
         if(uId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))
-            getServiceButton().setVisibility(View.GONE);
-        else getServiceButton().setVisibility(View.VISIBLE);
+            getServiceBtn().setVisibility(View.GONE);
+        else getServiceBtn().setVisibility(View.VISIBLE);
         return view;
     }
 }

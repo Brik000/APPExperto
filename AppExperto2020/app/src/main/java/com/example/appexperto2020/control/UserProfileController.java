@@ -1,8 +1,6 @@
 package com.example.appexperto2020.control;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.View;
 
@@ -10,27 +8,20 @@ import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
 import com.example.appexperto2020.R;
-import com.example.appexperto2020.util.Constants;
-import com.example.appexperto2020.util.HTTPSWebUtilDomi;
 import com.example.appexperto2020.view.RequestServiceActivity;
 import com.example.appexperto2020.view.UserProfileFragment;
 import com.example.appexperto2020.model.Expert;
 import com.example.appexperto2020.model.Job;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 import lombok.Getter;
 
@@ -45,7 +36,7 @@ public class UserProfileController implements View.OnClickListener{
 
     public UserProfileController(UserProfileFragment activity) {
         this.activity = activity;
-        activity.getServiceButton().setOnClickListener(this);
+        activity.getServiceText().setOnClickListener(this);
         activity.getServiceBtn().setOnClickListener(this);
         Query query = FirebaseDatabase.getInstance()
                 .getReference()
@@ -143,12 +134,6 @@ public class UserProfileController implements View.OnClickListener{
                 Log.e("idE", expert.getId());
                 i.putExtra("idE", expert.getId());
                 v.getContext().startActivity(i);
-                break;
-            case R.id.serviceBtn:
-                Intent i2 = new Intent(v.getContext(), RequestServiceActivity.class);
-                Log.e("idE", expert.getId());
-                i2.putExtra("idE", expert.getId());
-                v.getContext().startActivity(i2);
                 break;
         }
     }

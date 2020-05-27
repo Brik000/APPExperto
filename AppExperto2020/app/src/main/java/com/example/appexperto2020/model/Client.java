@@ -14,8 +14,8 @@ public class Client extends User {
 
     private HashMap<String, String> interests;
 
-    public Client(String id, String firstName, String lastName, String email, String password, String description, String idDocument, HashMap<String, String> interests) {
-        super(id, firstName, lastName, email, password, description, idDocument, null);
+    public Client(String id, String firstName, String lastName, String email, String password, String description, String idDocument, HashMap<String, String> services, HashMap<String, String> interests) {
+        super(id, firstName, lastName, email, password, description, idDocument, services);
         this.interests = interests;
     }
 }
