@@ -15,9 +15,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appexperto2020.R;
 import com.example.appexperto2020.holder.ServiceViewHolder;
+import com.example.appexperto2020.model.Client;
 import com.example.appexperto2020.model.Expert;
 import com.example.appexperto2020.model.Job;
 import com.example.appexperto2020.model.Service;
+import com.example.appexperto2020.util.Constants;
 import com.example.appexperto2020.util.HTTPSWebUtilDomi;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,7 +38,7 @@ public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceVie
 
     private ArrayList<Service> services  = new ArrayList<>();
     private Context context;
-
+    private String actualSession;
 
     @NonNull
     @Override
@@ -49,59 +51,114 @@ public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceVie
     @Override
     public void onBindViewHolder(@NonNull ServiceViewHolder holder, int position) {
 
-        Query query = FirebaseDatabase.getInstance().getReference().child("experts").
-                child(services.get(position).getExpertId());
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String jobs = "";
-                Expert expert = dataSnapshot.getValue(Expert.class);
-                for (String key : expert.getJobList().keySet()){
-                    jobs += expert.getJobList().get(key).getName() + "-";
+        if(actualSession.equals(Constants.SESSION_EXPERT)){
+            //Obtener las imagenes
+
+            File imageFile = new File( context.getExternalFilesDir(null)+"/"+services.get(position).getExpertId());
+            if(imageFile.exists())
+            {
+                loadImage(holder.getServiceCV(), imageFile);
+            }else
+            {
+
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+
+                try {
+                    storage.getReference().child("profilePictures").child(services.get(position).getExpertId()).getDownloadUrl().
+                            addOnSuccessListener(
+                                    uri -> {
+
+                                        File file = new File(context.getExternalFilesDir(null) + "/" + services.get(position).getExpertId());
+                                        new Thread(
+                                                () ->
+                                                {
+                                                    HTTPSWebUtilDomi utilDomi = new HTTPSWebUtilDomi();
+                                                    utilDomi.saveURLImageOnFile(uri.toString(), file);
+                                                    Log.e("---->", "se guarda");
+                                                    loadImage(holder.getServiceCV(), file);
+                                                }
+                                        ).start();
+                                    }
+                            );
+
+                } catch (Exception e) {
+                    Log.e(">>>", "There is no profile picture for: " + services.get(position).getExpertId());
                 }
-                holder.getJobServiceTV().setText(jobs);
-                holder.getUserServiceTV().setText(expert.getFirstName() + " " + expert.getLastName());
             }
+            Query query = FirebaseDatabase.getInstance().getReference().child("experts").
+                    child(services.get(position).getExpertId());
+            query.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    String jobs = "";
+                    Expert expert = dataSnapshot.getValue(Expert.class);
+                    for (String key : expert.getJobList().keySet()){
+                        jobs += expert.getJobList().get(key).getName() + "-";
+                    }
+                    holder.getJobServiceTV().setText(jobs);
+                    holder.getUserServiceTV().setText(expert.getFirstName() + " " + expert.getLastName());
+                }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
 
-        //Obtener las imagenes
+        }
+        else{
+            //Obtener las imagenes
 
-        File imageFile = new File( context.getExternalFilesDir(null)+"/"+services.get(position).getExpertId());
-        if(imageFile.exists())
-        {
-            loadImage(holder.getServiceCV(), imageFile);
-        }else
-        {
+            File imageFile = new File( context.getExternalFilesDir(null)+"/"+services.get(position).getExpertId());
+            if(imageFile.exists())
+            {
+                loadImage(holder.getServiceCV(), imageFile);
+            }else
+            {
 
-            FirebaseStorage storage = FirebaseStorage.getInstance();
+                FirebaseStorage storage = FirebaseStorage.getInstance();
 
-            try {
-                storage.getReference().child("profilePictures").child(services.get(position).getExpertId()).getDownloadUrl().
-                        addOnSuccessListener(
-                                uri -> {
+                try {
+                    storage.getReference().child("profilePictures").child(services.get(position).getExpertId()).getDownloadUrl().
+                            addOnSuccessListener(
+                                    uri -> {
 
-                                    File file = new File(context.getExternalFilesDir(null) + "/" + services.get(position).getExpertId());
-                                    new Thread(
-                                            () ->
-                                            {
-                                                HTTPSWebUtilDomi utilDomi = new HTTPSWebUtilDomi();
-                                                utilDomi.saveURLImageOnFile(uri.toString(), file);
-                                                Log.e("---->", "se guarda");
-                                                loadImage(holder.getServiceCV(), file);
-                                            }
-                                    ).start();
-                                }
-                        );
+                                        File file = new File(context.getExternalFilesDir(null) + "/" + services.get(position).getExpertId());
+                                        new Thread(
+                                                () ->
+                                                {
+                                                    HTTPSWebUtilDomi utilDomi = new HTTPSWebUtilDomi();
+                                                    utilDomi.saveURLImageOnFile(uri.toString(), file);
+                                                    Log.e("---->", "se guarda");
+                                                    loadImage(holder.getServiceCV(), file);
+                                                }
+                                        ).start();
+                                    }
+                            );
 
-            } catch (Exception e) {
-                Log.e(">>>", "There is no profile picture for: " + services.get(position).getExpertId());
+                } catch (Exception e) {
+                    Log.e(">>>", "There is no profile picture for: " + services.get(position).getExpertId());
+                }
+                Query query = FirebaseDatabase.getInstance().getReference().child("clients").
+                        child(services.get(position).getClientId());
+                query.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Client client = dataSnapshot.getValue(Client.class);
+                        holder.getJobServiceTV().setText("Cliente");
+                        holder.getUserServiceTV().setText(client.getFirstName() + " " + client.getLastName());
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
         }
+
+
+
         holder.getStatusServiceTV().setText(services.get(position).getStatus());
         holder.getBodyServiceTV().setText(services.get(position).getTitle());
         holder.getServiceContainerCL().setOnClickListener(new View.OnClickListener() {
