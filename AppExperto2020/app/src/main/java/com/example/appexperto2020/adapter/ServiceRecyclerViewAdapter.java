@@ -21,6 +21,7 @@ import com.example.appexperto2020.model.Job;
 import com.example.appexperto2020.model.Service;
 import com.example.appexperto2020.util.Constants;
 import com.example.appexperto2020.util.HTTPSWebUtilDomi;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -38,7 +39,6 @@ public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceVie
 
     private ArrayList<Service> services  = new ArrayList<>();
     private Context context;
-    private String actualSession;
 
     @NonNull
     @Override
@@ -50,8 +50,8 @@ public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceVie
 
     @Override
     public void onBindViewHolder(@NonNull ServiceViewHolder holder, int position) {
-
-        if(actualSession.equals(Constants.SESSION_EXPERT)){
+        boolean expert = validateExpertOrClient(FirebaseAuth.getInstance().getCurrentUser().getUid(),services.get(position));
+        if(expert){
             //Obtener las imagenes
 
             File imageFile = new File( context.getExternalFilesDir(null)+"/"+services.get(position).getExpertId());
@@ -183,6 +183,15 @@ public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceVie
     private void loadImage(ImageView expertIV, File file) {
         Bitmap bitmap = BitmapFactory.decodeFile(file.toString());
         expertIV.setImageBitmap(bitmap);
+    }
+
+    private boolean validateExpertOrClient(String userId, Service temp){
+        if(userId.equals(temp.getClientId())){
+            return false;
+        }
+        else{
+            return true;
+        }
     }
 
 }

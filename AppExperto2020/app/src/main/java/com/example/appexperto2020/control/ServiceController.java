@@ -43,7 +43,7 @@ public class ServiceController {
 
     public void getAdapterData() {
         loadData();
-        adapter = new ServiceRecyclerViewAdapter(services, fragment.getActivity(), fragment.getActualSession());
+        adapter = new ServiceRecyclerViewAdapter(services, fragment.getActivity());
     }
 
     public void loadData() {
