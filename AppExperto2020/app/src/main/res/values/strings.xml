@@ -27,6 +27,9 @@
     <string name="name">Nombres</string>
     <string name="last_name">Apellidos</string>
     <string name="email">E-mail</string>
+
+
+
     <string name="password">Contraseña</string>
     <string name="password_validation">Por favor, repita la contraseña</string>
     <string name="document">Cédula</string>
@@ -37,6 +40,9 @@
     <string name="addFilesExpert">Adjunta aquí foto de documentos, certificados, o fotos de trabajo que validen su experiencia. (Opcional)</string>
     <string name="addFilesClient">Adjunta aquí fotos de los servicios o productos de interés que más te llamen la atención. (Opcional)</string>
 
+    <!-- Expert Profile Activity -->
+    <string name="ask_service">Solicitar Servicio</string>
+    <string name="phone">Celular</string>
     <!-- Strings for navigation -->
     <string name="next">Siguiente</string>
     <string name="previous">Atrás</string>

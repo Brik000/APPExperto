@@ -3,12 +3,14 @@ package com.example.appexperto2020.view;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -20,16 +22,20 @@ import lombok.Getter;
 
 public class UserProfileFragment extends Fragment {
     @Getter
-    private TextView expertDetailsNameTxt,expertDetailsLastNameTxt,expertDetailsDescriptionTxt,expertDetailsCellphoneTxt;
+    private TextView nameTV,mailTV, jobTV, descriptionTV, phoneTV;
     @Getter
-    private ListView expertDetailJobsList;
+    private TextView serviceButton;
     @Getter
-    private Button serviceButton;
+    private ImageView serviceBtn, expertPp;
+    @Getter
+    private RecyclerView photosRV;
+
     @Getter
     private String uId;
     private UserProfileController controller;
 
     public UserProfileFragment(String id) {
+
         this.uId = id;
     }
 
@@ -38,11 +44,15 @@ public class UserProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_user_profile, container, false);
         serviceButton = view.findViewById(R.id.serviceButton);
-        expertDetailsNameTxt= view.findViewById(R.id.expertDetailsNameTxt);
-        expertDetailsLastNameTxt= view.findViewById(R.id.expertDetailsLastNameTxt);
-        expertDetailsDescriptionTxt = view.findViewById(R.id.expertDetailsDescriptionTxt);
-        expertDetailsCellphoneTxt = view.findViewById(R.id.expertDetailsCellphoneTxt);
-        expertDetailJobsList = view.findViewById(R.id.expertDetailJobsList);
+        serviceBtn = view.findViewById(R.id.serviceBtn);
+        nameTV = view.findViewById(R.id.nameTV);
+        jobTV = view.findViewById(R.id.jobTV);
+        mailTV = view.findViewById(R.id.mailTV);
+        phoneTV = view.findViewById(R.id.phoneTV);
+        descriptionTV = view.findViewById(R.id.descriptionTV);
+        expertPp = view.findViewById(R.id.expertPp);
+        photosRV = view.findViewById(R.id.photosRV);
+
         controller = new UserProfileController(this);
         if(uId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))
             getServiceButton().setVisibility(View.GONE);

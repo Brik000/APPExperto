@@ -8,10 +8,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -24,8 +22,6 @@ import com.example.appexperto2020.control.RegisterController;
 import com.example.appexperto2020.util.Constants;
 import com.example.appexperto2020.util.HTTPSWebUtilDomi;
 import com.example.appexperto2020.util.MultiSelectionSpinner;
-import com.facebook.AccessToken;
-import com.facebook.login.LoginManager;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -54,7 +50,7 @@ public class RegisterActivity extends AppCompatActivity {
     @Getter
     private Button registerBut;
     @Getter
-    private MultiSelectionSpinner  jobSpinner;
+    private MultiSelectionSpinner jobSpinner;
     @Getter
     private ImageView addPhotoIV;
 

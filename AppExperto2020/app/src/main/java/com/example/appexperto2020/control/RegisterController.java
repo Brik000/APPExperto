@@ -124,10 +124,10 @@ public class RegisterController implements View.OnClickListener {
                     Toast.makeText(activity, activity.getString(R.string.fill_blank_spaces), Toast.LENGTH_LONG).show();
                     return;
                 } if (!activity.getPasswordET().getEditText().getText().toString().trim().equals(
-                        activity.getRepeatPasswordET().getEditText().getText().toString().trim())) {
-                    Toast.makeText(activity, activity.getString(R.string.password_repeat_wrong), Toast.LENGTH_LONG).show();
-                    return;
-                }
+                    activity.getRepeatPasswordET().getEditText().getText().toString().trim())) {
+                Toast.makeText(activity, activity.getString(R.string.password_repeat_wrong), Toast.LENGTH_LONG).show();
+                return;
+            }
                 activity.getRegisterBut().setEnabled(false);
                 activity.getProgressBar().setVisibility(View.VISIBLE);
                 DatabaseReference dBUser;
@@ -142,23 +142,23 @@ public class RegisterController implements View.OnClickListener {
                 }
                 User user = buildUser();
                 if (AccessToken.getCurrentAccessToken() == null)
-                FirebaseAuth.getInstance().createUserWithEmailAndPassword(user.getEmail(), user.getPassword()).addOnSuccessListener(
-                        (authResult) -> {
-                            registerInDataBase(user,dBUser,storageUser);
-                        }
-                ).addOnFailureListener(
-                        (e) -> {
-                            loadingFinished();
-                            Toast.makeText(activity, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                        }
-                );
+                    FirebaseAuth.getInstance().createUserWithEmailAndPassword(user.getEmail(), user.getPassword()).addOnSuccessListener(
+                            (authResult) -> {
+                                registerInDataBase(user,dBUser,storageUser);
+                            }
+                    ).addOnFailureListener(
+                            (e) -> {
+                                loadingFinished();
+                                Toast.makeText(activity, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                            }
+                    );
                 else {
                     Log.e(">>","Ingresa datos en DB con auth de facebook");
                     registerInDataBase(user, dBUser, storageUser);
                 }
                 break;
         }
-        }
+    }
 
     private void registerInDataBase(User user, DatabaseReference dBUser, StorageReference storageUser) {
         loadingFinished();
@@ -180,8 +180,8 @@ public class RegisterController implements View.OnClickListener {
     }
 
     private void loadingFinished() {
-            activity.getRegisterBut().setEnabled(true);
-            activity.getProgressBar().setVisibility(View.GONE);
+        activity.getRegisterBut().setEnabled(true);
+        activity.getProgressBar().setVisibility(View.GONE);
     }
 
     private User buildUser() {
@@ -246,15 +246,15 @@ public class RegisterController implements View.OnClickListener {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-            if (requestCode== GALLERY_CALLBACK_DOCS && resultCode == RESULT_OK)
-            {
-                Uri uri = data.getData();
-                uris.add(uri);
-                File photo = new File(UtilDomi.getPath(this.activity, uri));
-                photoAdapter.addPhoto(photo);
-            }
+        if (requestCode== GALLERY_CALLBACK_DOCS && resultCode == RESULT_OK)
+        {
+            Uri uri = data.getData();
+            uris.add(uri);
+            File photo = new File(UtilDomi.getPath(this.activity, uri));
+            photoAdapter.addPhoto(photo);
+        }
         if (requestCode== GALLERY_CALLBACK_PP && resultCode == RESULT_OK)
         {
             uriPp  = data.getData();
@@ -263,5 +263,5 @@ public class RegisterController implements View.OnClickListener {
             Bitmap bitmap = Bitmap.createBitmap(i);
             activity.getSessionImage().setImageBitmap(bitmap);
         }
-        }
+    }
 }

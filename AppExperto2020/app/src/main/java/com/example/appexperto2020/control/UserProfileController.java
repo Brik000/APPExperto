@@ -1,31 +1,45 @@
 package com.example.appexperto2020.control;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 
+import com.bumptech.glide.Glide;
 import com.example.appexperto2020.R;
+import com.example.appexperto2020.util.Constants;
+import com.example.appexperto2020.util.HTTPSWebUtilDomi;
 import com.example.appexperto2020.view.RequestServiceActivity;
 import com.example.appexperto2020.view.UserProfileFragment;
 import com.example.appexperto2020.model.Expert;
 import com.example.appexperto2020.model.Job;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.ListResult;
 
+import java.io.File;
 import java.util.ArrayList;
+
+import static com.example.appexperto2020.util.Constants.FOLDER_EXPERTS;
+import static com.example.appexperto2020.util.Constants.FOLDER_PROFILE_PICTURES;
 
 public class UserProfileController implements View.OnClickListener{
     private UserProfileFragment activity;
     private Expert expert;
+    private String jobs;
+
     public UserProfileController(UserProfileFragment activity) {
         this.activity = activity;
         activity.getServiceButton().setOnClickListener(this);
+        activity.getServiceBtn().setOnClickListener(this);
         Query query = FirebaseDatabase.getInstance()
                 .getReference()
                 .child("experts")
@@ -35,19 +49,28 @@ public class UserProfileController implements View.OnClickListener{
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 expert = dataSnapshot.getValue(Expert.class);
 
-                ArrayList<String> data = new ArrayList<>();
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(activity.getActivity(),android.R.layout.simple_list_item_1,data);
+                jobs = "";
                 for(Job j: expert.getJobList().values()){
-                    data.add(j.getName());
-                    adapter.notifyDataSetChanged();
+                    if(jobs.equals(""))
+                    {
+                        jobs += j.getName();
+                    }else {
+                        jobs += " || " + j.getName();
+                    }
                 }
+
+                setProfilePicture();
+                setJobPhotos();
                 activity.getActivity().runOnUiThread(
                         ()->{
-                            activity.getExpertDetailsCellphoneTxt().setText(expert.getCellphone()+"");
-                            activity.getExpertDetailsDescriptionTxt().setText(expert.getDescription());
-                            activity.getExpertDetailsLastNameTxt().setText(expert.getLastName());
-                            activity.getExpertDetailsNameTxt().setText(expert.getFirstName());
-                            activity.getExpertDetailJobsList().setAdapter(adapter);
+                            activity.getNameTV().setText(expert.getFirstName() + " " + expert.getLastName());
+                            activity.getDescriptionTV().setText(expert.getDescription());
+                            activity.getJobTV().setText(jobs);
+                            activity.getMailTV().setText(expert.getEmail());
+                            activity.getPhoneTV().setText(expert.getCellphone()+"");
+
+
+
                         }
                 );
             }
@@ -59,6 +82,34 @@ public class UserProfileController implements View.OnClickListener{
         });
     }
 
+
+    public void setJobPhotos()
+    {
+
+    }
+    public void setProfilePicture()
+    {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+
+        try{
+            storage.getReference().child(FOLDER_PROFILE_PICTURES).child(expert.getId()).getDownloadUrl().
+                    addOnSuccessListener(
+                            uri ->{
+
+                              activity.getActivity().runOnUiThread(
+                                      () ->
+                                      {
+                                          Glide.with(activity).load(uri).centerCrop().into(activity.getExpertPp());
+                                      }
+                              );
+                            }
+                    );
+
+        }catch(Exception e)
+        {
+            Log.e(">>>", "There is no profile picture for: "+ expert.getLastName());
+        }
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -67,6 +118,12 @@ public class UserProfileController implements View.OnClickListener{
                 Log.e("idE", expert.getId());
                 i.putExtra("idE", expert.getId());
                 v.getContext().startActivity(i);
+                break;
+            case R.id.serviceBtn:
+                Intent i2 = new Intent(v.getContext(), RequestServiceActivity.class);
+                Log.e("idE", expert.getId());
+                i2.putExtra("idE", expert.getId());
+                v.getContext().startActivity(i2);
                 break;
         }
     }

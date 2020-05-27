@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Job {
 
-    String id;
-    String name;
-    HashMap<String,String> clients, experts;
+  String id;
+  String name;
+  HashMap<String,String> clients, experts;
 }

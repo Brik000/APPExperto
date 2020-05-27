@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+      AccessToken accessToken = AccessToken.getCurrentAccessToken();
         if(accessToken != null && !accessToken.isExpired() || mAuth.getCurrentUser() != null) {
             Log.e(">>","Entra a login con facebook");
             logIn(mAuth.getCurrentUser().getUid());

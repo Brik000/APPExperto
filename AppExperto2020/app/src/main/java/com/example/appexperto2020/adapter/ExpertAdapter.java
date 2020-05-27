@@ -21,6 +21,7 @@ import com.example.appexperto2020.model.Expert;
 import com.example.appexperto2020.model.Job;
 import com.example.appexperto2020.util.HTTPSWebUtilDomi;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageException;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -32,7 +33,6 @@ public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder
 
     public ExpertAdapter(UserMainController controller)
     {
-        Log.e("", "INIT");
         this.controller = controller;
         experts = new ArrayList<>();
     }
@@ -116,28 +116,34 @@ public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder
             if(imageFile.exists())
             {
                 loadImage(expertIV, imageFile);
-                Log.e("-------", "image exists");
             }else{
 
                 FirebaseStorage storage = FirebaseStorage.getInstance();
-                Log.e("-------", "image doesnt exists");
 
-                storage.getReference().child("profilePictures").child("-M7pd7jmsrLHTKIn9YHj").getDownloadUrl().
-                        addOnSuccessListener(
-                                uri ->{
+                    try{
+                        storage.getReference().child("profilePictures").child(expert.getId()).getDownloadUrl().
+                                addOnSuccessListener(
+                                        uri ->{
 
-                                    File file = new File(view.getContext().getExternalFilesDir(null) +"/"+expert.getId());
-                                    new Thread(
-                                            () ->
-                                            {
-                                                HTTPSWebUtilDomi utilDomi = new HTTPSWebUtilDomi();
-                                                utilDomi.saveURLImageOnFile(uri.toString(), file);
-                                                Log.e("---->","se guarda");
-                                                loadImage(expertIV, imageFile);
-                                            }
-                                    ).start();
-                                }
-                        );
+                                            File file = new File(view.getContext().getExternalFilesDir(null) +"/"+expert.getId());
+                                            new Thread(
+                                                    () ->
+                                                    {
+                                                        HTTPSWebUtilDomi utilDomi = new HTTPSWebUtilDomi();
+                                                        utilDomi.saveURLImageOnFile(uri.toString(), file);
+                                                        Log.e("---->","se guarda");
+                                                        loadImage(expertIV, file);
+                                                    }
+                                            ).start();
+                                        }
+                                );
+
+                    }catch(Exception e)
+                    {
+                        Log.e(">>>", "There is no profile picture for: "+ expert.getLastName());
+                    }
+
+
             }
         }
 
