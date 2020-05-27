@@ -10,9 +10,11 @@ import android.widget.ImageView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.appexperto2020.R;
+import com.example.appexperto2020.util.Constants;
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -40,11 +42,26 @@ public class NavBarActivity extends AppCompatActivity implements View.OnClickLis
         logOutIV = findViewById(R.id.logOutIV);
         logOutIV.setOnClickListener(this);
         bottomNavigationView = findViewById(R.id.bottomNav);
-        userMainFragment = new UserMainFragment(session);
-        getSupportFragmentManager().beginTransaction().add(R.id.fragmentSelected, userMainFragment, "userMain").commit();
-        getSupportFragmentManager().beginTransaction().setPrimaryNavigationFragment(userMainFragment).commit();
-        bottomNavigationView.setSelectedItemId(R.id.mainMenu);
-        getSupportFragmentManager().beginTransaction().show(userMainFragment).commit();
+        if (session.equals(Constants.SESSION_EXPERT)){
+            bottomNavigationView.getMenu().removeItem(R.id.mainMenu);
+            myServicesFragment = new MyServicesFragment();
+            getSupportFragmentManager().beginTransaction().add(R.id.fragmentSelected, myServicesFragment, "myServices").commit();
+            getSupportFragmentManager().beginTransaction().setPrimaryNavigationFragment(myServicesFragment).commit();
+            bottomNavigationView.setSelectedItemId(R.id.servicesMenu);
+            getSupportFragmentManager().beginTransaction().show(myServicesFragment).commit();
+        }
+        else {
+            userMainFragment = new UserMainFragment(session);
+            getSupportFragmentManager().beginTransaction().add(R.id.fragmentSelected, userMainFragment, "userMain").commit();
+            getSupportFragmentManager().beginTransaction().setPrimaryNavigationFragment(userMainFragment).commit();
+            bottomNavigationView.setSelectedItemId(R.id.mainMenu);
+            getSupportFragmentManager().beginTransaction().show(userMainFragment).commit();
+        }
+        configureBottomNavBehavior();
+
+    }
+
+    private void configureBottomNavBehavior() {
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 item ->{
                     Fragment fragmentActivity = null;
@@ -55,7 +72,7 @@ public class NavBarActivity extends AppCompatActivity implements View.OnClickLis
                                 getSupportFragmentManager().beginTransaction().add(R.id.fragmentSelected, userProfileFragment, "userProfile").commit();
                             }
                             fragmentActivity = userProfileFragment;
-                        break;
+                            break;
                         case R.id.mainMenu:
                             fragmentActivity = userMainFragment;
                             break;
@@ -66,14 +83,14 @@ public class NavBarActivity extends AppCompatActivity implements View.OnClickLis
                             }
                             fragmentActivity = myServicesFragment;
                             break;
-            }
-                if(fragmentActivity != null) {
-                    if(getSupportFragmentManager().getPrimaryNavigationFragment().getTag().equals("temporal"))
-                        getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().getPrimaryNavigationFragment()).commit();
-                    else getSupportFragmentManager().beginTransaction().hide(getSupportFragmentManager().getPrimaryNavigationFragment()).commit();
-                    getSupportFragmentManager().beginTransaction().setPrimaryNavigationFragment(fragmentActivity).commit();
-                    getSupportFragmentManager().beginTransaction().show(fragmentActivity).commit();
-                }
+                    }
+                    if(fragmentActivity != null) {
+                        if(getSupportFragmentManager().getPrimaryNavigationFragment().getTag().equals("temporal"))
+                            getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().getPrimaryNavigationFragment()).commit();
+                        else getSupportFragmentManager().beginTransaction().hide(getSupportFragmentManager().getPrimaryNavigationFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().setPrimaryNavigationFragment(fragmentActivity).commit();
+                        getSupportFragmentManager().beginTransaction().show(fragmentActivity).commit();
+                    }
                     return true;
                 });
     }
