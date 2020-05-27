@@ -1,6 +1,8 @@
 package com.example.appexperto2020.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -21,6 +23,7 @@ import com.example.appexperto2020.model.Job;
 import com.example.appexperto2020.model.Service;
 import com.example.appexperto2020.util.Constants;
 import com.example.appexperto2020.util.HTTPSWebUtilDomi;
+import com.example.appexperto2020.view.ChatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,6 +34,7 @@ import com.google.firebase.storage.FirebaseStorage;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Map;
 
 import lombok.AllArgsConstructor;
 
@@ -38,7 +42,7 @@ import lombok.AllArgsConstructor;
 public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceViewHolder> {
 
     private ArrayList<Service> services  = new ArrayList<>();
-    private Context context;
+    private Activity context;
 
     @NonNull
     @Override
@@ -51,9 +55,9 @@ public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceVie
     @Override
     public void onBindViewHolder(@NonNull ServiceViewHolder holder, int position) {
         boolean client = validateExpertOrClient(FirebaseAuth.getInstance().getCurrentUser().getUid(),services.get(position));
+
         if(client){
             //Obtener las imagenes
-
             File imageFile = new File( context.getExternalFilesDir(null)+"/"+services.get(position).getExpertId());
                 if(imageFile.exists())
                 {
@@ -111,11 +115,9 @@ public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceVie
             if(imageFile.exists())
             {
                 loadImage(holder.getServiceCV(), imageFile);
-            }else
-            {
-
+            }else {
                 FirebaseStorage storage = FirebaseStorage.getInstance();
-
+                Log.e("Before Query", "Here");
                 try {
                     storage.getReference().child("profilePictures").child(services.get(position).getClientId()).getDownloadUrl().
                             addOnSuccessListener(
@@ -137,14 +139,28 @@ public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceVie
                 } catch (Exception e) {
                     Log.e(">>>", "There is no profile picture for: " + services.get(position).getExpertId());
                 }
+            }
                 Query query = FirebaseDatabase.getInstance().getReference().child("clients").
                         child(services.get(position).getClientId());
                 query.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Client client = dataSnapshot.getValue(Client.class);
+                        String firstName = "";
+                        String lastName = "";
+                        Map<String,Object> client = (Map<String,Object>) dataSnapshot.getValue();
+                        for (String key:client.keySet()) {
+                            if(key.equals("firstName")){
+                                firstName = (String) client.get(key);
+                            }
+                            else if (key.equals("lastName")){
+                                lastName = (String) client.get(key);
+                            }
+
+                            Log.e(">>>>> KEY: ", key);
+                            Log.e(">>>>> Value: ", "" +  client.get(key));
+                        }
                         holder.getJobServiceTV().setText("Cliente");
-                        holder.getUserServiceTV().setText(client.getFirstName() + " " + client.getLastName());
+                        holder.getUserServiceTV().setText(firstName + " " + lastName);
                     }
 
                     @Override
@@ -153,9 +169,6 @@ public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceVie
                     }
                 });
             }
-        }
-
-
 
         holder.getStatusServiceTV().setText(services.get(position).getStatus());
         holder.getBodyServiceTV().setText(services.get(position).getTitle());
@@ -165,7 +178,21 @@ public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceVie
                 Toast.makeText(context,services.get(position).getDescription(),Toast.LENGTH_LONG).show();
             }
         });
+        String userId = client ? services.get(position).getClientId(): services.get(position).getExpertId();
+        String userRoot = client ? "clients":"experts";
 
+        holder.getChatServiceBtn().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ChatActivity.class);
+                intent.putExtra("username", userId);
+                intent.putExtra("chatroom",services.get(position).getId());
+                intent.putExtra("userRoot",userRoot);
+                context.startActivity(intent);
+
+
+            }
+        });
     }
 
     @Override
@@ -191,5 +218,4 @@ public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceVie
             return false;
         }
     }
-
 }
