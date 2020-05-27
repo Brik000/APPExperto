@@ -59,7 +59,7 @@ public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.custom(experts.get(position));
+        holder.custom(experts.get(position), controller);
         holder.goToBtn.setContentDescription(experts.get(position).getId());
         holder.goToBtn.setOnClickListener(controller);
     }
@@ -89,7 +89,7 @@ public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder
 
 
         // Personalizamos un ViewHolder a partir de un lugar
-        public void custom(Expert expert) {
+        public void custom(Expert expert, UserMainController controller) {
             Log.e("", "CUSTOM");
             expertNameTv.setText(expert.getFirstName() + " " + expert.getLastName());
             String jobs = "";
@@ -108,7 +108,13 @@ public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder
             File imageFile = new File(view.getContext().getExternalFilesDir(null)+"/"+expert.getId());
             if(imageFile.exists())
             {
-                loadImage(expertIV, imageFile);
+                controller.getActivity().getActivity().runOnUiThread(
+                        () ->
+                        {
+                            loadImage(expertIV, imageFile);
+
+                        }
+                );
             }else{
 
                 FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -125,7 +131,12 @@ public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder
                                                         HTTPSWebUtilDomi utilDomi = new HTTPSWebUtilDomi();
                                                         utilDomi.saveURLImageOnFile(uri.toString(), file);
                                                         Log.e("---->","se guarda");
-                                                        loadImage(expertIV, file);
+                                                        controller.getActivity().getActivity().runOnUiThread(
+                                                                () ->
+                                                                {
+                                                                    loadImage(expertIV, file);
+                                                                }
+                                                        );
                                                     }
                                             ).start();
                                         }

@@ -25,6 +25,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
+        android:fontFamily="@font/lato"
         android:text="TextView"
         android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="@+id/goToBtn"
@@ -39,6 +40,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
+        android:fontFamily="@font/lato"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/expertNameTV" />

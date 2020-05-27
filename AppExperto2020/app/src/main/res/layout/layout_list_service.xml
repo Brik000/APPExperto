@@ -31,8 +31,9 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="5dp"
             android:clickable="false"
+            android:fontFamily="@font/lato"
             android:hint="@string/job_service_hint"
-            android:textSize="8sp"
+            android:textSize="10sp"
             app:layout_constraintStart_toEndOf="@+id/graySquareIV"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,7 +45,7 @@
             android:layout_marginRight="35dp"
             android:clickable="false"
             android:hint="@string/status_service_hint"
-            android:textSize="8sp"
+            android:textSize="10sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -69,6 +70,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="10dp"
         android:clickable="false"
+        android:fontFamily="@font/lato"
         android:hint="@string/user_name_service_hint"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/serviceCV"
@@ -82,6 +84,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
         android:clickable="false"
+        android:fontFamily="@font/lato"
         android:hint="@string/body_service_hint"
         android:textSize="10sp"
         app:layout_constraintStart_toEndOf="@+id/serviceCV"
@@ -95,6 +98,7 @@
         android:layout_marginLeft="65dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/go_to_chat_button_bg"
+        android:fontFamily="@font/lato"
         android:text="@string/button_go_chat"
         android:textSize="8sp"
         android:visibility="visible"

@@ -97,6 +97,7 @@
                                         <com.google.android.material.textfield.TextInputEditText
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
+                                            android:fontFamily="@font/lato"
                                             android:inputType="textEmailAddress" />
 
                                 </com.google.android.material.textfield.TextInputLayout>
@@ -120,6 +121,7 @@
                                         <com.google.android.material.textfield.TextInputEditText
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
+                                            android:fontFamily="@font/lato"
                                             android:inputType="textPassword" />
                                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -143,6 +145,7 @@
                                         <com.google.android.material.textfield.TextInputEditText
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
+                                            android:fontFamily="@font/lato"
                                             android:inputType="textPassword" />
                                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -164,7 +167,8 @@
 
                                         <com.google.android.material.textfield.TextInputEditText
                                             android:layout_width="match_parent"
-                                            android:layout_height="wrap_content" />
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/lato" />
                                 </com.google.android.material.textfield.TextInputLayout>
 
                                 <com.google.android.material.textfield.TextInputLayout
@@ -185,7 +189,8 @@
 
                                         <com.google.android.material.textfield.TextInputEditText
                                             android:layout_width="match_parent"
-                                            android:layout_height="wrap_content" />
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/lato" />
                                 </com.google.android.material.textfield.TextInputLayout>
 
                                 <com.google.android.material.textfield.TextInputLayout
@@ -208,6 +213,7 @@
                                         <com.google.android.material.textfield.TextInputEditText
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
+                                            android:fontFamily="@font/lato"
                                             android:inputType="phone" />
                                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -319,7 +325,8 @@
 
                                         <com.google.android.material.textfield.TextInputEditText
                                             android:layout_width="match_parent"
-                                            android:layout_height="match_parent" />
+                                            android:layout_height="match_parent"
+                                            android:fontFamily="@font/lato" />
                                 </com.google.android.material.textfield.TextInputLayout>
 
                                 <com.google.android.material.textfield.TextInputLayout
@@ -340,7 +347,8 @@
 
                                         <com.google.android.material.textfield.TextInputEditText
                                             android:layout_width="match_parent"
-                                            android:layout_height="wrap_content" />
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/lato" />
 
                                 </com.google.android.material.textfield.TextInputLayout>
 

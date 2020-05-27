@@ -14,11 +14,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.appexperto2020.R;
 import com.example.appexperto2020.adapter.ExpertAdapter;
 import com.example.appexperto2020.control.UserMainController;
+import com.example.appexperto2020.util.MultiSelectionSpinner;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,9 +32,13 @@ public class UserMainFragment extends Fragment {
     private TextView welcomeTV;
     private RecyclerView expertsRV;
     @Getter
+    private SearchView searchView;
+    @Getter
     private ExpertAdapter adapter;
     @Getter
     private ProgressBar progressBar;
+    @Getter
+    private MultiSelectionSpinner jobSpinner;
 
     private String session;
 
@@ -50,6 +56,7 @@ public class UserMainFragment extends Fragment {
         progressBar = view.findViewById(R.id.progressBarList);
         controller = new UserMainController(this, session);
         adapter = new ExpertAdapter(controller);
+        searchView = view.findViewById(R.id.searchView);
         LinearLayoutManager linearLayoutManager = new GridLayoutManager(getActivity(), 2);
         getExpertsRV().setLayoutManager(linearLayoutManager);
         getExpertsRV().setAdapter(adapter);

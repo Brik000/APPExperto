@@ -10,17 +10,14 @@
         android:id="@+id/reqTitletxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|end"
         android:layout_marginTop="25dp"
+        android:fontFamily="@font/lato"
+        android:gravity="center"
         android:text="@string/Screntitle"
-        android:textColor="@color/blueExpert"
-        android:textColorHighlight="@color/blueExpert"
-        android:textColorHint="@color/blueExpert"
-        android:textColorLink="@color/blueExpert"
-        android:textSize="36sp"
+        android:textColor="@color/blueText"
+        android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.727"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imagereqservice"
         tools:text="@string/Screntitle" />
@@ -42,6 +39,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
             android:hint="@string/ServiceTitle" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -61,6 +59,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fontFamily="@font/lato"
             android:hint="@string/ServiceDescription" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -73,7 +72,7 @@
         android:layout_marginTop="35dp"
         android:layout_marginEnd="1dp"
         android:layout_marginRight="1dp"
-        android:hint="@string/OfferServices"
+        android:hint="@string/ServiceOffer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/descriptionReqSer">
@@ -81,7 +80,8 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/ServiceOffer" />
+            android:fontFamily="@font/lato"
+            android:scrollHorizontally="false" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
@@ -94,12 +94,14 @@
         android:layout_marginEnd="163dp"
         android:layout_marginRight="163dp"
         android:background="@color/gray2"
+        android:fontFamily="@font/lato"
         android:text="@string/RequestBtn"
-        android:textColor="@color/backgroundExpert"
 
+        android:textColor="@color/backgroundExpert"
         android:textColorHighlight="@color/gray2"
         android:textColorHint="@color/blueExpert"
         android:textColorLink="@color/blueExpert"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

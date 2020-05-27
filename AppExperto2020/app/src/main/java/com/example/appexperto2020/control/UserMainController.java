@@ -23,6 +23,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import lombok.Getter;
+
 import static com.example.appexperto2020.util.Constants.FOLDER_CLIENTS;
 import static com.example.appexperto2020.util.Constants.FOLDER_EXPERTS;
 import static com.example.appexperto2020.util.Constants.SESSION_CLIENT;
@@ -30,19 +32,23 @@ import static com.example.appexperto2020.util.Constants.SESSION_EXPERT;
 
 public class UserMainController implements View.OnClickListener{
 
+    @Getter
     private UserMainFragment activity;
 
     private HashMap<String, String> interests;
     private String user;
-    String session;
+    private String session;
     private String folder;
 
-    ArrayList<Expert> experts;
+    private HashMap<String, Job> jobsFromServer;
+    private ArrayList<Expert> experts;
 
     public UserMainController(UserMainFragment activity, String session)
     {
         this.activity = activity;
         experts = new ArrayList<>();
+        jobsFromServer = new HashMap<>();
+     //   activity.getSearchView().setOnSearchClickListener(this);
 
         this.session = session;
         activity.getExpertsRV().addItemDecoration(new DividerItemDecoration(activity.getExpertsRV().getContext()
@@ -134,6 +140,10 @@ public class UserMainController implements View.OnClickListener{
                 fm.beginTransaction().setPrimaryNavigationFragment(userProfileFragment).commit();
                 fm.beginTransaction().show(userProfileFragment).commit();
             break;
+            case R.id.searchView:
+            {
+                this.activity.getJobSpinner().setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -154,6 +164,28 @@ public class UserMainController implements View.OnClickListener{
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.e(">>>>", databaseError.toString());
+
+            }
+        });
+    }
+
+    public void bringJobsFromServer(){
+
+        Query q = FirebaseDatabase.getInstance().getReference().child("jobs");
+        q.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<String> jobs = new ArrayList<>();
+                for (DataSnapshot d : dataSnapshot.getChildren()){
+                    Job j = d.getValue(Job.class);
+                    jobsFromServer.put(j.getName(), j);
+                    jobs.add(j.getName());
+                }
+                activity.getJobSpinner().setItems(jobs);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });

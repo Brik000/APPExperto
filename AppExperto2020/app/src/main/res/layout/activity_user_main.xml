@@ -7,6 +7,17 @@
     android:background="@android:color/white"
     tools:context=".view.UserMainFragment">
 
+    <com.example.appexperto2020.util.MultiSelectionSpinner
+        android:id="@+id/jobSpinner"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginLeft="40dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/searchView"
+        app:layout_constraintStart_toStartOf="@+id/searchView"
+        app:layout_constraintTop_toTopOf="@+id/searchView" />
+
     <SearchView
         android:id="@+id/searchView"
         android:layout_width="300dp"
