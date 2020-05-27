@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public abstract class User {
   private String id, firstName, lastName, email, password, description, idDocument;
+  private HashMap<String, String> services;
 
 }
