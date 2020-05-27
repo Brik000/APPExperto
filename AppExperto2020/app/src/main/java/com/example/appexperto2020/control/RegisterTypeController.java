@@ -33,7 +33,7 @@ public class RegisterTypeController implements View.OnClickListener, Switch.OnCh
                         dialog.dismiss();
                     }
                 });
-        if(view.getIntent().getExtras() != null && !view.getIntent().getExtras().isEmpty()){
+        if(view.getIntent().getExtras() != null && view.getIntent().getExtras().getString(Constants.FACEBOOK_FIRST_NAME) != null){
             alertDialog.setTitle(view.getString(R.string.near_to_complete_register));
             alertDialog.setMessage(view.getString(R.string.near_to_register_body));
             alertDialog.show();

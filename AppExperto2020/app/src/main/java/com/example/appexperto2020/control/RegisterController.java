@@ -22,6 +22,7 @@ import com.example.appexperto2020.model.Job;
 import com.example.appexperto2020.model.User;
 import com.example.appexperto2020.util.Constants;
 import com.example.appexperto2020.util.UtilDomi;
+import com.example.appexperto2020.view.NavBarActivity;
 import com.example.appexperto2020.view.RegisterActivity;
 import com.example.appexperto2020.view.UserMainFragment;
 import com.facebook.AccessToken;
@@ -221,7 +222,7 @@ public class RegisterController implements View.OnClickListener {
                 newJob.setName(j.getName());
                 dBUser.child(pushId).child(jobType).child(j.getId()).setValue(newJob);
                 FirebaseDatabase.getInstance().getReference().child("jobs").child(j.getId()).child(userType).child(pushId).setValue(pushId);
-                goToUserMain(userName);
+                goToUserMain();
             }
             else {
                 AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
@@ -230,7 +231,7 @@ public class RegisterController implements View.OnClickListener {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
-                                goToUserMain(userName);
+                                goToUserMain();
                             }
                         });
                 alertDialog.setMessage(activity.getString(R.string.no_choosen));
@@ -239,8 +240,8 @@ public class RegisterController implements View.OnClickListener {
         }
     }
 
-    public void goToUserMain(String userName) {
-        Intent i = new Intent(activity, UserMainFragment.class);
+    public void goToUserMain() {
+        Intent i = new Intent(activity, NavBarActivity.class);
         i.putExtra(SESSION_TYPE, session);
         activity.startActivity(i);
     }
