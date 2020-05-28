@@ -195,7 +195,7 @@ public class ChatController implements View.OnClickListener {
                 }
                 activity.hideImage();
                 tempUri = null;
-
+                activity.getMessageET().setText("");
                 break;
             case R.id.galBtn:
                 Intent gal = new Intent((Intent.ACTION_GET_CONTENT));
