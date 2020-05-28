@@ -182,6 +182,10 @@ public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceVie
         String userId = client ? services.get(position).getClientId(): services.get(position).getExpertId();
         String userRoot = client ? "clients":"experts";
         String state = services.get(position).getStatus();
+        if(state.equals("Aceptado"))
+        {
+            holder.getChatServiceBtn().setVisibility(View.VISIBLE);
+        }
         if(state.equals(context.getActivity().getString(R.string.service_pending)) || state.equals(context.getActivity().getString(R.string.service_declined)))
         {
             if(client){
@@ -215,13 +219,6 @@ public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceVie
                     intent.putExtra("userRoot",userRoot);
                     context.startActivity(intent);
                 }
-
-
-            /**
-             * DEBERÍA HACERSE UN CONDICIONAL
-             * SI EL TEXTO DEL BOTON DICE (VER MAS) IR AL FRAGMENT DE ACEPTAR SERVICIO
-             * SI EL TEXTO NO DICE ESO HACER LO DE ARRIBA DEL INTENT
-             */
 
 
             }
