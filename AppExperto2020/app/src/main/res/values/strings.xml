@@ -29,7 +29,6 @@
     <string name="email">E-mail</string>
 
 
-
     <string name="password">Contraseña</string>
     <string name="password_validation">Por favor, repita la contraseña</string>
     <string name="document">Cédula</string>
@@ -53,6 +52,16 @@
     <string name="ServiceDescription">Haz una breve descripcion del lo que requieres</string>
     <string name="ServiceOffer">$ Ofrezco en moneda local (opcional)</string>
     <string name="RequestBtn">Solicitar</string>
+
+    <!-- Strings needed to show a service -->
+    <string name="Service_dp">Servicio: </string>
+    <string name="Description_dp">Descripción: </string>
+    <string name="OfferPrice_dp">Precio ofrecido: </string>
+    <string name="Accept">Aceptar Servicio</string>
+    <string name="Refuse">Rechazar Servicio</string>
+
+
+
     <!-- End Strings needed to request a service -->
 
     <string name="action_settings">Configuración</string>
@@ -86,4 +95,7 @@
     <string name="body_service_hint"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, </string>
     <string name="button_go_chat">Chatea con tu experto</string>
     <string name="usertype_incorrect">Intentando acceder con el tipo de usuario incorrecto</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

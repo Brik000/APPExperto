@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/reqTitletxt"
+        android:id="@+id/titleTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
@@ -19,7 +19,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imagereqservice"
+        app:layout_constraintTop_toBottomOf="@+id/clientIV"
         tools:text="@string/Screntitle" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -34,7 +34,7 @@
         android:hint="@string/ServiceTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reqTitletxt">
+        app:layout_constraintTop_toBottomOf="@+id/titleTV">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -108,7 +108,7 @@
         app:layout_constraintTop_toBottomOf="@+id/rewardrtxt" />
 
     <ImageView
-        android:id="@+id/imagereqservice"
+        android:id="@+id/clientIV"
         android:layout_width="139dp"
         android:layout_height="128dp"
         android:layout_marginStart="136dp"

@@ -40,7 +40,7 @@ public class MyServicesController {
     }
 
     public void getAdapterData() {
-        adapter = new ServiceRecyclerViewAdapter(fragment.getActivity());
+        adapter = new ServiceRecyclerViewAdapter(fragment);
         loadData();
     }
 

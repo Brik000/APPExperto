@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context= ".view.ChatActivity">
+    android:background="@android:color/white"
+    tools:context=".view.ChatActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/controlsContainer"
@@ -66,11 +67,15 @@
         android:id="@+id/usernameTV"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
         android:fontFamily="@font/lato"
+        android:gravity="center"
         android:text="Username"
+        android:textColor="@color/blueText"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

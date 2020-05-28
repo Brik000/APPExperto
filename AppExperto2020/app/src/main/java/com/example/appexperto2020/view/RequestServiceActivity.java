@@ -40,13 +40,13 @@ public class RequestServiceActivity extends AppCompatActivity {
 
         expertId = getIntent().getExtras().getString("idE");
 
-        maintitletxt=findViewById(R.id.reqTitletxt);
+        maintitletxt=findViewById(R.id.titleTV);
         titleTxt=findViewById(R.id.titleReqSer);
         descriptionTxt=findViewById(R.id.descriptionReqSer);
         rewardTxt=findViewById(R.id.rewardrtxt);
         requestBtn=findViewById(R.id.butonreqser);
         backBtn=findViewById(R.id.gobackBtn);
-        serviceImg=findViewById(R.id.imagereqservice);
+        serviceImg=findViewById(R.id.clientIV);
         controller=new RequestServiceController(this,getExpertId());
     }
 

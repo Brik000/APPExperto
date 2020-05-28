@@ -23,7 +23,9 @@ import com.example.appexperto2020.model.Job;
 import com.example.appexperto2020.model.Service;
 import com.example.appexperto2020.util.Constants;
 import com.example.appexperto2020.util.HTTPSWebUtilDomi;
+import com.example.appexperto2020.view.AcceptServiceFragment;
 import com.example.appexperto2020.view.ChatActivity;
+import com.example.appexperto2020.view.MyServicesFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -42,9 +44,9 @@ import lombok.AllArgsConstructor;
 public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceViewHolder> {
 
     private ArrayList<Service> services  = new ArrayList<>();
-    private Activity context;
+    private MyServicesFragment context;
 
-    public ServiceRecyclerViewAdapter(Activity context) {
+    public ServiceRecyclerViewAdapter(MyServicesFragment context) {
         this.context = context;
     }
 
@@ -62,21 +64,19 @@ public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceVie
 
         if(client){
             //Obtener las imagenes
-            File imageFile = new File( context.getExternalFilesDir(null)+"/"+services.get(position).getExpertId());
+            File imageFile = new File( context.getActivity().getExternalFilesDir(null)+"/"+services.get(position).getExpertId());
                 if(imageFile.exists())
                 {
                     loadImage(holder.getServiceCV(), imageFile);
                 }else
                 {
-
                     FirebaseStorage storage = FirebaseStorage.getInstance();
-
                     try {
                         storage.getReference().child("profilePictures").child(services.get(position).getExpertId()).getDownloadUrl().
                                 addOnSuccessListener(
                                         uri -> {
 
-                                            File file = new File(context.getExternalFilesDir(null) + "/" + services.get(position).getExpertId());
+                                            File file = new File(context.getActivity().getExternalFilesDir(null) + "/" + services.get(position).getExpertId());
                                             new Thread(
                                                     () ->
                                                     {
@@ -115,7 +115,7 @@ public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceVie
         }
         else{
             //Obtener las imagenes
-            File imageFile = new File( context.getExternalFilesDir(null)+"/"+services.get(position).getClientId());
+            File imageFile = new File( context.getActivity().getExternalFilesDir(null)+"/"+services.get(position).getClientId());
             if(imageFile.exists())
             {
                 loadImage(holder.getServiceCV(), imageFile);
@@ -127,7 +127,7 @@ public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceVie
                             addOnSuccessListener(
                                     uri -> {
 
-                                        File file = new File(context.getExternalFilesDir(null) + "/" + services.get(position).getClientId());
+                                        File file = new File(context.getActivity().getExternalFilesDir(null) + "/" + services.get(position).getClientId());
                                         new Thread(
                                                 () ->
                                                 {
@@ -153,6 +153,20 @@ public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceVie
 
                         holder.getJobServiceTV().setText("Cliente");
                         holder.getUserServiceTV().setText(client.getFirstName() + " " + client.getLastName());
+
+                        /** if(context.getActualSession().equals(Constants.SESSION_EXPERT))
+                         {
+
+                         /////AQUI ENTONCES PRIMERO SE DEBERÍA VER SI EL SERVICIO NO ESTA ACEPTADO
+                         1. SI NO ESTA ACEPTADO (EN EL BOTON CAMBIAR EL TEXTO .SETTEXT("VER MÁS")
+                         AcceptServiceFragment myServicesFragment = new AcceptServiceFragment(context.getActualSession());
+                         }
+                         if(context.getActualSession().equals(Constants.SESSION_CLIENT))
+                         {
+                         1. SI NO ESTA ACEPTADO SE DEBE ESCONDER EL BOTON
+                         }
+
+                         **/
                     }
 
                     @Override
@@ -167,7 +181,7 @@ public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceVie
         holder.getServiceContainerCL().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context,services.get(position).getDescription(),Toast.LENGTH_LONG).show();
+                Toast.makeText(context.getActivity(),services.get(position).getDescription(),Toast.LENGTH_LONG).show();
             }
         });
         String userId = client ? services.get(position).getClientId(): services.get(position).getExpertId();
@@ -176,11 +190,17 @@ public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceVie
         holder.getChatServiceBtn().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, ChatActivity.class);
+                Intent intent = new Intent(context.getActivity(), ChatActivity.class);
                 intent.putExtra("username", userId);
                 intent.putExtra("chatroom",services.get(position).getId());
                 intent.putExtra("userRoot",userRoot);
                 context.startActivity(intent);
+
+            /**
+             * DEBERÍA HACERSE UN CONDICIONAL
+             * SI EL TEXTO DEL BOTON DICE (VER MAS) IR AL FRAGMENT DE ACEPTAR SERVICIO
+             * SI EL TEXTO NO DICE ESO HACER LO DE ARRIBA DEL INTENT
+             */
 
 
             }

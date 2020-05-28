@@ -2,108 +2,133 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/serviceContainerCL"
     android:layout_width="match_parent"
-    android:layout_height="120dp"
-    android:background="@color/gray3">
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:paddingBottom="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/headerServiceCL"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:id="@+id/serviceContainerCL"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="2dp"
+        android:background="@drawable/bg3"
+        android:paddingBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintStart_toStartOf="parent">
 
-        <ImageView
-            android:id="@+id/graySquareIV"
-            android:layout_width="34dp"
-            android:layout_height="20dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/headerServiceCL"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/gray_square_service" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/jobServiceTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            <ImageView
+                android:id="@+id/graySquareIV"
+                android:layout_width="34dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/gray_square_service" />
+
+            <TextView
+                android:id="@+id/jobServiceTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="10dp"
+                android:clickable="false"
+                android:fontFamily="@font/lato"
+                android:hint="@string/job_service_hint"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@+id/graySquareIV"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/statusServiceTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="35dp"
+                android:layout_marginRight="35dp"
+                android:clickable="false"
+                android:hint="@string/status_service_hint"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/serviceCV"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="8dp"
             android:clickable="false"
-            android:fontFamily="@font/lato"
-            android:hint="@string/job_service_hint"
-            android:textSize="10sp"
-            app:layout_constraintStart_toEndOf="@+id/graySquareIV"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:src="@drawable/client"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/headerServiceCL" />
 
         <TextView
-            android:id="@+id/statusServiceTV"
+            android:id="@+id/userServiceTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="35dp"
-            android:layout_marginRight="35dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="10dp"
             android:clickable="false"
-            android:hint="@string/status_service_hint"
+            android:fontFamily="@font/lato"
+            android:hint="@string/user_name_service_hint"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/serviceCV"
+            app:layout_constraintTop_toBottomOf="@+id/headerServiceCL" />
+
+        <TextView
+            android:id="@+id/bodyServiceTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:clickable="false"
+            android:fontFamily="@font/lato"
+            android:hint="@string/body_service_hint"
             android:textSize="10sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/serviceCV"
+            app:layout_constraintTop_toBottomOf="@+id/userServiceTV" />
+
+        <Button
+            android:id="@+id/chatServiceBtn"
+            android:layout_width="128dp"
+            android:layout_height="37dp"
+            android:layout_marginStart="65dp"
+            android:layout_marginLeft="65dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="2dp"
+            android:background="@drawable/go_to_chat_button_bg"
+            android:fontFamily="@font/lato"
+            android:text="@string/button_go_chat"
+            android:textSize="8sp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/serviceCV"
+            app:layout_constraintTop_toBottomOf="@+id/bodyServiceTV" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/serviceCV"
-        android:layout_width="85dp"
-        android:layout_height="85dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:clickable="false"
-        android:src="@drawable/client"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headerServiceCL" />
-
-    <TextView
-        android:id="@+id/userServiceTV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="10dp"
-        android:clickable="false"
-        android:fontFamily="@font/lato"
-        android:hint="@string/user_name_service_hint"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/serviceCV"
-        app:layout_constraintTop_toBottomOf="@+id/headerServiceCL" />
-
-    <TextView
-        android:id="@+id/bodyServiceTV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:clickable="false"
-        android:fontFamily="@font/lato"
-        android:hint="@string/body_service_hint"
-        android:textSize="10sp"
-        app:layout_constraintStart_toEndOf="@+id/serviceCV"
-        app:layout_constraintTop_toBottomOf="@+id/userServiceTV" />
-
-    <Button
-        android:id="@+id/chatServiceBtn"
-        android:layout_width="128dp"
-        android:layout_height="37dp"
-        android:layout_marginStart="65dp"
-        android:layout_marginLeft="65dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/go_to_chat_button_bg"
-        android:fontFamily="@font/lato"
-        android:text="@string/button_go_chat"
-        android:textSize="8sp"
-        android:visibility="visible"
-        app:layout_constraintStart_toEndOf="@+id/serviceCV"
-        app:layout_constraintTop_toBottomOf="@+id/bodyServiceTV" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
