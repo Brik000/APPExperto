@@ -130,9 +130,11 @@ public class NavBarActivity extends AppCompatActivity implements View.OnClickLis
     public void onBackPressed() {
         if(getSupportFragmentManager().getPrimaryNavigationFragment().getTag().equals("temporal"))
             getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().getPrimaryNavigationFragment()).commit();
-        else getSupportFragmentManager().beginTransaction().hide(getSupportFragmentManager().getPrimaryNavigationFragment()).commit();
-        getSupportFragmentManager().beginTransaction().setPrimaryNavigationFragment(userMainFragment).commit();
-        getSupportFragmentManager().beginTransaction().show(userMainFragment).commit();
+        else if (userMainFragment != null) {
+            getSupportFragmentManager().beginTransaction().hide(getSupportFragmentManager().getPrimaryNavigationFragment()).commit();
+            getSupportFragmentManager().beginTransaction().setPrimaryNavigationFragment(userMainFragment).commit();
+            getSupportFragmentManager().beginTransaction().show(userMainFragment).commit();
+        }
     }
 
     @Override

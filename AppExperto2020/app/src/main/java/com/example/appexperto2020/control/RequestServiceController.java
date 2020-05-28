@@ -38,8 +38,11 @@ public class RequestServiceController implements View.OnClickListener{
             case R.id.butonreqser:
                 this.generateService();
                 FirebaseDatabase.getInstance().getReference().child("services").child(servicio.getId()).setValue(servicio);
+                view.onBackPressed();
+                break;
             case R.id.gobackBtn:
                 view.onBackPressed();
+                break;
         }
     }
 

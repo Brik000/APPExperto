@@ -6,13 +6,16 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.example.appexperto2020.adapter.ServiceRecyclerViewAdapter;
 import com.example.appexperto2020.model.Service;
 import com.example.appexperto2020.model.User;
+import com.example.appexperto2020.util.Constants;
 import com.example.appexperto2020.util.HTTPSWebUtilDomi;
 import com.example.appexperto2020.view.MyServicesFragment;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -45,42 +48,33 @@ public class MyServicesController {
     }
 
     public void loadData() {
+        String searchId;
+        if(getFragment().getActualSession().equals(Constants.SESSION_CLIENT))
+            searchId = "clientId";
+        else searchId = "expertId";
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Query clientServiceQuery = FirebaseDatabase.getInstance().getReference().child("services").orderByChild("clientId").equalTo(userId);
-        clientServiceQuery.addValueEventListener(new ValueEventListener() {
+        Query userServiceQuery = FirebaseDatabase.getInstance().getReference().child("services").orderByChild(searchId).equalTo(userId);
+        userServiceQuery.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                //Ninguna coincidencia
-                if (dataSnapshot.getChildrenCount() == 0) {
-
-                } else {
-                    adapter.initializeServices();
-                    for (DataSnapshot coincidence : dataSnapshot.getChildren()) {
-                        Service s = coincidence.getValue(Service.class);
-                        adapter.addService(s);
-                    }
-                }
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Log.e("new service", dataSnapshot.getKey());
+                Service service = dataSnapshot.getValue(Service.class);
+                adapter.addService(service);
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
             }
-        });
 
-        Query expertServiceQuery = FirebaseDatabase.getInstance().getReference().child("services").orderByChild("expertId").equalTo(userId);
-        expertServiceQuery.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getChildrenCount() == 0) {
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
 
-                } else {
-                    for (DataSnapshot coincidence : dataSnapshot.getChildren()) {
-                        Service s = coincidence.getValue(Service.class);
-                        adapter.addService(s);
-                    }
-                }
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
             }
 
             @Override

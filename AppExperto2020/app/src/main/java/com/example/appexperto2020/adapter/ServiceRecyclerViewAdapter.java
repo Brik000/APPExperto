@@ -153,7 +153,7 @@ public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceVie
             }
                 Query query = FirebaseDatabase.getInstance().getReference().child("clients").
                         child(services.get(position).getClientId());
-                query.addValueEventListener(new ValueEventListener() {
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Client client = dataSnapshot.getValue(Client.class);
@@ -236,6 +236,21 @@ public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceVie
     public void addService(Service service){
         services.add(service);
         notifyDataSetChanged();
+        int pos = services.size()-1;
+        FirebaseDatabase.getInstance().getReference().child("services").child(service.getId())
+                .addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.e("actualiza", dataSnapshot.getKey());
+                services.set(pos, dataSnapshot.getValue(Service.class));
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void loadImage(ImageView expertIV, File file) {

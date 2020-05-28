@@ -44,27 +44,25 @@ public class AcceptServiceController implements View.OnClickListener {
 
         FirebaseDatabase.getInstance().getReference().child(FOLDER_SERVICES).child(serviceId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
-                                                    @Override
-                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                        Log.e("DATASNAPSHOT ----->", dataSnapshot.toString());
-                                                         service = dataSnapshot.getValue(Service.class);
-                                                         activity.runOnUiThread(
-                                                                 ()->
-                                                                 {
-                                                                     activity.getDescriptionTV().setText(service.getDescription());
-                                                                     activity.getServiceTV().setText(service.getTitle());
-                                                                    activity.getPriceTV().setText("$ "+service.getReward());
-                                                                    clientId = service.getClientId();
-                                                                     setProfilePicture();
-
-                                                                 }
-                                                         );
-                                                    }
-                                                    @Override
-                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                                                    }
-                                                }
-                );
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Log.e("DATASNAPSHOT ----->", dataSnapshot.toString());
+                        service = dataSnapshot.getValue(Service.class);
+                        activity.runOnUiThread(
+                                ()->
+                                {
+                                    activity.getDescriptionTV().setText(service.getDescription());
+                                    activity.getServiceTV().setText(service.getTitle());
+                                    activity.getPriceTV().setText("$ "+service.getReward());
+                                    clientId = service.getClientId();
+                                    setProfilePicture();
+                                }
+                                );
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
+                });
     }
     @Override
     public void onClick(View v) {
