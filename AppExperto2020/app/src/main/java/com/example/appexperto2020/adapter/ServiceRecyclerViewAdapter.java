@@ -1,7 +1,5 @@
 package com.example.appexperto2020.adapter;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,11 +17,9 @@ import com.example.appexperto2020.R;
 import com.example.appexperto2020.holder.ServiceViewHolder;
 import com.example.appexperto2020.model.Client;
 import com.example.appexperto2020.model.Expert;
-import com.example.appexperto2020.model.Job;
 import com.example.appexperto2020.model.Service;
-import com.example.appexperto2020.util.Constants;
 import com.example.appexperto2020.util.HTTPSWebUtilDomi;
-import com.example.appexperto2020.view.AcceptServiceFragment;
+import com.example.appexperto2020.view.AcceptServiceActivity;
 import com.example.appexperto2020.view.ChatActivity;
 import com.example.appexperto2020.view.MyServicesFragment;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,9 +32,11 @@ import com.google.firebase.storage.FirebaseStorage;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Map;
 
 import lombok.AllArgsConstructor;
+
+import static com.example.appexperto2020.util.Constants.AWAITING;
+import static com.example.appexperto2020.util.Constants.MORE;
 
 @AllArgsConstructor
 public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceViewHolder> {
@@ -62,6 +60,7 @@ public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceVie
     public void onBindViewHolder(@NonNull ServiceViewHolder holder, int position) {
         boolean client = validateExpertOrClient(FirebaseAuth.getInstance().getCurrentUser().getUid(),services.get(position));
 
+        final String[] clientName = new String[1];
         if(client){
             //Obtener las imagenes
             File imageFile = new File( context.getActivity().getExternalFilesDir(null)+"/"+services.get(position).getExpertId());
@@ -152,21 +151,9 @@ public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceVie
                         Client client = dataSnapshot.getValue(Client.class);
 
                         holder.getJobServiceTV().setText("Cliente");
+                         clientName[0] = client.getFirstName().toString();
                         holder.getUserServiceTV().setText(client.getFirstName() + " " + client.getLastName());
 
-                        /** if(context.getActualSession().equals(Constants.SESSION_EXPERT))
-                         {
-
-                         /////AQUI ENTONCES PRIMERO SE DEBERÍA VER SI EL SERVICIO NO ESTA ACEPTADO
-                         1. SI NO ESTA ACEPTADO (EN EL BOTON CAMBIAR EL TEXTO .SETTEXT("VER MÁS")
-                         AcceptServiceFragment myServicesFragment = new AcceptServiceFragment(context.getActualSession());
-                         }
-                         if(context.getActualSession().equals(Constants.SESSION_CLIENT))
-                         {
-                         1. SI NO ESTA ACEPTADO SE DEBE ESCONDER EL BOTON
-                         }
-
-                         **/
                     }
 
                     @Override
@@ -186,15 +173,41 @@ public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceVie
         });
         String userId = client ? services.get(position).getClientId(): services.get(position).getExpertId();
         String userRoot = client ? "clients":"experts";
+        String state = services.get(position).getStatus();
+        if(state.equals(AWAITING))
+        {
+            if(client){
+                holder.getChatServiceBtn().setVisibility(View.GONE);
+            }else
+            {
+                holder.getChatServiceBtn().setText(MORE);
+            }
+        }else {
+            if(!client)
+            {
+                holder.getChatServiceBtn().setText(("Chatea con tu cliente"));
+            }
+        }
 
         holder.getChatServiceBtn().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context.getActivity(), ChatActivity.class);
-                intent.putExtra("username", userId);
-                intent.putExtra("chatroom",services.get(position).getId());
-                intent.putExtra("userRoot",userRoot);
-                context.startActivity(intent);
+                if(holder.getChatServiceBtn().getText().toString().equals(MORE))
+                {
+                    Intent intent = new Intent(context.getActivity(), AcceptServiceActivity.class);
+                    intent.putExtra("service",services.get(position).getId());
+                    intent.putExtra("clientName",clientName[0]);
+
+                    context.startActivity(intent);
+                }else
+                {
+                    Intent intent = new Intent(context.getActivity(), ChatActivity.class);
+                    intent.putExtra("username", userId);
+                    intent.putExtra("chatroom",services.get(position).getId());
+                    intent.putExtra("userRoot",userRoot);
+                    context.startActivity(intent);
+                }
+
 
             /**
              * DEBERÍA HACERSE UN CONDICIONAL

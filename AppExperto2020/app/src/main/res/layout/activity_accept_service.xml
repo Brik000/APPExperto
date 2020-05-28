@@ -4,13 +4,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/reqTitleTxt"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context=".view.AcceptServiceActivity">
+
+    <ImageButton
+        android:id="@+id/backBtn"
+        android:layout_width="58dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="347dp"
+        android:layout_marginRight="347dp"
+        android:background="@color/backgroundExpert"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="?attr/homeAsUpIndicator" />
 
     <TextView
         android:id="@+id/titleTV"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
         android:fontFamily="@font/lato"
         android:gravity="center"
         android:text="@string/Screntitle"
@@ -18,23 +39,21 @@
         android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.658"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/clientIV"
+        app:layout_constraintTop_toBottomOf="@+id/clientPP"
         tools:text="@string/Screntitle" />
 
-    <ImageView
-        android:id="@+id/clientIV"
-        android:layout_width="139dp"
-        android:layout_height="128dp"
-        android:layout_marginStart="136dp"
-        android:layout_marginLeft="136dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="136dp"
-        android:layout_marginRight="136dp"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/clientPP"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="20dp"
+        android:clickable="false"
+        android:src="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/expert" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/gobackBtn"
@@ -45,8 +64,8 @@
         android:layout_marginTop="6dp"
         android:layout_marginEnd="347dp"
         android:layout_marginRight="347dp"
-        app:layout_constraintEnd_toEndOf="parent"
         android:background="@color/backgroundExpert"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="?attr/homeAsUpIndicator" />
@@ -60,7 +79,7 @@
         android:layout_marginTop="20dp"
         android:fontFamily="@font/lato"
         android:text="@string/Service_dp"
-        android:textSize="16sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleTV" />
@@ -89,7 +108,7 @@
         android:layout_marginTop="20dp"
         android:fontFamily="@font/lato"
         android:text="@string/Description_dp"
-        android:textSize="16sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/serviceTV" />
@@ -118,7 +137,7 @@
         android:layout_marginTop="20dp"
         android:fontFamily="@font/lato"
         android:text="@string/OfferPrice_dp"
-        android:textSize="16sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/descriptionTV" />

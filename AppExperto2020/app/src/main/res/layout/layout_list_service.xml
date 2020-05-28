@@ -106,7 +106,7 @@
             android:clickable="false"
             android:fontFamily="@font/lato"
             android:hint="@string/body_service_hint"
-            android:textSize="10sp"
+            android:textSize="12sp"
             app:layout_constraintStart_toEndOf="@+id/serviceCV"
             app:layout_constraintTop_toBottomOf="@+id/userServiceTV" />
 
@@ -121,7 +121,8 @@
             android:background="@drawable/go_to_chat_button_bg"
             android:fontFamily="@font/lato"
             android:text="@string/button_go_chat"
-            android:textSize="8sp"
+            android:textAllCaps="false"
+            android:textSize="12sp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/serviceCV"
