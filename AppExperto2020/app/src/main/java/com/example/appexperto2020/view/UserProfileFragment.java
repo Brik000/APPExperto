@@ -49,7 +49,7 @@ public class UserProfileFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_user_profile, container, false);
-        serviceText = view.findViewById(R.id.serviceButton);
+        serviceText = view.findViewById(R.id.serviceTxtBtn);
         serviceBtn = view.findViewById(R.id.serviceBtn);
         nameTV = view.findViewById(R.id.nameTV);
         jobTV = view.findViewById(R.id.jobTV);

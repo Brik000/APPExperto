@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appexperto2020.R;
 import com.example.appexperto2020.control.UserProfileController;
-import com.example.appexperto2020.util.Constants;
 import com.example.appexperto2020.util.HTTPSWebUtilDomi;
 import com.google.firebase.storage.FirebaseStorage;
 
@@ -113,7 +112,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
                                                     HTTPSWebUtilDomi utilDomi = new HTTPSWebUtilDomi();
                                                     utilDomi.saveURLImageOnFile(uri.toString(), file);
                                                     Log.e("---->","se guarda");
-                                                    controller.getActivity().getActivity().runOnUiThread(
+                                                    controller.getFragment().getActivity().runOnUiThread(
                                                             ()->
                                                             {
                                                                 loadImage(photoIV, file);

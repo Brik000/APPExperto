@@ -2,6 +2,9 @@ package com.example.appexperto2020.control;
 
 import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Switch;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
@@ -21,7 +24,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 import lombok.Getter;
 
@@ -30,10 +32,10 @@ import static com.example.appexperto2020.util.Constants.FOLDER_EXPERTS;
 import static com.example.appexperto2020.util.Constants.SESSION_CLIENT;
 import static com.example.appexperto2020.util.Constants.SESSION_EXPERT;
 
-public class UserMainController implements View.OnClickListener{
+public class UserMainController implements View.OnClickListener, Switch.OnCheckedChangeListener {
 
     @Getter
-    private UserMainFragment activity;
+    private UserMainFragment fragment;
 
     private HashMap<String, String> interests;
     private String session;
@@ -44,9 +46,9 @@ public class UserMainController implements View.OnClickListener{
 
     public UserMainController(UserMainFragment activity, String session)
     {
-        this.activity = activity;
+        this.fragment = activity;
         jobsFromServer = new HashMap<>();
-        activity.getSearchView().setOnSearchClickListener(this);
+        activity.getSwitchSearch().setOnCheckedChangeListener(this);
         this.session = session;
         bringJobsFromServer();
 
@@ -106,7 +108,7 @@ public class UserMainController implements View.OnClickListener{
 
     public void setupJobsSelected()
     {
-        String[] selectedJobs= activity.getJobSpinner().getSelectedItemsAsString().split(", ");
+        String[] selectedJobs= fragment.getJobSpinner().getSelectedItemsAsString().split(", ");
 
         HashMap<String, String> jobsToSearch = new HashMap<>();
         for(int i = 0; i<selectedJobs.length;i++)
@@ -114,7 +116,7 @@ public class UserMainController implements View.OnClickListener{
             Job j = jobsFromServer.get(selectedJobs[i]);
             jobsToSearch.put(j.getId(), j.getId());
         }
-        activity.getAdapter().removeData();
+        fragment.getAdapter().removeData();
         findExpertsBySearch(jobsToSearch);
 
     }
@@ -124,19 +126,13 @@ public class UserMainController implements View.OnClickListener{
         switch (v.getId()){
             case R.id.goToBtn:
                 String id = v.getContentDescription().toString();
-                FragmentManager fm = activity.getActivity().getSupportFragmentManager();
+                FragmentManager fm = fragment.getActivity().getSupportFragmentManager();
                 UserProfileFragment userProfileFragment = new UserProfileFragment(id,session);
                 fm.beginTransaction().add(R.id.fragmentSelected, userProfileFragment, "temporal").commit();
                 fm.beginTransaction().hide(fm.getPrimaryNavigationFragment()).commit();
                 fm.beginTransaction().setPrimaryNavigationFragment(userProfileFragment).commit();
                 fm.beginTransaction().show(userProfileFragment).commit();
             break;
-            case R.id.searchView:
-            {
-                setupJobsSelected();
-                break;
-            }
-
         }
     }
 
@@ -147,6 +143,7 @@ public class UserMainController implements View.OnClickListener{
         q.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                fragment.getAdapter().removeData();
                 for (DataSnapshot d : dataSnapshot.getChildren()){
                     Expert expert = d.getValue(Expert.class);
                     checkJob(expert, interests);
@@ -188,8 +185,8 @@ public class UserMainController implements View.OnClickListener{
         {
             if(jobs != null && jobsParameter.containsKey(job))
             {
-                activity.getAdapter().addExpert(expert);
-                activity.getAdapter().notifyDataSetChanged();
+                fragment.getAdapter().addExpert(expert);
+                fragment.getAdapter().notifyDataSetChanged();
             }
             break;
         }
@@ -207,7 +204,7 @@ public class UserMainController implements View.OnClickListener{
                     jobsFromServer.put(j.getName(), j);
                     jobs.add(j.getName());
                 }
-                activity.getJobSpinner().setItems(jobs);
+                fragment.getJobSpinner().setItems(jobs);
             }
 
             @Override
@@ -217,5 +214,24 @@ public class UserMainController implements View.OnClickListener{
         });
     }
 
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch (buttonView.getId()) {
+            case R.id.switchSearch:
+                if (isChecked) {
+                    if(fragment.getJobSpinner().getSelectedIndicies().isEmpty()) {
+                        Toast.makeText(fragment.getActivity(), fragment.getString(R.string.no_choosen), Toast.LENGTH_LONG).show();
+                        fragment.getSwitchSearch().setChecked(false);
+                    }
+                    else
+                    setupJobsSelected();
+                    fragment.getFindingByTV().setText(fragment.getString(R.string.finding_by_search));
+                }
+                else {
+                    findExpertsByInterests();
+                    fragment.getFindingByTV().setText(fragment.getString(R.string.finding_by_interests));
+                }
+        }
+    }
 }
 

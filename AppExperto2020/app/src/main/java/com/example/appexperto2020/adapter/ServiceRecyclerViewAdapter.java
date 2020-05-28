@@ -57,6 +57,7 @@ public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceVie
 
     public void initializeServices() {
         services = new ArrayList<>();
+        notifyDataSetChanged();
     }
 
     @Override

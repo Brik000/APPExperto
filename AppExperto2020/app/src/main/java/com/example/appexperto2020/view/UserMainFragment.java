@@ -2,7 +2,6 @@ package com.example.appexperto2020.view;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,9 +11,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.appexperto2020.R;
@@ -29,10 +27,11 @@ import lombok.NoArgsConstructor;
 public class UserMainFragment extends Fragment {
 
     private UserMainController controller;
-    private TextView welcomeTV;
+    @Getter
+    private TextView welcomeTV, findingByTV;
     private RecyclerView expertsRV;
     @Getter
-    private SearchView searchView;
+    private Switch switchSearch;
     @Getter
     private ExpertAdapter adapter;
     @Getter
@@ -54,19 +53,15 @@ public class UserMainFragment extends Fragment {
         welcomeTV = view.findViewById(R.id.welcomeTV);
         expertsRV = view.findViewById(R.id.expertsRV);
         progressBar = view.findViewById(R.id.progressBarList);
-        searchView = view.findViewById(R.id.searchView);
+        switchSearch = view.findViewById(R.id.switchSearch);
         jobSpinner = view.findViewById(R.id.jobSpinner);
-
+        findingByTV = view.findViewById(R.id.findingByTV);
         controller = new UserMainController(this, session);
         adapter = new ExpertAdapter(controller);
         LinearLayoutManager linearLayoutManager = new GridLayoutManager(getActivity(), 2);
         getExpertsRV().setLayoutManager(linearLayoutManager);
         getExpertsRV().setAdapter(adapter);
         return view;
-    }
-
-    public TextView getWelcomeTV() {
-        return welcomeTV;
     }
 
     public RecyclerView getExpertsRV() {

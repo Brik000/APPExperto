@@ -34,23 +34,22 @@ import static com.example.appexperto2020.util.Constants.FOLDER_PROFILE_PICTURES;
 
 public class UserProfileController implements View.OnClickListener{
    @Getter
-    private UserProfileFragment activity;
+    private UserProfileFragment fragment;
     private User user;
     private String jobs;
     private String folder;
 
-    public UserProfileController(UserProfileFragment activity, String session, String uId) {
-        this.activity = activity;
+    public UserProfileController(UserProfileFragment fragment, String session, String uId) {
+        this.fragment = fragment;
         if(session.equals(Constants.SESSION_CLIENT) && uId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))
             folder = Constants.FOLDER_CLIENTS;
         else folder = FOLDER_EXPERTS;
 
-        activity.getServiceText().setOnClickListener(this);
-        activity.getServiceBtn().setOnClickListener(this);
+        fragment.getServiceBtn().setOnClickListener(this);
         Query query = FirebaseDatabase.getInstance()
                 .getReference()
                 .child(folder)
-                .child(activity.getUId());
+                .child(fragment.getUId());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -80,18 +79,18 @@ public class UserProfileController implements View.OnClickListener{
 
                 setProfilePicture();
                 setJobPhotos();
-                activity.getActivity().runOnUiThread(
+                fragment.getActivity().runOnUiThread(
                         ()->{
-                            activity.getNameTV().setText(user.getFirstName() + " " + user.getLastName());
-                            activity.getDescriptionTV().setText(user.getDescription());
-                            activity.getJobTV().setText(jobs);
-                            activity.getMailTV().setText(user.getEmail());
+                            fragment.getNameTV().setText(user.getFirstName() + " " + user.getLastName());
+                            fragment.getDescriptionTV().setText(user.getDescription());
+                            fragment.getJobTV().setText(jobs);
+                            fragment.getMailTV().setText(user.getEmail());
                             if(user instanceof Expert) {
                                 Expert expert = (Expert) user;
-                                activity.getPhoneTV().setText(expert.getCellphone() + "");
+                                fragment.getPhoneTV().setText(expert.getCellphone() + "");
                             } else {
-                                activity.getPhoneTV().setVisibility(View.GONE);
-                                activity.getTxtCel().setVisibility(View.GONE);
+                                fragment.getPhoneTV().setVisibility(View.GONE);
+                                fragment.getTxtCel().setVisibility(View.GONE);
                             }
                         }
                 );
@@ -125,8 +124,8 @@ public class UserProfileController implements View.OnClickListener{
                         Log.e(">>>>>", "ERROR BRINGING ITEMS");
                     }
                 });
-        activity.getAdapter().setIdExpert(user.getId());
-        activity.getAdapter().setData(uris);
+        fragment.getAdapter().setIdExpert(user.getId());
+        fragment.getAdapter().setData(uris);
     }
     public void setProfilePicture()
     {
@@ -136,10 +135,10 @@ public class UserProfileController implements View.OnClickListener{
             storage.getReference().child(FOLDER_PROFILE_PICTURES).child(user.getId()).getDownloadUrl().
                     addOnSuccessListener(
                             uri ->{
-                              activity.getActivity().runOnUiThread(
+                              fragment.getActivity().runOnUiThread(
                                       () ->
                                       {
-                                          Glide.with(activity).load(uri).centerCrop().into(activity.getExpertPp());
+                                          Glide.with(fragment).load(uri).centerCrop().into(fragment.getExpertPp());
                                       }
                               );
                             }
@@ -153,7 +152,7 @@ public class UserProfileController implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.serviceButton:
+            case R.id.serviceBtn:
                 Intent i = new Intent(v.getContext(), RequestServiceActivity.class);
                 Log.e("idE", user.getId());
                 i.putExtra("idE", user.getId());

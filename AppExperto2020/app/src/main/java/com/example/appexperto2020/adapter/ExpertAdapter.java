@@ -2,26 +2,22 @@ package com.example.appexperto2020.adapter;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.appexperto2020.R;
 import com.example.appexperto2020.control.UserMainController;
 import com.example.appexperto2020.model.Expert;
 import com.example.appexperto2020.model.Job;
 import com.example.appexperto2020.util.HTTPSWebUtilDomi;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageException;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -117,7 +113,7 @@ public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder
             File imageFile = new File(view.getContext().getExternalFilesDir(null)+"/"+expert.getId());
             if(imageFile.exists())
             {
-                controller.getActivity().getActivity().runOnUiThread(
+                controller.getFragment().getActivity().runOnUiThread(
                         () ->
                         {
                             loadImage(expertIV, imageFile);
@@ -140,7 +136,7 @@ public class ExpertAdapter extends RecyclerView.Adapter<ExpertAdapter.ViewHolder
                                                         HTTPSWebUtilDomi utilDomi = new HTTPSWebUtilDomi();
                                                         utilDomi.saveURLImageOnFile(uri.toString(), file);
                                                         Log.e("---->","se guarda");
-                                                        controller.getActivity().getActivity().runOnUiThread(
+                                                        controller.getFragment().getActivity().runOnUiThread(
                                                                 () ->
                                                                 {
                                                                     loadImage(expertIV, file);

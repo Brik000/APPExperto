@@ -7,7 +7,7 @@
     <string name="register">Registrarme</string>
     <string name="add_pp">Agrega una foto de perfil (Opcional)</string>
     <string name="login">Iniciar sesión</string>
-
+    <string name="FindBy">Búsqueda</string>
     <!-- Messages -->
     <string name="welcome_user">Esperamos que encuentres lo que necesitas</string>
     <string name="userServices">Tus servicios en curso</string>
@@ -66,7 +66,7 @@
     <string name="action_settings">Configuración</string>
     <string name="choose_one">Escoge una de las opciones</string>
     <string name="alert_title">¡Hey!</string>
-    <string name="no_choosen">No ingresante ninguna experticie, ¡Pero no importa! Luego podrás agregarlas en tu perfil.</string>
+    <string name="no_choosen">No has escogido ninguna experticie.</string>
 
     <string name="jobs">Áreas de trabajo</string>
     <string name="agree">De acuerdo</string>
@@ -100,4 +100,6 @@
     <string name="service_accepted">Aceptado</string>
     <string name="service_declined">Rechazado</string>
     <string name="service_pending">Pendiente</string>
+    <string name="finding_by_search">Expertos según tu búsqueda</string>
+    <string name="finding_by_interests">Expertos según tus intereses</string>
 </resources>
