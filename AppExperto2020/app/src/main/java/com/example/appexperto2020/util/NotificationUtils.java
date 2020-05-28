@@ -25,7 +25,7 @@ public class NotificationUtils {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context,Constants.CHANNEL_ID)
                 .setContentTitle("Nuevo Mensaje")
                 .setContentText(mensaje)
-                .setSmallIcon(R.mipmap.ic_launcher);
+                .setSmallIcon(R.drawable.expert);
         manager.notify(consecutive,builder.build());
         consecutive++;
     }
