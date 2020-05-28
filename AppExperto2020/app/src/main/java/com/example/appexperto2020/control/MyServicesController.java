@@ -55,6 +55,7 @@ public class MyServicesController {
                 if (dataSnapshot.getChildrenCount() == 0) {
 
                 } else {
+                    adapter.initializeServices();
                     for (DataSnapshot coincidence : dataSnapshot.getChildren()) {
                         Service s = coincidence.getValue(Service.class);
                         adapter.addService(s);

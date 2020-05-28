@@ -97,4 +97,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="service_accepted">Aceptado</string>
+    <string name="service_declined">Rechazado</string>
+    <string name="service_pending">Pendiente</string>
 </resources>

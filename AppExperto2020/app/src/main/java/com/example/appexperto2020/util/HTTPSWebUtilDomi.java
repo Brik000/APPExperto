@@ -54,9 +54,15 @@ public class HTTPSWebUtilDomi {
             HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
                 @Override
                 public boolean verify(String hostname, SSLSession sslSession) {
-                    return true;
-                    //Use la variable hostname para retornar true en caso de que
-                    //concuerde con la página que usted está intentando consultar
+                    switch (hostname){
+                        case "facebook.com":
+                            return true;
+                        case "fcm.googleapis.com":
+                            return true;
+                        case "firebasestorage.googleapis.com":
+                            return true;
+                        default:return false;
+                    }
                 }
             });
             //HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);

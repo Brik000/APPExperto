@@ -35,7 +35,6 @@ import java.util.ArrayList;
 
 import lombok.AllArgsConstructor;
 
-import static com.example.appexperto2020.util.Constants.AWAITING;
 import static com.example.appexperto2020.util.Constants.MORE;
 
 @AllArgsConstructor
@@ -54,6 +53,10 @@ public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceVie
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_list_service,parent,false);
         ServiceViewHolder holder = new ServiceViewHolder(view);
         return holder;
+    }
+
+    public void initializeServices() {
+        services = new ArrayList<>();
     }
 
     @Override
@@ -133,7 +136,11 @@ public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceVie
                                                     HTTPSWebUtilDomi utilDomi = new HTTPSWebUtilDomi();
                                                     utilDomi.saveURLImageOnFile(uri.toString(), file);
                                                     Log.e("---->", "se guarda");
-                                                    loadImage(holder.getServiceCV(), file);
+                                                    context.getActivity().runOnUiThread(
+                                                            ()->{
+                                                                loadImage(holder.getServiceCV(), file);
+                                                            }
+                                                    );
                                                 }
                                         ).start();
                                     }
@@ -174,7 +181,7 @@ public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceVie
         String userId = client ? services.get(position).getClientId(): services.get(position).getExpertId();
         String userRoot = client ? "clients":"experts";
         String state = services.get(position).getStatus();
-        if(state.equals(AWAITING))
+        if(state.equals(context.getActivity().getString(R.string.service_pending)) || state.equals(context.getActivity().getString(R.string.service_declined)))
         {
             if(client){
                 holder.getChatServiceBtn().setVisibility(View.GONE);

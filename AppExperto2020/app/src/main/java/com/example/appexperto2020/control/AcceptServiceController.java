@@ -15,8 +15,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 
-import static com.example.appexperto2020.util.Constants.ACCEPTED;
-import static com.example.appexperto2020.util.Constants.DECLINED;
 import static com.example.appexperto2020.util.Constants.FOLDER_PROFILE_PICTURES;
 import static com.example.appexperto2020.util.Constants.FOLDER_SERVICES;
 
@@ -74,14 +72,14 @@ public class AcceptServiceController implements View.OnClickListener {
             case R.id.acceptBtn:
             {
 
-                FirebaseDatabase.getInstance().getReference().child(FOLDER_SERVICES).child(serviceId).child("status").setValue(ACCEPTED);
+                FirebaseDatabase.getInstance().getReference().child(FOLDER_SERVICES).child(serviceId).child("status").setValue(activity.getString(R.string.service_accepted));
                 Log.e("-------->", "ACCEPTED");
                 activity.onBackPressed();
                 break;
             }
             case R.id.refuseBtn:
             {
-                FirebaseDatabase.getInstance().getReference().child(FOLDER_SERVICES).child(serviceId).child("status").setValue(DECLINED);
+                FirebaseDatabase.getInstance().getReference().child(FOLDER_SERVICES).child(serviceId).child("status").setValue(activity.getString(R.string.service_declined));
                 Log.e("-------->", "REFUSED");
                 activity.onBackPressed();
                 break;
