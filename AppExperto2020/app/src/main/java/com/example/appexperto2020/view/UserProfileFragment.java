@@ -25,7 +25,7 @@ public class UserProfileFragment extends Fragment {
 
     private final String session;
     @Getter
-    private TextView nameTV,mailTV, jobTV, descriptionTV, phoneTV;
+    private TextView nameTV,mailTV, jobTV, descriptionTV, phoneTV, txtCel;
     @Getter
     private TextView serviceText;
     @Getter
@@ -55,11 +55,12 @@ public class UserProfileFragment extends Fragment {
         jobTV = view.findViewById(R.id.jobTV);
         mailTV = view.findViewById(R.id.mailTV);
         phoneTV = view.findViewById(R.id.phoneTV);
+        txtCel = view.findViewById(R.id.txtCelLeft);
         descriptionTV = view.findViewById(R.id.descriptionTV);
         expertPp = view.findViewById(R.id.expertPp);
 
         photosRV = view.findViewById(R.id.photosRV);
-        controller = new UserProfileController(this, session);
+        controller = new UserProfileController(this, session, uId);
 
         adapter = new PhotosAdapter(controller);
         LinearLayoutManager linearLayoutManager = new GridLayoutManager(getActivity(), 2);

@@ -21,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 import lombok.Getter;
 
@@ -39,7 +40,6 @@ public class UserMainController implements View.OnClickListener{
     private String folder;
     private String userName;
     private HashMap<String, Job> jobsFromServer;
-    private ArrayList<Expert> expertsFromServer;
 
 
     public UserMainController(UserMainFragment activity, String session)
@@ -50,6 +50,8 @@ public class UserMainController implements View.OnClickListener{
         this.session = session;
         bringJobsFromServer();
 
+        activity.getExpertsRV().addItemDecoration(new DividerItemDecoration(activity.getExpertsRV().getContext()
+                , DividerItemDecoration.HORIZONTAL));
         activity.getExpertsRV().addItemDecoration(new DividerItemDecoration(activity.getExpertsRV().getContext()
                 , DividerItemDecoration.VERTICAL));
 
@@ -80,17 +82,13 @@ public class UserMainController implements View.OnClickListener{
 
     }
 
-    public void checkJob(Expert expert, HashMap<String, String> j)
+    public void checkJob(Expert expert)
     {
-        Object[] keys  = j.keySet().toArray();
-        HashMap<String,Job> jobs = expert.getJobList();
-        ArrayList<Expert> experts = new ArrayList<>();
-        for(int i = 0; i<keys.length;i++)
+        Iterable<String> jobs = expert.getJobList().keySet();
+        for(String job : jobs)
         {
-
-            if(jobs != null && jobs.containsKey(keys[i]))
+            if(jobs != null && interests.containsKey(job))
             {
-                experts.add(expert);
                 activity.getAdapter().addExpert(expert);
                 activity.getAdapter().notifyDataSetChanged();
 
@@ -109,6 +107,7 @@ public class UserMainController implements View.OnClickListener{
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot d : dataSnapshot.getChildren()){
                             Job job = d.getValue(Job.class);
+                            Log.e("trae un interes", job.getName());
                             interests.put(job.getId(), job.getId());
 
                         }
@@ -137,9 +136,9 @@ public class UserMainController implements View.OnClickListener{
     }
 
     public void searchCoincidences( HashMap<String, String>  j){
-        for(int i = 0; i<expertsFromServer.size();i++)
+        for(int i = 0; i<activity.getAdapter().getItemCount();i++)
         {
-            checkJob(expertsFromServer.get(i), j);
+            checkJob(activity.getAdapter().getItem(i));
         }
 
     }
@@ -167,7 +166,6 @@ public class UserMainController implements View.OnClickListener{
 
     public void findExpertsByInterests() {
 
-       expertsFromServer = new ArrayList<>();
         Query q = FirebaseDatabase.getInstance().getReference().child(FOLDER_EXPERTS);
 
         q.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -175,8 +173,7 @@ public class UserMainController implements View.OnClickListener{
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot d : dataSnapshot.getChildren()){
                     Expert expert = d.getValue(Expert.class);
-                    expertsFromServer.add(expert);
-                    checkJob(expert, interests);
+                    checkJob(expert);
                 }
             }
 

@@ -16,6 +16,7 @@ import com.example.appexperto2020.view.UserProfileFragment;
 import com.example.appexperto2020.model.Expert;
 import com.example.appexperto2020.model.Job;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -36,11 +37,11 @@ public class UserProfileController implements View.OnClickListener{
     private UserProfileFragment activity;
     private User user;
     private String jobs;
+    private String folder;
 
-    public UserProfileController(UserProfileFragment activity, String session) {
+    public UserProfileController(UserProfileFragment activity, String session, String uId) {
         this.activity = activity;
-        String folder;
-        if(session.equals(Constants.SESSION_CLIENT))
+        if(session.equals(Constants.SESSION_CLIENT) && uId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))
             folder = Constants.FOLDER_CLIENTS;
         else folder = FOLDER_EXPERTS;
 
@@ -88,6 +89,9 @@ public class UserProfileController implements View.OnClickListener{
                             if(user instanceof Expert) {
                                 Expert expert = (Expert) user;
                                 activity.getPhoneTV().setText(expert.getCellphone() + "");
+                            } else {
+                                activity.getPhoneTV().setVisibility(View.GONE);
+                                activity.getTxtCel().setVisibility(View.GONE);
                             }
                         }
                 );
@@ -105,7 +109,7 @@ public class UserProfileController implements View.OnClickListener{
     {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         ArrayList<String> uris = new ArrayList<>();
-        StorageReference listRef = storage.getReference().child(FOLDER_EXPERTS).child(user.getId());
+        StorageReference listRef = storage.getReference().child(folder).child(user.getId());
         listRef.listAll()
                 .addOnSuccessListener(listResult -> {
 
