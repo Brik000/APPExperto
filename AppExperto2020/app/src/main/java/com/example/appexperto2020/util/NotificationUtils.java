@@ -45,6 +45,6 @@ public class NotificationUtils {
                 .setContentText(mensaje)
                 .setSmallIcon(R.drawable.expert);
         manager.notify(consecutive,builder.build());
-        consecutive++;
+        consecutiveS++;
     }
 }

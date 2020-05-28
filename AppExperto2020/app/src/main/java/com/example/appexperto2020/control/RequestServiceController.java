@@ -47,7 +47,7 @@ public class RequestServiceController implements View.OnClickListener{
                 FirebaseDatabase.getInstance().getReference().child("services").child(servicio.getId()).setValue(servicio);
                 FCMMessage fcm = new FCMMessage();
                 fcm.setTo(Constants.FCM_TO_EXPERT_SERVICE + servicio.getExpertId());
-                Message m = new Message(Constants.MESSAGE_TYPE_TEXT,"Service Temp",
+                Message m = new Message(Constants.MESSAGE_TYPE_TEXT,"Service",
                         "Se ha solicitado un nuevo servicio.",
                         FirebaseAuth.getInstance().getCurrentUser().getUid(),
                         Calendar.getInstance().getTime().getTime());

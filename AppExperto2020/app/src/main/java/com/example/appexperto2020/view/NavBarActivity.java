@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.se.omapi.Session;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -24,6 +25,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.Objects;
 
+import static com.example.appexperto2020.util.Constants.SESSION_EXPERT;
 import static com.example.appexperto2020.util.Constants.SESSION_TYPE;
 
 public class NavBarActivity extends AppCompatActivity implements View.OnClickListener {
@@ -44,6 +46,7 @@ public class NavBarActivity extends AppCompatActivity implements View.OnClickLis
         logOutIV = findViewById(R.id.logOutIV);
         logOutIV.setOnClickListener(this);
         bottomNavigationView = findViewById(R.id.bottomNav);
+        subscribeExpertChannel();
         if (session.equals(Constants.SESSION_EXPERT)){
             bottomNavigationView.getMenu().removeItem(R.id.mainMenu);
             myServicesFragment = new MyServicesFragment(session);
@@ -51,7 +54,7 @@ public class NavBarActivity extends AppCompatActivity implements View.OnClickLis
             getSupportFragmentManager().beginTransaction().setPrimaryNavigationFragment(myServicesFragment).commit();
             bottomNavigationView.setSelectedItemId(R.id.servicesMenu);
             getSupportFragmentManager().beginTransaction().show(myServicesFragment).commit();
-            subscribeExpertChannel();
+
         }
         else {
             userMainFragment = new UserMainFragment(session);
@@ -150,14 +153,16 @@ public class NavBarActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     public void subscribeExpertChannel(){
+        if(session.equals(SESSION_EXPERT)) {
             FirebaseMessaging.getInstance().subscribeToTopic("services-" + FirebaseAuth.getInstance().getCurrentUser().getUid())
-            .addOnCompleteListener(
-                    task->{
-                        if(task.isSuccessful()){
-                            Log.e("Expert Suscrito -> ", " " + FirebaseAuth.getInstance().getCurrentUser().getUid());
-                        }
-                    }
-            );
+                    .addOnCompleteListener(
+                            task -> {
+                                if (task.isSuccessful()) {
+                                    Log.e("Expert Suscrito -> ", " " + FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                }
+                            }
+                    );
+        }
 
     }
 }
