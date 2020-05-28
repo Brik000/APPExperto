@@ -107,6 +107,9 @@ public class NavBarActivity extends AppCompatActivity implements View.OnClickLis
             public void onClick(DialogInterface dialog, int which) {
                 switch (which){
                     case DialogInterface.BUTTON_POSITIVE:
+                        if(session.equals(SESSION_EXPERT)){
+                            FirebaseMessaging.getInstance().unsubscribeFromTopic("services-" + FirebaseAuth.getInstance().getCurrentUser().getUid());
+                        }
                         signOut();
                         break;
                     case DialogInterface.BUTTON_NEGATIVE:
@@ -121,7 +124,6 @@ public class NavBarActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     public void signOut() {
-
         if(AccessToken.getCurrentAccessToken() != null && !AccessToken.getCurrentAccessToken().isExpired())
             LoginManager.getInstance().logOut();
         if(FirebaseAuth.getInstance().getCurrentUser() != null)

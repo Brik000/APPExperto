@@ -18,10 +18,14 @@ public class FCMService extends FirebaseMessagingService {
         JSONObject object = new JSONObject(remoteMessage.getData());
         Gson gson = new Gson();
         Message message = gson.fromJson(object.toString(), Message.class);
+        Log.e(">>> FCM", message.getId());
         if (message.getId().equals("Service")) {
             NotificationUtils.createNotificationServices(this,message.getBody());
         }
-        NotificationUtils.createNotification(this,message.getBody());
+        else{
+            NotificationUtils.createNotification(this,message.getBody());
+        }
+
 
     }
 }

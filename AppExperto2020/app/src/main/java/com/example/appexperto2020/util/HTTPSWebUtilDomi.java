@@ -61,6 +61,8 @@ public class HTTPSWebUtilDomi {
                             return true;
                         case "firebasestorage.googleapis.com":
                             return true;
+                        case "graph.facebook.com":
+                            return true;
                         default:return false;
                     }
                 }
