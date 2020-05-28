@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -19,6 +20,7 @@ import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.Objects;
 
@@ -49,6 +51,7 @@ public class NavBarActivity extends AppCompatActivity implements View.OnClickLis
             getSupportFragmentManager().beginTransaction().setPrimaryNavigationFragment(myServicesFragment).commit();
             bottomNavigationView.setSelectedItemId(R.id.servicesMenu);
             getSupportFragmentManager().beginTransaction().show(myServicesFragment).commit();
+            subscribeExpertChannel();
         }
         else {
             userMainFragment = new UserMainFragment(session);
@@ -144,5 +147,17 @@ public class NavBarActivity extends AppCompatActivity implements View.OnClickLis
                 logOutDialog();
                 break;
         }
+    }
+
+    public void subscribeExpertChannel(){
+            FirebaseMessaging.getInstance().subscribeToTopic("/services/" + FirebaseAuth.getInstance().getCurrentUser().getUid())
+            .addOnCompleteListener(
+                    task->{
+                        if(task.isSuccessful()){
+                            Log.e("Expert Suscrito -> ", " " + FirebaseAuth.getInstance().getCurrentUser().getUid());
+                        }
+                    }
+            );
+
     }
 }

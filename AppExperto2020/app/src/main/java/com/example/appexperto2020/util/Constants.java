@@ -24,9 +24,13 @@ public abstract class Constants {
     public static final String FACEBOOK_LAST_NAME = "last_name";
     public static final String FACEBOOK_PP_URL = "picture";
     public static final String CHANNEL_ID = "ChatExperto";
+    public static final String CHANNEL_ID_SERVICE = "ServiceExperto";
     public static final String CHANNEL_NAME = "ChatExpertoMessages";
+    public static final String CHANNEL_NAME_SERVICE = "ServiceExpertoMessages";
     public static final int CHANNEL_IMPORTANCE = NotificationManager.IMPORTANCE_HIGH;
     public static final String FCM_API_KEY = "AAAAEC95IrE:APA91bFujHZ3pKHZebVImNDS1rcFmElDmdy7Drw3kZGPBpC-N0geooqNults7IczCZN8uH87ErqckluJD7aEdAjwdG9AiICxUnymAzSE0qEugjbVjEg_jJYCZp7qT4ePzkEFjqApS1uq";
+
+    public static final String FCM_TO_EXPERT_SERVICE = "/topics/services/";
 
     public final static String MORE ="Ver más";
 

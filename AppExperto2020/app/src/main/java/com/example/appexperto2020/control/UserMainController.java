@@ -81,7 +81,6 @@ public class UserMainController implements View.OnClickListener, Switch.OnChecke
         }
 
 
-
     }
 
     public void getInterests(String uid) {
