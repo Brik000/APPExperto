@@ -30,7 +30,7 @@ public abstract class Constants {
     public static final int CHANNEL_IMPORTANCE = NotificationManager.IMPORTANCE_HIGH;
     public static final String FCM_API_KEY = "AAAAEC95IrE:APA91bFujHZ3pKHZebVImNDS1rcFmElDmdy7Drw3kZGPBpC-N0geooqNults7IczCZN8uH87ErqckluJD7aEdAjwdG9AiICxUnymAzSE0qEugjbVjEg_jJYCZp7qT4ePzkEFjqApS1uq";
 
-    public static final String FCM_TO_EXPERT_SERVICE = "/topics/services/";
+    public static final String FCM_TO_EXPERT_SERVICE = "/topics/services-";
 
     public final static String MORE ="Ver más";
 

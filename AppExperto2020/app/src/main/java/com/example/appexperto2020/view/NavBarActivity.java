@@ -150,7 +150,7 @@ public class NavBarActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     public void subscribeExpertChannel(){
-            FirebaseMessaging.getInstance().subscribeToTopic("/services/" + FirebaseAuth.getInstance().getCurrentUser().getUid())
+            FirebaseMessaging.getInstance().subscribeToTopic("services-" + FirebaseAuth.getInstance().getCurrentUser().getUid())
             .addOnCompleteListener(
                     task->{
                         if(task.isSuccessful()){
