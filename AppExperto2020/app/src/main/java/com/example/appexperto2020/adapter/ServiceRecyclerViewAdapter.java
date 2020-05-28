@@ -44,6 +44,10 @@ public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceVie
     private ArrayList<Service> services  = new ArrayList<>();
     private Activity context;
 
+    public ServiceRecyclerViewAdapter(Activity context) {
+        this.context = context;
+    }
+
     @NonNull
     @Override
     public ServiceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -145,22 +149,10 @@ public class ServiceRecyclerViewAdapter  extends RecyclerView.Adapter<ServiceVie
                 query.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        String firstName = "";
-                        String lastName = "";
-                        Map<String,Object> client = (Map<String,Object>) dataSnapshot.getValue();
-                        for (String key:client.keySet()) {
-                            if(key.equals("firstName")){
-                                firstName = (String) client.get(key);
-                            }
-                            else if (key.equals("lastName")){
-                                lastName = (String) client.get(key);
-                            }
+                        Client client = dataSnapshot.getValue(Client.class);
 
-                            Log.e(">>>>> KEY: ", key);
-                            Log.e(">>>>> Value: ", "" +  client.get(key));
-                        }
                         holder.getJobServiceTV().setText("Cliente");
-                        holder.getUserServiceTV().setText(firstName + " " + lastName);
+                        holder.getUserServiceTV().setText(client.getFirstName() + " " + client.getLastName());
                     }
 
                     @Override

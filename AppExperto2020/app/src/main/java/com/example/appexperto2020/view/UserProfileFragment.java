@@ -22,6 +22,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import lombok.Getter;
 
 public class UserProfileFragment extends Fragment {
+
+    private final String session;
     @Getter
     private TextView nameTV,mailTV, jobTV, descriptionTV, phoneTV;
     @Getter
@@ -35,11 +37,12 @@ public class UserProfileFragment extends Fragment {
 
     @Getter
     private String uId;
+
     private UserProfileController controller;
 
-    public UserProfileFragment(String id) {
-
+    public UserProfileFragment(String id, String session) {
         this.uId = id;
+        this.session = session;
     }
 
     @Nullable
@@ -56,16 +59,21 @@ public class UserProfileFragment extends Fragment {
         expertPp = view.findViewById(R.id.expertPp);
 
         photosRV = view.findViewById(R.id.photosRV);
-        controller = new UserProfileController(this);
+        controller = new UserProfileController(this, session);
 
         adapter = new PhotosAdapter(controller);
         LinearLayoutManager linearLayoutManager = new GridLayoutManager(getActivity(), 2);
         getPhotosRV().setLayoutManager(linearLayoutManager);
         getPhotosRV().setAdapter(adapter);
 
-        if(uId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))
+        if(uId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
             getServiceBtn().setVisibility(View.GONE);
-        else getServiceBtn().setVisibility(View.VISIBLE);
+            getServiceText().setVisibility(View.GONE);
+        }
+        else{
+            getServiceText().setVisibility(View.VISIBLE);
+            getServiceBtn().setVisibility(View.VISIBLE);
+        }
         return view;
     }
 }

@@ -1,18 +1,13 @@
 package com.example.appexperto2020.control;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 
-import com.example.appexperto2020.model.Client;
 import com.example.appexperto2020.model.Job;
-import com.example.appexperto2020.util.Constants;
 import com.example.appexperto2020.view.UserProfileFragment;
 import com.example.appexperto2020.R;
 import com.example.appexperto2020.model.Expert;
@@ -20,7 +15,6 @@ import com.example.appexperto2020.view.UserMainFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
@@ -41,29 +35,23 @@ public class UserMainController implements View.OnClickListener{
     private UserMainFragment activity;
 
     private HashMap<String, String> interests;
-    private String user;
     private String session;
     private String folder;
-
+    private String userName;
     private HashMap<String, Job> jobsFromServer;
-    private ArrayList<Expert> experts;
     private ArrayList<Expert> expertsFromServer;
 
 
     public UserMainController(UserMainFragment activity, String session)
     {
         this.activity = activity;
-        experts = new ArrayList<>();
         jobsFromServer = new HashMap<>();
         activity.getSearchView().setOnSearchClickListener(this);
-        bringJobsFromServer();
         this.session = session;
-        activity.getExpertsRV().addItemDecoration(new DividerItemDecoration(activity.getExpertsRV().getContext()
-                , DividerItemDecoration.HORIZONTAL));
+        bringJobsFromServer();
 
         activity.getExpertsRV().addItemDecoration(new DividerItemDecoration(activity.getExpertsRV().getContext()
                 , DividerItemDecoration.VERTICAL));
-
 
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         if(session.equals(SESSION_EXPERT))
@@ -74,16 +62,14 @@ public class UserMainController implements View.OnClickListener{
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if(folder.equals(FOLDER_EXPERTS))
-                        user = dataSnapshot.child("firstName").getValue(String.class);
-                        else user = dataSnapshot.child("firstName").getValue(String.class);
-                        activity.getWelcomeTV().setText(activity.getString(R.string.welcome_word)+" " +user);
+                        userName = dataSnapshot.child("firstName").getValue(String.class);
+                        activity.getWelcomeTV().setText(activity.getString(R.string.welcome_word)+" " + userName);
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
                 }
-    }
-        );
+                );
 
         if(session.equals(SESSION_CLIENT)){
             getInterests(uid);
@@ -158,14 +144,13 @@ public class UserMainController implements View.OnClickListener{
 
     }
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.goToBtn:
                 String id = v.getContentDescription().toString();
                 FragmentManager fm = activity.getActivity().getSupportFragmentManager();
-                UserProfileFragment userProfileFragment = new UserProfileFragment(id);
+                UserProfileFragment userProfileFragment = new UserProfileFragment(id,session);
                 fm.beginTransaction().add(R.id.fragmentSelected, userProfileFragment, "temporal").commit();
                 fm.beginTransaction().hide(fm.getPrimaryNavigationFragment()).commit();
                 fm.beginTransaction().setPrimaryNavigationFragment(userProfileFragment).commit();

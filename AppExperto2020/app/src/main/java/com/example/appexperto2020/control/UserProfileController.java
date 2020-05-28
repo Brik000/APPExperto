@@ -8,6 +8,9 @@ import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
 import com.example.appexperto2020.R;
+import com.example.appexperto2020.model.Client;
+import com.example.appexperto2020.model.User;
+import com.example.appexperto2020.util.Constants;
 import com.example.appexperto2020.view.RequestServiceActivity;
 import com.example.appexperto2020.view.UserProfileFragment;
 import com.example.appexperto2020.model.Expert;
@@ -31,29 +34,46 @@ import static com.example.appexperto2020.util.Constants.FOLDER_PROFILE_PICTURES;
 public class UserProfileController implements View.OnClickListener{
    @Getter
     private UserProfileFragment activity;
-    private Expert expert;
+    private User user;
     private String jobs;
 
-    public UserProfileController(UserProfileFragment activity) {
+    public UserProfileController(UserProfileFragment activity, String session) {
         this.activity = activity;
+        String folder;
+        if(session.equals(Constants.SESSION_CLIENT))
+            folder = Constants.FOLDER_CLIENTS;
+        else folder = FOLDER_EXPERTS;
+
         activity.getServiceText().setOnClickListener(this);
         activity.getServiceBtn().setOnClickListener(this);
         Query query = FirebaseDatabase.getInstance()
                 .getReference()
-                .child("experts")
+                .child(folder)
                 .child(activity.getUId());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                expert = dataSnapshot.getValue(Expert.class);
-
+                if(folder.equals(FOLDER_EXPERTS))
+                    user = dataSnapshot.getValue(Expert.class);
+                else user = dataSnapshot.getValue(Client.class);
                 jobs = "";
-                for(Job j: expert.getJobList().values()){
-                    if(jobs.equals(""))
-                    {
-                        jobs += j.getName();
-                    }else {
-                        jobs += " || " + j.getName();
+                if(user instanceof Expert) {
+                    Expert expert = (Expert) user;
+                    for (Job j : expert.getJobList().values()) {
+                        if (jobs.equals("")) {
+                            jobs += j.getName();
+                        } else {
+                            jobs += " || " + j.getName();
+                        }
+                    }
+                } else {
+                    Client client = (Client) user;
+                    for (Job j : client.getInterests().values()) {
+                        if (jobs.equals("")) {
+                            jobs += j.getName();
+                        } else {
+                            jobs += " || " + j.getName();
+                        }
                     }
                 }
 
@@ -61,14 +81,14 @@ public class UserProfileController implements View.OnClickListener{
                 setJobPhotos();
                 activity.getActivity().runOnUiThread(
                         ()->{
-                            activity.getNameTV().setText(expert.getFirstName() + " " + expert.getLastName());
-                            activity.getDescriptionTV().setText(expert.getDescription());
+                            activity.getNameTV().setText(user.getFirstName() + " " + user.getLastName());
+                            activity.getDescriptionTV().setText(user.getDescription());
                             activity.getJobTV().setText(jobs);
-                            activity.getMailTV().setText(expert.getEmail());
-                            activity.getPhoneTV().setText(expert.getCellphone()+"");
-
-
-
+                            activity.getMailTV().setText(user.getEmail());
+                            if(user instanceof Expert) {
+                                Expert expert = (Expert) user;
+                                activity.getPhoneTV().setText(expert.getCellphone() + "");
+                            }
                         }
                 );
             }
@@ -85,7 +105,7 @@ public class UserProfileController implements View.OnClickListener{
     {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         ArrayList<String> uris = new ArrayList<>();
-        StorageReference listRef = storage.getReference().child(FOLDER_EXPERTS).child(expert.getId());
+        StorageReference listRef = storage.getReference().child(FOLDER_EXPERTS).child(user.getId());
         listRef.listAll()
                 .addOnSuccessListener(listResult -> {
 
@@ -101,7 +121,7 @@ public class UserProfileController implements View.OnClickListener{
                         Log.e(">>>>>", "ERROR BRINGING ITEMS");
                     }
                 });
-        activity.getAdapter().setIdExpert(expert.getId());
+        activity.getAdapter().setIdExpert(user.getId());
         activity.getAdapter().setData(uris);
     }
     public void setProfilePicture()
@@ -109,7 +129,7 @@ public class UserProfileController implements View.OnClickListener{
         FirebaseStorage storage = FirebaseStorage.getInstance();
 
         try{
-            storage.getReference().child(FOLDER_PROFILE_PICTURES).child(expert.getId()).getDownloadUrl().
+            storage.getReference().child(FOLDER_PROFILE_PICTURES).child(user.getId()).getDownloadUrl().
                     addOnSuccessListener(
                             uri ->{
                               activity.getActivity().runOnUiThread(
@@ -123,7 +143,7 @@ public class UserProfileController implements View.OnClickListener{
 
         }catch(Exception e)
         {
-            Log.e(">>>", "There is no profile picture for: "+ expert.getLastName());
+            Log.e(">>>", "There is no profile picture for: "+ user.getLastName());
         }
     }
     @Override
@@ -131,8 +151,8 @@ public class UserProfileController implements View.OnClickListener{
         switch (v.getId()){
             case R.id.serviceButton:
                 Intent i = new Intent(v.getContext(), RequestServiceActivity.class);
-                Log.e("idE", expert.getId());
-                i.putExtra("idE", expert.getId());
+                Log.e("idE", user.getId());
+                i.putExtra("idE", user.getId());
                 v.getContext().startActivity(i);
                 break;
         }

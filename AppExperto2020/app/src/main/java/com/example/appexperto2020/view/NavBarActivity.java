@@ -68,7 +68,7 @@ public class NavBarActivity extends AppCompatActivity implements View.OnClickLis
                     switch (item.getItemId()) {
                         case R.id.profileMenu:
                             if(userProfileFragment == null) {
-                                userProfileFragment = new UserProfileFragment(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                userProfileFragment = new UserProfileFragment(FirebaseAuth.getInstance().getCurrentUser().getUid(), session);
                                 getSupportFragmentManager().beginTransaction().add(R.id.fragmentSelected, userProfileFragment, "userProfile").commit();
                             }
                             fragmentActivity = userProfileFragment;

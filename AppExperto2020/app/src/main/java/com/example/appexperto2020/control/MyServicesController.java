@@ -30,26 +30,24 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ServiceController {
+public class MyServicesController {
     private MyServicesFragment fragment;
     private ServiceRecyclerViewAdapter adapter;
-    private ArrayList<Service> services;
 
-    public ServiceController(MyServicesFragment fragment) {
+    public MyServicesController(MyServicesFragment fragment) {
         this.fragment = fragment;
-        services = new ArrayList<>();
         getAdapterData();
     }
 
     public void getAdapterData() {
+        adapter = new ServiceRecyclerViewAdapter(fragment.getActivity());
         loadData();
-        adapter = new ServiceRecyclerViewAdapter(services, fragment.getActivity());
     }
 
     public void loadData() {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Query clientServiceQuery = FirebaseDatabase.getInstance().getReference().child("services").orderByChild("clientId").equalTo(userId);
-        clientServiceQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+        clientServiceQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -59,7 +57,7 @@ public class ServiceController {
                 } else {
                     for (DataSnapshot coincidence : dataSnapshot.getChildren()) {
                         Service s = coincidence.getValue(Service.class);
-                        services.add(s);
+                        adapter.addService(s);
                     }
                 }
             }
@@ -71,7 +69,7 @@ public class ServiceController {
         });
 
         Query expertServiceQuery = FirebaseDatabase.getInstance().getReference().child("services").orderByChild("expertId").equalTo(userId);
-        expertServiceQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+        expertServiceQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getChildrenCount() == 0) {
@@ -79,7 +77,7 @@ public class ServiceController {
                 } else {
                     for (DataSnapshot coincidence : dataSnapshot.getChildren()) {
                         Service s = coincidence.getValue(Service.class);
-                        services.add(s);
+                        adapter.addService(s);
                     }
                 }
             }

@@ -85,4 +85,5 @@
     <string name="user_name_service_hint">Name Last Name</string>
     <string name="body_service_hint"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, </string>
     <string name="button_go_chat">Chatea con tu experto</string>
+    <string name="usertype_incorrect">Intentando acceder con el tipo de usuario incorrecto</string>
 </resources>
