@@ -82,22 +82,6 @@ public class UserMainController implements View.OnClickListener{
 
     }
 
-    public void checkJob(Expert expert)
-    {
-        Iterable<String> jobs = expert.getJobList().keySet();
-        for(String job : jobs)
-        {
-            if(jobs != null && interests.containsKey(job))
-            {
-                activity.getAdapter().addExpert(expert);
-                activity.getAdapter().notifyDataSetChanged();
-
-            }
-
-            break;
-        }
-    }
-
     public void getInterests(String uid) {
         interests = new HashMap<>();
 
@@ -131,15 +115,7 @@ public class UserMainController implements View.OnClickListener{
             jobsToSearch.put(j.getId(), j.getId());
         }
         activity.getAdapter().removeData();
-        searchCoincidences(jobsToSearch);
-
-    }
-
-    public void searchCoincidences( HashMap<String, String>  j){
-        for(int i = 0; i<activity.getAdapter().getItemCount();i++)
-        {
-            checkJob(activity.getAdapter().getItem(i));
-        }
+        findExpertsBySearch(jobsToSearch);
 
     }
 
@@ -173,7 +149,7 @@ public class UserMainController implements View.OnClickListener{
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot d : dataSnapshot.getChildren()){
                     Expert expert = d.getValue(Expert.class);
-                    checkJob(expert);
+                    checkJob(expert, interests);
                 }
             }
 
@@ -183,6 +159,40 @@ public class UserMainController implements View.OnClickListener{
 
             }
         });
+    }
+
+    public void findExpertsBySearch(HashMap<String, String> searched) {
+
+        Query q = FirebaseDatabase.getInstance().getReference().child(FOLDER_EXPERTS);
+
+        q.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot d : dataSnapshot.getChildren()){
+                    Expert expert = d.getValue(Expert.class);
+                    checkJob(expert, searched);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e(">>>>", databaseError.toString());
+
+            }
+        });
+    }
+
+    private void checkJob(Expert expert, HashMap<String, String> jobsParameter) {
+        Iterable<String> jobs = expert.getJobList().keySet();
+        for(String job : jobs)
+        {
+            if(jobs != null && jobsParameter.containsKey(job))
+            {
+                activity.getAdapter().addExpert(expert);
+                activity.getAdapter().notifyDataSetChanged();
+            }
+            break;
+        }
     }
 
     public void bringJobsFromServer(){
